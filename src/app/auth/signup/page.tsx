@@ -42,7 +42,7 @@ export default function SignIn() {
         variant='h5' 
         mb={1}
       >Patient registration</Typography>
-      {true && 
+      {isSuccess && 
       <Alert severity="success">
         Account was created. <Link href='/auth/signin'>You can Sign In</Link>
       </Alert>}

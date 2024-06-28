@@ -1,11 +1,18 @@
-export function getAccessToken() {
-  return sessionStorage.getItem("token");
+'use server'
+
+import { cookies } from 'next/headers'
+
+export async function getAccessToken() {
+  'use server'
+  return cookies().get("token");
 }
 
-export function setAccessToken(token:string) {
-  sessionStorage.setItem("token", token);
+export async function setAccessToken(token:string) {
+  'use server'
+  cookies().set("token", token);
 }
 
-export function removeAccessToken() {
-  sessionStorage.clearItem("token");
+export async function removeAccessToken() {
+  'use server'
+  cookies().delete("token");
 }

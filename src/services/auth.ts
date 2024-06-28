@@ -18,6 +18,6 @@ export class AuthService {
 
 	async logout() {
 		// const response = await axiosClassic.post<boolean>('/auth/logout')
-    removeAccessToken()
+    await removeAccessToken()
 	}
 }
