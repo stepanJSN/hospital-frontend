@@ -6,7 +6,7 @@ export class AuthService {
 	async signIn(data: ISingIn) {
 		const response = await axiosClassic.post<IUser>('/auth/signin', data);
 
-		if (response.headers['Authorization']) setAccessToken(response.headers['Authorization'])
+		if (response.data.access_token) setAccessToken(response.data.access_token)
 
 		return response
 	};

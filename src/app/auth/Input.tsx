@@ -29,7 +29,11 @@ export default function Input({ control, label, errorText, type = "text", requir
           size="small"
           margin='dense'
           error={!!error}
-          onChange={onChange}
+          onChange={
+            (event) => type === "number" ? 
+            onChange(event.target.value ? +event.target.value : '') :
+            onChange(event.target.value)
+          }
           value={value}
           label={label}
           fullWidth

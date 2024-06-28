@@ -5,14 +5,15 @@ import { default as NextLink } from 'next/link';
 type LinkProps = {
   children: React.ReactNode;
   href: string;
+  fullwidth?: boolean;
 }
 
-export default function Link({ children, href }: LinkProps) {
+export default function Link({ children, href, fullwidth = false }: LinkProps) {
   return (
   <NextLink href={href}>
     <LinkUI
       align="center"
-      display="block"
+      display={fullwidth ? "block" : "inline"}
       component="span"
       mt={1}
     >

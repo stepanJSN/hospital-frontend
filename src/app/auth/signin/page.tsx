@@ -68,7 +68,7 @@ export default function SignIn() {
       >
         Submit
       </LoadingButton>
-      <Link href='/auth/signup'>Register</Link>
+      <Link href='/auth/signup' fullwidth>Register</Link>
     </Box>
   )
 }

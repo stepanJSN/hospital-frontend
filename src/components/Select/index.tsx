@@ -32,7 +32,7 @@ export default function Select({control, label, errorText, options, required = t
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             value={value}
-            label="Age"
+            label={label}
             onChange={onChange}
           >
             {options.map(option => <MenuItem key={option} value={option}>{option}</MenuItem>)}

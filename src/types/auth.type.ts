@@ -25,5 +25,6 @@ export interface IUser {
   specializationId?: string
   experience?: number
   role: 'Customer' | 'Staff'
+  access_token: string
 }
 
