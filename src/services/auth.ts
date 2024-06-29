@@ -1,10 +1,10 @@
-import { ISingIn, ISingUp, IUser } from '@/types/auth.type'
+import { IAuthResponse, ISingIn, ISingUp } from '@/types/auth.type'
 import { axiosClassic } from './api'
 import { setAccessToken, removeAccessToken } from './auth-token'
 
 export class AuthService {
 	async signIn(data: ISingIn) {
-		const response = await axiosClassic.post<IUser>('/auth/signin', data);
+		const response = await axiosClassic.post<IAuthResponse>('/auth/signin', data);
 
 		if (response.data.access_token) setAccessToken(response.data.access_token)
 
@@ -12,7 +12,7 @@ export class AuthService {
 	};
 
 	async signUp(data: ISingUp) {
-		const response = await axiosClassic.post<IUser>('/customers', data);
+		const response = await axiosClassic.post('/customers', data);
 		return response
 	};
 

@@ -14,17 +14,7 @@ export interface ISingUp {
 	password: string
 }
 
-export interface IUser {
-	id: number
-	name: string
-	email: string
-  surname: string
-  telephone?: number
-  birthday: Date
-  gender: 'male' | 'female'
-  specializationId?: string
-  experience?: number
-  role: 'Customer' | 'Staff'
+export interface IAuthResponse {
   access_token: string
 }
 
