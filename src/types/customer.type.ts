@@ -8,5 +8,5 @@ export interface IUser {
   gender: 'male' | 'female'
 }
 
-export type UpdateUser = Partial<Omit<IUser, 'id'>>
+export type UpdateUser = Partial<Omit<IUser, 'id'> & { password: string }>
 
