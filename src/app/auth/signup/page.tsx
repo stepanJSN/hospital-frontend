@@ -2,15 +2,14 @@
 
 import { Alert, Box, Typography } from '@mui/material'
 import { LoadingButton } from '@mui/lab';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form'
-import Input from '../Input';
+import { SubmitHandler, useForm } from 'react-hook-form'
+import FormInput from '@/components/Inputs/FormInput';
 import { useMutation } from '@tanstack/react-query';
 import { AuthService } from '@/services/auth';
 import { ISingUp } from '@/types/auth.type';
 import Select from '@/components/Select';
 import Link from '@/components/Link';
-import { DatePicker } from '@mui/x-date-pickers';
-import dayjs from 'dayjs';
+import DatePicker from '@/components/DatePicker';
 
 export default function SignIn() {
   const {
@@ -47,56 +46,36 @@ export default function SignIn() {
         Account was created. <Link href='/auth/signin'>You can Sign In</Link>
       </Alert>}
       {isError && <Alert severity="error">{error.message}</Alert>}
-      <Input 
+      <FormInput 
         label='Email'
         control={control}
         errorText='Incorrect email'
         pattern={/^[^\s@]+@[^\s@]+\.[^\s@]+$/}
       />
-      <Input 
+      <FormInput 
         label='Name'
         control={control}
         errorText='Incorrect name'
       />
-      <Input 
+      <FormInput 
         label='Surname'
         control={control}
         errorText='Incorrect surname'
       />
-      <Input 
+      <FormInput 
         label='Telephone'
         control={control}
         errorText='Incorrect telephone'
         required={false}
-        type='number'
       />
-      <Controller
-        name="birthday"
-        control={control}
-        rules={{
-          required: true
-        }}
-        render={({
-          field: { onChange, value },
-        }) => (
-          <DatePicker
-            value={dayjs(value)}
-            onChange={value => onChange(value?.toISOString())}
-            sx={{ 
-              width: '100%',
-              marginTop: '8px',
-              marginBottom: '4px'
-            }}
-          />
-        )}
-      />
+      <DatePicker label="birthday" control={control} />
       <Select 
         label='Gender'
         control={control}
         errorText='Gender is required'
         options={['male', 'female']}
       />
-      <Input 
+      <FormInput 
         label='Password'
         control={control}
         errorText='Incorrect password'

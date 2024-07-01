@@ -10,7 +10,7 @@ type InputProps = {
   pattern?: RegExp;
 }
 
-export default function Input({ control, label, errorText, type = "text", required = true, pattern }: InputProps) {
+export default function FormInput({ control, label, errorText, type = "text", required = true, pattern }: InputProps) {
   return (
     <Controller
       name={label.toLowerCase()}
@@ -24,6 +24,7 @@ export default function Input({ control, label, errorText, type = "text", requir
         fieldState: { error },
       }) => (
         <TextField
+          InputLabelProps={{ shrink: value }}
           required={required}
           helperText={error ? errorText : null}
           size="small"

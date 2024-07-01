@@ -3,7 +3,7 @@
 import { Alert, Box, Typography } from '@mui/material'
 import { LoadingButton } from '@mui/lab';
 import { SubmitHandler, useForm } from 'react-hook-form'
-import Input from '../Input';
+import FormInput from '@/components/Inputs/FormInput';
 import { useMutation } from '@tanstack/react-query';
 import { AuthService } from '@/services/auth';
 import { ISingIn } from '@/types/auth.type';
@@ -41,13 +41,13 @@ export default function SignIn() {
         mb={1}
       >Sign In</Typography>
       {isError && <Alert severity="error">{error.message}</Alert>}
-      <Input 
+      <FormInput 
         label='Email'
         control={control}
         errorText='Incorrect email'
         pattern={/^[^\s@]+@[^\s@]+\.[^\s@]+$/}
       />
-      <Input 
+      <FormInput 
         label='Password'
         control={control}
         errorText='Incorrect password'

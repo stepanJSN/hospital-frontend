@@ -17,6 +17,7 @@ export default function Select({control, label, errorText, options, required = t
       rules={{
         required,
       }}
+      defaultValue="female"
       render={({
         field: { onChange, value },
         fieldState: { error },
