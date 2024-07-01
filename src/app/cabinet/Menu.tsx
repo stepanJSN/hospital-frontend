@@ -1,7 +1,7 @@
 "use client"
 
 import { UserService } from '@/services/user'
-import { Avatar, Box, Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material'
+import { Avatar, Box, Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Skeleton, Typography } from '@mui/material'
 import PersonIcon from '@mui/icons-material/Person';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
@@ -9,7 +9,7 @@ import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import { useQuery } from '@tanstack/react-query'
 
 export default function Menu() {
-  const { data } = useQuery({
+  const { data, isSuccess, isPending } = useQuery({
 		queryKey: ['profile'],
 		queryFn: () => new UserService().getProfile()
 	})
@@ -23,7 +23,8 @@ export default function Menu() {
       sx={{ borderRight: '1px solid rgba(0, 0, 0, 0.12)' }}
     >
       <Avatar sx={{ width: 56, height: 56 }}>{data?.name.charAt(0)}</Avatar>
-      <Typography variant="h6" component="p">{`${data?.name} ${data?.surname}`}</Typography>
+      {isSuccess && <Typography variant="h6" component="p">{`${data?.name} ${data?.surname}`}</Typography>}
+      {isPending && <Skeleton width="90%" sx={{ fontSize: '1.5rem' }} />}
       <Divider sx={{ width: '100%' }} />
       <List>
         <ListItem>
