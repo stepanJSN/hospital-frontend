@@ -13,5 +13,5 @@ export async function middleware(request: NextRequest, response: NextResponse) {
 }
 
 export const config = {
-	matcher: '/',
+	matcher: '/cabinet/:path*',
 }

@@ -4,7 +4,7 @@ import { cookies } from 'next/headers'
 
 export async function getAccessToken() {
   'use server'
-  return cookies().get("token");
+  return await cookies().get("token")?.value;
 }
 
 export async function setAccessToken(token:string) {

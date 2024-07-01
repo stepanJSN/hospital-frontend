@@ -12,8 +12,8 @@ const options: CreateAxiosDefaults = {
 const axiosClassic = axios.create(options)
 const axiosWithAuth = axios.create(options)
 
-axiosWithAuth.interceptors.request.use(config => {
-	const accessToken = getAccessToken()
+axiosWithAuth.interceptors.request.use(async config => {
+	const accessToken = await getAccessToken()
 
 	if (config?.headers && accessToken)
 		config.headers.Authorization = `Bearer ${accessToken}`
