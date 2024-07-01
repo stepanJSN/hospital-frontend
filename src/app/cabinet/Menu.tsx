@@ -1,5 +1,7 @@
+"use client"
+
 import { UserService } from '@/services/user'
-import { Avatar, Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material'
+import { Avatar, Box, Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material'
 import PersonIcon from '@mui/icons-material/Person';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
@@ -13,10 +15,16 @@ export default function Menu() {
 	})
 
   return (
-    <div>
-      <Avatar>{data?.name.charAt(0)}</Avatar>
+    <Box
+      display="flex"
+      alignItems="center"
+      flexDirection="column"
+      mr={1}
+      sx={{ borderRight: '1px solid rgba(0, 0, 0, 0.12)' }}
+    >
+      <Avatar sx={{ width: 56, height: 56 }}>{data?.name.charAt(0)}</Avatar>
       <Typography variant="h6" component="p">{`${data?.name} ${data?.surname}`}</Typography>
-      <Divider />
+      <Divider sx={{ width: '100%' }} />
       <List>
         <ListItem>
           <ListItemButton>
@@ -43,7 +51,7 @@ export default function Menu() {
           </ListItemButton>
         </ListItem>
         <ListItem>
-          <ListItemButton>
+          <ListItemButton selected>
             <ListItemIcon>
               <PersonIcon />
             </ListItemIcon>
@@ -51,6 +59,6 @@ export default function Menu() {
           </ListItemButton>
         </ListItem>
       </List>
-    </div>
+    </Box>
   )
 }
