@@ -1,6 +1,6 @@
 export interface ISpecialization {
   id: string
-  name: string
+  title: string
 }
 
 export interface IDoctors {
@@ -9,4 +9,9 @@ export interface IDoctors {
   surname: string
   experience: number
   gender: 'male' | 'female'
+}
+
+export type GetDoctorsType = {
+  specializationId: string; 
+  date?: string
 }
