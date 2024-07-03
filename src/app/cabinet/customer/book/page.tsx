@@ -2,13 +2,14 @@
 
 import DatePicker from "@/components/DatePicker";
 import AutocompleteAsync from "@/components/Inputs/AutocompleteAsync";
-import useLazyQuery from "@/hooks/useLazyQuery";
+// import useLazyQuery from "@/hooks/useLazyQuery";
 import { appointmentService } from "@/services/appointment";
-import { ISpecialization } from "@/types/appointment.type";
+import { IDoctors, ISpecialization } from "@/types/appointment.type";
 import { LoadingButton } from "@mui/lab";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
+import DataTable from "./DataTable";
 
 type FormPayloadType = {
   date: string;
@@ -23,7 +24,7 @@ export default function Book() {
     formState: { errors },
   } = useForm<FormPayloadType>()
 
-  const { refetch: queryRefetch, data, isLoading, error } = useLazyQuery({
+  const { refetch: queryRefetch, data, isLoading, error, isSuccess } = useQuery({
     queryKey: ['doctors'],
 		queryFn: () => {
       const data = getValues()
@@ -33,6 +34,7 @@ export default function Book() {
       }
       return appointmentService.getDoctors(payload)
     },
+    enabled: false,
   })
   
   const onSubmit = () => queryRefetch();
@@ -76,6 +78,8 @@ export default function Book() {
             Search
           </LoadingButton>
       </Box>
+      <Typography component="h3" variant="h5">Doctors:</Typography>
+      {isSuccess && <DataTable data={data} />}
     </Box>
   )
 }

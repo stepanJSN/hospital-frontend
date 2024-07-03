@@ -9,6 +9,9 @@ export interface IDoctors {
   surname: string
   experience: number
   gender: 'male' | 'female'
+  specialization: {
+    title: string;
+  }
 }
 
 export type GetDoctorsType = {
