@@ -4,7 +4,7 @@ import DatePicker from "@/components/DatePicker";
 import AutocompleteAsync from "@/components/Inputs/AutocompleteAsync";
 // import useLazyQuery from "@/hooks/useLazyQuery";
 import { appointmentService } from "@/services/appointment";
-import { IDoctors, ISpecialization } from "@/types/appointment.type";
+import { ISpecialization } from "@/types/appointment.type";
 import { LoadingButton } from "@mui/lab";
 import { Box, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";

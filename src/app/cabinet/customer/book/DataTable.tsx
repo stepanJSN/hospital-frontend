@@ -1,9 +1,9 @@
-import { IDoctors } from "@/types/appointment.type";
+import { IDoctorShort } from "@/types/appointment.type";
 import { TableCell, TableContainer, TableHead, TableRow, Table, TableBody, Paper, Button } from "@mui/material";
 import Link from "next/link";
 
 type DataTableType = {
-  data: IDoctors[]
+  data: IDoctorShort[]
 }
 
 export default function DataTable({ data }: DataTableType) {

@@ -45,7 +45,7 @@ export default function Menu() {
         {getMenu().map(element => (
           <ListItem key={element.pageName}>
             <ListItemButton
-              href={`/cabinet/customer/${element.pageName}`}
+              href={`/cabinet/${role}/${element.pageName}`}
               selected={currentPage === element.pageName}
               component={Link}
             >
