@@ -12,15 +12,23 @@ type AutocompleteAsyncProps = {
   control: Control<any>;
   startFromLetter?: number;
   searchFunc: (searchValue: string) => Promise<Array<ISpecialization>>
+  noOptionsText?: string
+  required?: boolean
   sx?: object
 }
 
-export default function AutocompleteAsync({ id, label, control, searchFunc, startFromLetter = 0, sx }: AutocompleteAsyncProps) {
+export default function AutocompleteAsync({ id, label, control, searchFunc, startFromLetter = 0, noOptionsText, required = false, sx }: AutocompleteAsyncProps) {
   const [searchValue, setSearchValue] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [options, setOptions] = useState<Array<ISpecialization>>([]);
   const debouncedSearchValue = useDebounce(searchValue, 500);
 
-  const getSpecialization = async () => setOptions(await searchFunc(debouncedSearchValue));
+  const getSpecialization = async () => {
+    setIsLoading(true);
+    const options = await searchFunc(debouncedSearchValue);
+    setOptions(options);
+    setIsLoading(false);
+  };
 
   useEffect(() => {
     if (debouncedSearchValue.length >= startFromLetter) {
@@ -32,8 +40,12 @@ export default function AutocompleteAsync({ id, label, control, searchFunc, star
     <Controller
       name={label.toLowerCase()}
       control={control}
+      rules={{
+        required,
+      }}
       render={({
         field: { onChange, value },
+        fieldState: { error },
       }) => (
         <Autocomplete
           disablePortal
@@ -42,9 +54,11 @@ export default function AutocompleteAsync({ id, label, control, searchFunc, star
           sx={sx}
           getOptionLabel={(option) => option.title}
           value={value}
+          loading={isLoading}
+          noOptionsText={noOptionsText ?? null}
           onChange={(event, value) => onChange(value)}
           onInputChange={(event, value) => setSearchValue(value)}
-          renderInput={(params) => <TextField {...params} label={label} />}
+          renderInput={(params) => <TextField {...params} error={!!error} label={label} />}
         />
       )}
     />

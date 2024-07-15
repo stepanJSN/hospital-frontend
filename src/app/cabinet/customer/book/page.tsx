@@ -6,7 +6,7 @@ import AutocompleteAsync from "@/components/Inputs/AutocompleteAsync";
 import { appointmentService } from "@/services/appointment";
 import { ISpecialization } from "@/types/appointment.type";
 import { LoadingButton } from "@mui/lab";
-import { Box, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import DataTable from "./DataTable";
@@ -24,7 +24,7 @@ export default function Book() {
     formState: { errors },
   } = useForm<FormPayloadType>()
 
-  const { refetch: queryRefetch, data, isLoading, error, isSuccess } = useQuery({
+  const { refetch: queryRefetch, data, isFetching, error, isSuccess } = useQuery({
     queryKey: ['doctors'],
 		queryFn: () => {
       const data = getValues()
@@ -53,8 +53,10 @@ export default function Book() {
           id="specialization" 
           label="Specialization"
           control={control}
+          required
           startFromLetter={2}
           searchFunc={(title) => appointmentService.getSpecialization(title)}
+          noOptionsText="Specialization not found"
           sx={{
             flex: "0 0 50%"
           }}
@@ -65,7 +67,7 @@ export default function Book() {
           required={false}
          />
          <LoadingButton 
-            loading={isLoading}
+            loading={isFetching}
             variant="contained" 
             fullWidth
             type="submit"
@@ -79,7 +81,8 @@ export default function Book() {
           </LoadingButton>
       </Box>
       <Typography component="h3" variant="h5">Doctors:</Typography>
-      {isSuccess && <DataTable data={data} />}
+      {isSuccess && !isFetching && <DataTable data={data} />}
+      {isFetching && <CircularProgress sx={{ position: 'relative', top: '30%', left: '50%' }} />}
     </Box>
   )
 }
