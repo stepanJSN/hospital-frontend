@@ -34,6 +34,5 @@ export interface IAvailableTime {
 
 export interface IAppointmentPayload {
   staffId: string;
-  customerId: string;
   dateTime: string;
 }
