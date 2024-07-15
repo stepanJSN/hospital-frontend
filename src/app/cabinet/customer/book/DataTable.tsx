@@ -35,7 +35,7 @@ export default function DataTable({ data }: DataTableType) {
                 <Button 
                   variant="outlined" 
                   component={Link}
-                  href="/"
+                  href={`/cabinet/customer/doctors/${row.id}`}
                 >Visit</Button>
               </TableCell>
             </TableRow>
