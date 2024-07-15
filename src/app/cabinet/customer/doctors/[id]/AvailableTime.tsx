@@ -5,6 +5,7 @@ import { Box, Button, Divider, Paper, Table, TableBody, TableCell, TableContaine
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import ConfirmBookingDialog from "./ConfirmBookingDialog";
+import dayjs from 'dayjs';
 
 type AvailableTimeProps = {
   staffId: string;
@@ -14,7 +15,7 @@ const daysName = ['Sun', 'Mon', 'Tu', 'Wed', 'Thur', 'Fr', 'St'];
 const timeArray = [9,10,11,12,13,14,15,16,17,18];
 
 export default function AvailableTime({ staffId }: AvailableTimeProps) {
-  const [dateRange, setDateRange] = useState({ startDate: new Date(), endDate: new Date(new Date().setDate(new Date().getDate() + 7)) });
+  const [dateRange, setDateRange] = useState({ startDate: new Date(), endDate: dayjs().add(7, 'day').toDate() });
   const [selectedDateTime, setSelectedDateTime] = useState<null | Date>(null);
   const [openConfirmDialog, setOpenConfirmDialog] = useState<boolean>(false);
   
@@ -22,6 +23,14 @@ export default function AvailableTime({ staffId }: AvailableTimeProps) {
     queryKey: ['appointment', staffId, dateRange],
 		queryFn: () => appointmentService.getAvailableTime(staffId, dateRange.startDate.toString(), dateRange.endDate.toString())
   })
+
+  function changeWeekForward() {
+    setDateRange((prevRange) => ({ startDate: dayjs(prevRange.startDate).add(7, 'day').toDate(), endDate:  dayjs(prevRange.endDate).add(7, 'day').toDate() }))
+  }
+
+  function changeWeekBackward() {
+    setDateRange((prevRange) => ({ startDate: dayjs(prevRange.startDate).subtract(7, 'day').toDate(), endDate: dayjs(prevRange.endDate).subtract(7, 'day').toDate() }))
+  }
 
   function renderAvailableTime(currentTime: number) {
     const availableTimeArray: Array<number | null> = [];
@@ -47,14 +56,24 @@ export default function AvailableTime({ staffId }: AvailableTimeProps) {
   const closeDialog = () => setOpenConfirmDialog(false);
   const openDialog = () => setOpenConfirmDialog(true);
 
+  console.log(new Date().getDate() === dateRange.startDate.getDate());
+
   return (
     <>
       <Box>
         <Typography>Available time</Typography>
         <Divider />
-        <Button>Prev</Button>
-        <Typography>{`${dateRange.startDate.toLocaleDateString()} - ${dateRange.endDate.toLocaleDateString()}`}</Typography>
-        <Button>Next</Button>
+        <Box display="flex" alignItems="center" marginY={2}>
+          <Button 
+            disabled={new Date().getDate() === dateRange.startDate.getDate()} 
+            variant="outlined"
+            onClick={changeWeekBackward}
+          >
+              Prev
+          </Button>
+          <Typography marginX={2}>{`${dateRange.startDate.toLocaleDateString()} - ${dateRange.endDate.toLocaleDateString()}`}</Typography>
+          <Button variant="outlined" onClick={changeWeekForward}>Next</Button>
+        </Box>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="appointment table">
             <TableHead>
