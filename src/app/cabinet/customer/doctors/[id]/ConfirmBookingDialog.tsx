@@ -2,6 +2,7 @@ import useGetDoctors from '@/hooks/useGetDoctroData';
 import { appointmentService } from '@/services/appointment';
 import { IAppointmentPayload } from '@/types/appointment.type';
 import CloseIcon from '@mui/icons-material/Close';
+import { LoadingButton } from '@mui/lab';
 import { Button, Dialog, DialogContent, DialogTitle, IconButton, Typography } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 import dayjs from 'dayjs';
@@ -54,7 +55,7 @@ export default function ConfirmBookingDialog({
           <Typography>{'Date: ' + bookingDateTime?.toLocaleDateString()}</Typography>
           <Typography>{'Time: ' + bookingDateTime?.getHours() + ':00'}</Typography>
         </DialogContent>
-        <Button onClick={confirmAppointment}>Confirm</Button>
+        <LoadingButton loading={isPending} onClick={confirmAppointment}>Confirm</LoadingButton>
       </Dialog>
   )
 }

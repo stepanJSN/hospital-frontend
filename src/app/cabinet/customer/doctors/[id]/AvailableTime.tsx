@@ -1,7 +1,7 @@
 "use client"
 import { appointmentService } from "@/services/appointment";
 import { IAvailableTime } from "@/types/appointment.type";
-import { Box, Button, Divider, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Divider, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import ConfirmBookingDialog from "./ConfirmBookingDialog";
@@ -19,7 +19,7 @@ export default function AvailableTime({ staffId }: AvailableTimeProps) {
   const [selectedDateTime, setSelectedDateTime] = useState<null | Date>(null);
   const [openConfirmDialog, setOpenConfirmDialog] = useState<boolean>(false);
   
-  const { refetch: queryRefetch, data, isLoading, error, isSuccess } = useQuery({
+  const { refetch: queryRefetch, data, isFetching, error } = useQuery({
     queryKey: ['appointment', staffId, dateRange],
 		queryFn: () => appointmentService.getAvailableTime(staffId, dateRange.startDate.toString(), dateRange.endDate.toString())
   })
@@ -61,7 +61,7 @@ export default function AvailableTime({ staffId }: AvailableTimeProps) {
   return (
     <>
       <Box>
-        <Typography>Available time</Typography>
+        <Typography variant="h6">Available time</Typography>
         <Divider />
         <Box display="flex" alignItems="center" marginY={2}>
           <Button 
@@ -74,6 +74,7 @@ export default function AvailableTime({ staffId }: AvailableTimeProps) {
           <Typography marginX={2}>{`${dateRange.startDate.toLocaleDateString()} - ${dateRange.endDate.toLocaleDateString()}`}</Typography>
           <Button variant="outlined" onClick={changeWeekForward}>Next</Button>
         </Box>
+        {!isFetching && 
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="appointment table">
             <TableHead>
@@ -98,7 +99,8 @@ export default function AvailableTime({ staffId }: AvailableTimeProps) {
               ))}
             </TableBody>
           </Table>
-        </TableContainer>
+        </TableContainer>}
+        {isFetching && <CircularProgress sx={{ position: 'relative', left: '50%' }} />}
       </Box>
       {(data && selectedDateTime) && <ConfirmBookingDialog
         isOpen={openConfirmDialog}
