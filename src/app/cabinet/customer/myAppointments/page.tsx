@@ -9,6 +9,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import CancelDialog from "./CancelDialog";
 import dayjs from "dayjs";
+import Notification from "@/components/Notifications";
 
 type FormPayloadType = {
   startdate?: string;
@@ -111,6 +112,7 @@ export default function MyAppointments() {
         closeDialog={closeDialog}
         refetchMyAppointments={queryRefetch}
       />}
+      <Notification trigger={!!error} />
     </Box>
   )
 }
