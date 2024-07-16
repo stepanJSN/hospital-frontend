@@ -11,7 +11,7 @@ export const customerMenu: MenuList = [
     pageText: "Make an appointment with a doctor"
   },
   {
-    pageName: "appointments",
+    pageName: "myAppointments",
     pageIcon: <FormatListBulletedIcon />,
     pageText: "My appointments"
   },

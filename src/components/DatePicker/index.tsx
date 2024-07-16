@@ -20,6 +20,7 @@ export default function DatePicker({ label, control, required = true }: DatePick
         field: { onChange, value },
       }) => (
         <DatePickerUI
+          label={label}
           value={value ? dayjs(value): null}
           onChange={value => onChange(value?.toISOString())}
           sx={{ 

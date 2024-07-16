@@ -36,3 +36,15 @@ export interface IAppointmentPayload {
   staffId: string;
   dateTime: string;
 }
+
+export interface IMyAppointment {
+  id: string;
+  dateTime: string;
+  staff: {
+    name: string;
+    surname: string;
+    specialization: {
+      title: string;
+    },
+  }
+}
