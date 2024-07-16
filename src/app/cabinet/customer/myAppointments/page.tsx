@@ -5,7 +5,10 @@ import { appointmentService } from "@/services/appointment";
 import { LoadingButton } from "@mui/lab";
 import { Box, Button, Divider, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import CancelDialog from "./CancelDialog";
+import dayjs from "dayjs";
 
 type FormPayloadType = {
   startdate?: string;
@@ -13,6 +16,7 @@ type FormPayloadType = {
 }
 
 export default function MyAppointments() {
+  const [appointmentId, setAppointmentId] = useState<string | null>(null);
   const {
     control,
     handleSubmit,
@@ -29,6 +33,7 @@ export default function MyAppointments() {
   })
   
   const onSubmit = () => queryRefetch();
+  const closeDialog = () => setAppointmentId(null);
 
   return (
     <Box margin={2} width="100%">
@@ -67,37 +72,45 @@ export default function MyAppointments() {
           </LoadingButton>
       </Box>
       <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="doctors table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Date and Time</TableCell>
-            <TableCell align="right">Name Surname</TableCell>
-            <TableCell align="right">Specialization</TableCell>
-            <TableCell align="right">Action</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {isSuccess && data.map((row) => (
-            <TableRow
-              key={row.id}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {`${new Date(row.dateTime).toLocaleDateString()} ${new Date(row.dateTime).toLocaleTimeString()}`}
-              </TableCell>
-              <TableCell align="right">{`${row.staff.name} ${row.staff.surname}`}</TableCell>
-              <TableCell align="right">{row.staff.specialization.title}</TableCell>
-              <TableCell align="right">
-                <Button 
-                  variant="outlined"
-                  color="error"
-                >Cancel</Button>
-              </TableCell>
+        <Table sx={{ minWidth: 650 }} aria-label="doctors table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Date and Time</TableCell>
+              <TableCell align="right">Name Surname</TableCell>
+              <TableCell align="right">Specialization</TableCell>
+              <TableCell align="right">Action</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {isSuccess && data.map((row) => (
+              <TableRow
+                key={row.id}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  {dayjs(row.dateTime).format('DD.MM.YYYY HH:mm')}
+                </TableCell>
+                <TableCell align="right">{`${row.staff.name} ${row.staff.surname}`}</TableCell>
+                <TableCell align="right">{row.staff.specialization.title}</TableCell>
+                <TableCell align="right">
+                  <Button 
+                    variant="outlined"
+                    color="error"
+                    onClick={() => setAppointmentId(row.id)}
+                  >Cancel</Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      {appointmentId && 
+      <CancelDialog
+        id={appointmentId}
+        isOpen={!!appointmentId} 
+        closeDialog={closeDialog}
+        refetchMyAppointments={queryRefetch}
+      />}
     </Box>
   )
 }

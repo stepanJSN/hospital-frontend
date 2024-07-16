@@ -41,6 +41,10 @@ class AppointmentService {
 			}}
 		)).data;
 	}
+
+	async deleteMyAppointment(id: string) {
+		return (await axiosWithAuth.delete(`/appointments/${id}`));
+	}
 }
 
 export const appointmentService = new AppointmentService();
