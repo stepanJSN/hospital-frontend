@@ -40,6 +40,7 @@ export interface IAppointmentPayload {
 export interface IMyAppointment {
   id: string;
   dateTime: string;
+  isCompleted: boolean;
   staff: {
     name: string;
     surname: string;

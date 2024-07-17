@@ -79,6 +79,7 @@ export default function MyAppointments() {
               <TableCell>Date and Time</TableCell>
               <TableCell align="right">Name Surname</TableCell>
               <TableCell align="right">Specialization</TableCell>
+              <TableCell align="right">Status</TableCell>
               <TableCell align="right">Action</TableCell>
             </TableRow>
           </TableHead>
@@ -93,10 +94,12 @@ export default function MyAppointments() {
                 </TableCell>
                 <TableCell align="right">{`${row.staff.name} ${row.staff.surname}`}</TableCell>
                 <TableCell align="right">{row.staff.specialization.title}</TableCell>
+                <TableCell align="right">{row.isCompleted ? 'Completed' : 'Planned'}</TableCell>
                 <TableCell align="right">
                   <Button 
                     variant="outlined"
                     color="error"
+                    disabled={row.isCompleted}
                     onClick={() => setAppointmentId(row.id)}
                   >Cancel</Button>
                 </TableCell>
