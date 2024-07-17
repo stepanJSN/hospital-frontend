@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import ConfirmBookingDialog from "./ConfirmBookingDialog";
 import dayjs from 'dayjs';
+import Notification from "@/components/Notifications";
 
 type AvailableTimeProps = {
   staffId: string;
@@ -19,7 +20,7 @@ export default function AvailableTime({ staffId }: AvailableTimeProps) {
   const [selectedDateTime, setSelectedDateTime] = useState<null | Date>(null);
   const [openConfirmDialog, setOpenConfirmDialog] = useState<boolean>(false);
   
-  const { refetch: queryRefetch, data, isFetching, error } = useQuery({
+  const { refetch: queryRefetch, data, isFetching, isError } = useQuery({
     queryKey: ['appointment', staffId, dateRange],
 		queryFn: () => appointmentService.getAvailableTime(staffId, dateRange.startDate.toString(), dateRange.endDate.toString())
   })
@@ -109,6 +110,8 @@ export default function AvailableTime({ staffId }: AvailableTimeProps) {
         bookingDateTime={selectedDateTime}
         refetchAppointments={queryRefetch}
       />}
+      {console.log({ isError })}
+      <Notification trigger={isError} />
     </>
   )
 }

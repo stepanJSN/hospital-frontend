@@ -2,6 +2,7 @@
 
 import DatePicker from '@/components/DatePicker'
 import FormInput from '@/components/Inputs/FormInput'
+import Notification from '@/components/Notifications'
 import Select from '@/components/Select'
 import { removeEmptyFields } from '@/helpers/removeEmptyFields'
 import { UserService } from '@/services/user'
@@ -20,7 +21,7 @@ export default function Profile() {
 
   const userService = new UserService();
 
-  const { data, isSuccess: isProfileSuccess, isPending: isProfilePending } = useQuery({
+  const { data, isSuccess: isProfileSuccess, isPending: isProfilePending, isError: isProfileDataError } = useQuery({
 		queryKey: ['profile'],
 		queryFn: () => userService.getProfile(),
 	})
@@ -114,6 +115,7 @@ export default function Profile() {
         </Box>
       }
       {isProfilePending && <CircularProgress size={65} sx={{ alignSelf: "center" }} />}
+      <Notification trigger={isProfileDataError} />
     </Box>
   )
 }

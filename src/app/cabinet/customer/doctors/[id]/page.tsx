@@ -10,7 +10,7 @@ export default function Doctor() {
   const { id } = useParams<{ id: string }>();
 
   return (
-    <Box>
+    <Box width="70%">
       <DoctorInfo doctorId={id} />
       <AvailableTime staffId={id} />
     </Box>

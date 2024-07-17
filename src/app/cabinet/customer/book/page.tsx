@@ -10,6 +10,7 @@ import { Box, CircularProgress, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import DataTable from "./DataTable";
+import Notification from "@/components/Notifications";
 
 type FormPayloadType = {
   date: string;
@@ -24,7 +25,7 @@ export default function Book() {
     formState: { errors },
   } = useForm<FormPayloadType>()
 
-  const { refetch: queryRefetch, data, isFetching, error, isSuccess } = useQuery({
+  const { refetch: queryRefetch, data, isFetching, isError, isSuccess } = useQuery({
     queryKey: ['doctors'],
 		queryFn: () => {
       const data = getValues()
@@ -83,6 +84,8 @@ export default function Book() {
       <Typography component="h3" variant="h5">Doctors:</Typography>
       {isSuccess && !isFetching && <DataTable data={data} />}
       {isFetching && <CircularProgress sx={{ position: 'relative', top: '30%', left: '50%' }} />}
+      {isSuccess && data?.length === 0 && <Typography textAlign="center" component="h3" variant="h6">Doctors not found</Typography>}
+      <Notification trigger={isError} />
     </Box>
   )
 }

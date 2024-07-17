@@ -1,6 +1,6 @@
 import { appointmentService } from '@/services/appointment';
 import { LoadingButton } from '@mui/lab'
-import { Button, Dialog, DialogActions, DialogTitle } from '@mui/material'
+import { Alert, Button, Dialog, DialogActions, DialogTitle } from '@mui/material'
 import { useMutation } from '@tanstack/react-query';
 import React from 'react'
 
@@ -25,6 +25,13 @@ export default function CancelDialog({ id, isOpen, closeDialog, refetchMyAppoint
       open={isOpen}
       onClose={closeDialog}
     >
+      {!!error && <Alert 
+        severity="error"
+        variant="filled"
+        sx={{ width: '100%' }}
+      >
+        Error. Try again later
+      </Alert>}
       <DialogTitle>
         {"Confirm cancelation"}
       </DialogTitle>
