@@ -1,7 +1,7 @@
 import { IUser, UpdateUser } from "@/types/customer.type";
 import { axiosWithAuth } from "./api";
 
-export class UserService {
+class CustomerService {
 	async getProfile() {
 		return (await axiosWithAuth.get<IUser>('/customers/current')).data;
 	};
@@ -14,3 +14,5 @@ export class UserService {
     await axiosWithAuth.delete('/customers/current');
   }
 }
+
+export const customerService = new CustomerService();

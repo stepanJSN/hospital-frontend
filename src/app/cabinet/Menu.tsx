@@ -1,13 +1,14 @@
 "use client"
 
-import { UserService } from '@/services/user'
+import { customerService } from '@/services/customer'
 import { Avatar, Box, Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Skeleton, Typography } from '@mui/material'
 
 import { useQuery } from '@tanstack/react-query'
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { MenuList } from '@/types/menu.type';
-import { customerMenu } from '@/config/menuConfig';
+import { customerMenu, staffMenu } from '@/config/menuConfig';
+import { staffService } from '@/services/staff';
 
 export default function Menu() {
   const pathname = usePathname().split('/');
@@ -15,14 +16,20 @@ export default function Menu() {
   const role = pathname[2];
   const { data, isSuccess, isPending } = useQuery({
 		queryKey: ['profile'],
-		queryFn: () => new UserService().getProfile()
+		queryFn: () => {
+      if(role === 'customer') {
+        return customerService.getProfile();
+      }
+      return staffService.getProfile();
+    }
 	})
 
   function getMenu(): MenuList {
     switch (role) {
       case "customer":
         return customerMenu;
-    
+      case "staff":
+        return staffMenu;
       default:
         return customerMenu;
     }

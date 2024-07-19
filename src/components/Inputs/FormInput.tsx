@@ -8,9 +8,10 @@ type InputProps = {
   type?: string;
   required?: boolean
   pattern?: RegExp;
+  multiline?: boolean;
 }
 
-export default function FormInput({ control, label, errorText, type = "text", required = true, pattern }: InputProps) {
+export default function FormInput({ control, label, errorText, type = "text", required = true, pattern, multiline = false }: InputProps) {
   return (
     <Controller
       name={label.toLowerCase()}
@@ -38,6 +39,7 @@ export default function FormInput({ control, label, errorText, type = "text", re
           value={value}
           label={label}
           fullWidth
+          multiline={multiline}
           type={type}
           variant="outlined"
         />

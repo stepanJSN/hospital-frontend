@@ -6,7 +6,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import FormInput from '@/components/Inputs/FormInput';
 import { useMutation } from '@tanstack/react-query';
 import { AuthService } from '@/services/auth';
-import { ISingIn } from '@/types/auth.type';
+import { IAuthResponse, ISingIn } from '@/types/auth.type';
 import Select from '@/components/Select';
 import { useRouter } from 'next/navigation';
 import Link from '@/components/Link';
@@ -22,7 +22,7 @@ export default function SignIn() {
   const { mutate, isPending, error, isError } = useMutation({
 		mutationKey: ['signIn'],
 		mutationFn: (data: ISingIn) => new AuthService().signIn(data),
-    onSuccess: () => push('/'),
+    onSuccess: (response) => push(`/cabinet/${response.data.role === 'Customer' ? 'customer/book' : 'staff/profile'}`),
 	})
 
   const onSubmit: SubmitHandler<ISingIn> = (data) => mutate(data)

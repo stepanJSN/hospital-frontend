@@ -1,12 +1,16 @@
 "use client"
 
 import DatePicker from '@/components/DatePicker'
+import AutocompleteAsync from '@/components/Inputs/AutocompleteAsync'
 import FormInput from '@/components/Inputs/FormInput'
 import Notification from '@/components/Notifications'
 import Select from '@/components/Select'
 import { removeEmptyFields } from '@/helpers/removeEmptyFields'
+import { appointmentService } from '@/services/appointment'
 import { customerService } from '@/services/customer'
+import { staffService } from '@/services/staff'
 import { UpdateUser } from '@/types/customer.type'
+import { IStaff, UpdateStaff } from '@/types/staff.type'
 import { LoadingButton } from '@mui/lab'
 import { Alert, Avatar, Box, CircularProgress, Typography } from '@mui/material'
 import { useMutation, useQuery } from '@tanstack/react-query'
@@ -17,11 +21,11 @@ export default function Profile() {
     control,
     handleSubmit,
     setValue,
-  } = useForm<UpdateUser>()
+  } = useForm<IStaff>();
 
   const { data, isSuccess: isProfileSuccess, isPending: isProfilePending, isError: isProfileDataError } = useQuery({
 		queryKey: ['profile'],
-		queryFn: () => customerService.getProfile(),
+		queryFn: () => staffService.getProfile(),
 	})
 
   if (isProfileSuccess) {
@@ -29,15 +33,26 @@ export default function Profile() {
     setValue("surname", data.surname);
     setValue("telephone", data.telephone);
     setValue("birthday", data.birthday);
-    setValue("gender", data.gender,{ shouldValidate: true })
+    setValue("gender", data.gender,{ shouldValidate: true });
+    setValue("specialization", data.specialization, {shouldValidate: true });
+    setValue("experience", data.experience);
+    setValue("room", data.room);
+    setValue("description", data.description);
   }
 
   const { mutate, isPending, error, isError, isSuccess } = useMutation({
 		mutationKey: ['profile'],
-		mutationFn: (data: UpdateUser) => customerService.update(data),
+		mutationFn: (data: UpdateStaff) => staffService.update(data),
 	})
 
-  const onSubmit: SubmitHandler<UpdateUser> = (data) => mutate(removeEmptyFields(data))
+  const onSubmit: SubmitHandler<IStaff> = (data) => {
+    const { specialization, ...rest } = data;
+    const payload = {
+      ...rest,
+      specializationId: data.specialization.id
+    }
+    mutate(removeEmptyFields(payload))
+  }
 
   return (
     <Box 
@@ -94,6 +109,38 @@ export default function Profile() {
             errorText='Gender is required'
             options={['male', 'female']}
             required={false}
+          />
+          <AutocompleteAsync 
+            id="specialization" 
+            label="Specialization"
+            control={control}
+            required
+            startFromLetter={2}
+            searchFunc={(title) => appointmentService.getSpecialization(title)}
+            noOptionsText="Specialization not found"
+            sx={{
+              flex: "0 0 50%"
+            }}
+          />
+          <FormInput 
+            label='Experience'
+            control={control}
+            errorText='Incorrect experience'
+            required={false}
+          />
+           <FormInput 
+            label='Description'
+            control={control}
+            errorText='Incorrect description'
+            required={false}
+            multiline
+          />
+          <FormInput 
+            label='Room'
+            control={control}
+            errorText='Incorrect room'
+            required={false}
+            type="number"
           />
           <FormInput 
             label='Password'

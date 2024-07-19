@@ -26,3 +26,26 @@ export const customerMenu: MenuList = [
     pageText: "Profile"
   }
 ]
+
+export const staffMenu: MenuList = [
+  {
+    pageName: "appointments",
+    pageIcon: <FormatListBulletedIcon />,
+    pageText: "Appointments"
+  },
+  {
+    pageName: "schedule",
+    pageIcon: <CalendarMonthIcon />,
+    pageText: "My schedule"
+  },
+  {
+    pageName: "notifications",
+    pageIcon: <NotificationsIcon />,
+    pageText: "Notifications"
+  },
+  {
+    pageName: "profile",
+    pageIcon: <PersonIcon />,
+    pageText: "Profile"
+  }
+]
