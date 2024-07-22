@@ -2,8 +2,8 @@ import { IUser, UpdateUser } from "@/types/customer.type";
 import { axiosWithAuth } from "./api";
 
 class CustomerService {
-	async getProfile() {
-		return (await axiosWithAuth.get<IUser>('/customers/current')).data;
+	async get(id: string) {
+		return (await axiosWithAuth.get<IUser>(`/customers/${id}`)).data;
 	};
 
   async update(data: UpdateUser) {

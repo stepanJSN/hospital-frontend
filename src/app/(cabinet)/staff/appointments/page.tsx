@@ -102,7 +102,7 @@ export default function Appointments() {
                 <TableCell align="right">
                   <UILink 
                     component={Link}
-                    href="/"
+                    href={`/customer/${row.customer.id}`}
                   >
                     {`${row.customer.name} ${row.customer.surname}`}
                   </UILink>
