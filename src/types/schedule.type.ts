@@ -2,8 +2,16 @@ export interface ISchedule {
   id: string;
   staffId: string;
   dayOfWeek: number;
-  startTime: number | null;
-  endTime: number | null;
+  startTime: number;
+  endTime: number;
 }
 
-export interface IUpdateSchedule extends Omit<ISchedule, 'staffId'> {}
+export interface IChangeSchedule {
+  staffId: string;
+
+  schedule: Array<{
+    dayOfWeek: number;
+    startTime: number;
+    endTime: number;
+  }>;
+}

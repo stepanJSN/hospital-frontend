@@ -6,7 +6,7 @@ type SelectProps = {
   label: string;
   errorText: string;
   required?: boolean;
-  options: Array<string>;
+  options: Array<string | { value: number, text: string }>;
 }
 
 export default function Select({control, label, errorText, options, required = true}: SelectProps) {
@@ -36,7 +36,11 @@ export default function Select({control, label, errorText, options, required = t
             label={label}
             onChange={onChange}
           >
-            {options.map(option => <MenuItem key={option} value={option}>{option}</MenuItem>)}
+            {options.map(option =>
+              typeof option === "string" ?
+              <MenuItem key={option} value={option}>{option}</MenuItem>
+              : <MenuItem key={option.value} value={option.value}>{option.text}</MenuItem>
+            )}
           </SelectComponent>
         </FormControl>
       )}

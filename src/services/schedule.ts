@@ -1,28 +1,19 @@
-import { ISchedule, IUpdateSchedule } from "@/types/schedule.type";
+import { ISchedule, IChangeSchedule } from "@/types/schedule.type";
 import { axiosWithAuth } from "./api";
 import { getUserId } from "./auth-token";
 
 class ScheduleService {
-  userId: string | undefined;
-  constructor() {
-    this.userId = undefined;
-    this.init();
-  }
 
-  async init() {
-    this.userId = await getUserId();
+  async create(data: IChangeSchedule) {
+    return (await axiosWithAuth.post<IChangeSchedule[]>(`/schedule`, data)).data;
   }
 
 	async get() {
-		return (await axiosWithAuth.get<ISchedule[]>(`/schedule/${this.userId}`)).data;
+		return (await axiosWithAuth.get<ISchedule[]>(`/schedule/${await getUserId()}`)).data;
 	};
 
-  async update(data: IUpdateSchedule) {
-    return (await axiosWithAuth.patch<IUpdateSchedule>(`/schedule/${this.userId}`, data)).data;
-  }
-
-  async delete() {
-    await axiosWithAuth.delete('/customers/current');
+  async update(data: IChangeSchedule) {
+    return (await axiosWithAuth.patch<IChangeSchedule[]>(`/schedule`, data)).data;
   }
 }
 
