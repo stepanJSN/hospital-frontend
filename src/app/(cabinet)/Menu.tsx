@@ -12,8 +12,8 @@ import { staffService } from '@/services/staff';
 
 export default function Menu() {
   const pathname = usePathname().split('/');
-  const currentPage = pathname[3];
-  const role = pathname[2];
+  const currentPage = pathname[2];
+  const role = pathname[1];
   const { data, isSuccess, isPending } = useQuery({
 		queryKey: ['profile'],
 		queryFn: () => {
@@ -52,7 +52,7 @@ export default function Menu() {
         {getMenu().map(element => (
           <ListItem key={element.pageName}>
             <ListItemButton
-              href={`/cabinet/${role}/${element.pageName}`}
+              href={`/${role}/${element.pageName}`}
               selected={currentPage === element.pageName}
               component={Link}
             >
