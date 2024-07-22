@@ -11,6 +11,7 @@ export interface ISingUp extends Omit<IUser, 'id'> {
 }
 
 export interface IAuthResponse {
+  id: string
   access_token: string
   role: 'Customer' | 'Staff' | 'Admin'
 }
