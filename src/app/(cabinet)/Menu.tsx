@@ -9,12 +9,22 @@ import Link from 'next/link';
 import { MenuList } from '@/types/menu.type';
 import { customerMenu, staffMenu } from '@/config/menuConfig';
 import { staffService } from '@/services/staff';
-import { getUserId } from '@/services/auth-token';
+import { getUserId, getUserRole } from '@/services/auth-token';
+import { useEffect, useState } from 'react';
 
 export default function Menu() {
   const pathname = usePathname().split('/');
   const currentPage = pathname[2];
-  const role = pathname[1];
+  const [role, setRole] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchUserRole = async () => {
+      const userRole = await getUserRole();
+      setRole((userRole as string).toLowerCase());
+    };
+    fetchUserRole();
+  }, []);
+
   const { data, isSuccess, isPending } = useQuery({
 		queryKey: ['profile'],
 		queryFn: async () => {

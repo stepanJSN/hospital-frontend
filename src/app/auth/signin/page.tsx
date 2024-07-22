@@ -22,7 +22,7 @@ export default function SignIn() {
   const { mutate, isPending, error, isError } = useMutation({
 		mutationKey: ['signIn'],
 		mutationFn: (data: ISingIn) => new AuthService().signIn(data),
-    onSuccess: (response) => push(`/cabinet/${response.data.role === 'Customer' ? 'customer/book' : 'staff/profile'}`),
+    onSuccess: (response) => push(`/${response.data.role === 'Customer' ? 'customer/book' : 'staff/profile'}`),
 	})
 
   const onSubmit: SubmitHandler<ISingIn> = (data) => mutate(data)

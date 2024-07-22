@@ -9,7 +9,7 @@ export async function getAccessToken() {
 
 export async function setAccessToken(token:string) {
   'use server'
-  cookies().set("token", token);
+  cookies().set("token", token, { httpOnly: true });
 }
 
 export async function removeAccessToken() {
@@ -24,10 +24,25 @@ export async function getUserId() {
 
 export async function setUserId(userId:string) {
   'use server'
-  cookies().set("userId", userId);
+  cookies().set("userId", userId, { httpOnly: true });
 }
 
 export async function removeUserId() {
   'use server'
   cookies().delete("userId");
+}
+
+export async function getUserRole() {
+  'use server'
+  return await cookies().get("role")?.value;
+}
+
+export async function setUserRole(userRole:string) {
+  'use server'
+  cookies().set("role", userRole, { httpOnly: true });
+}
+
+export async function removeUserRole() {
+  'use server'
+  cookies().delete("role");
 }
