@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { MenuList } from '@/types/menu.type';
 import { customerMenu, staffMenu } from '@/config/menuConfig';
 import { staffService } from '@/services/staff';
+import { getUserId } from '@/services/auth-token';
 
 export default function Menu() {
   const pathname = usePathname().split('/');
@@ -16,9 +17,9 @@ export default function Menu() {
   const role = pathname[1];
   const { data, isSuccess, isPending } = useQuery({
 		queryKey: ['profile'],
-		queryFn: () => {
+		queryFn: async () => {
       if(role === 'customer') {
-        return customerService.getProfile();
+        return customerService.get((await getUserId()) as string);
       }
       return staffService.getProfile();
     }

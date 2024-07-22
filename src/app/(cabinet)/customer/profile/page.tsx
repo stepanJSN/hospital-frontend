@@ -5,6 +5,7 @@ import FormInput from '@/components/Inputs/FormInput'
 import Notification from '@/components/Notifications'
 import Select from '@/components/Select'
 import { removeEmptyFields } from '@/helpers/removeEmptyFields'
+import { getUserId } from '@/services/auth-token'
 import { customerService } from '@/services/customer'
 import { UpdateUser } from '@/types/customer.type'
 import { LoadingButton } from '@mui/lab'
@@ -21,7 +22,7 @@ export default function Profile() {
 
   const { data, isSuccess: isProfileSuccess, isPending: isProfilePending, isError: isProfileDataError } = useQuery({
 		queryKey: ['profile'],
-		queryFn: () => customerService.getProfile(),
+		queryFn: async () => customerService.get((await getUserId()) as string),
 	})
 
   if (isProfileSuccess) {
