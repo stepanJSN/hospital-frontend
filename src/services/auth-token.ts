@@ -9,7 +9,6 @@ export async function getAccessToken() {
 
 export async function setAccessToken(token:string) {
   'use server'
-  console.log({ token });
   cookies().set("token", token);
 }
 

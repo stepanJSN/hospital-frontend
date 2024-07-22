@@ -49,3 +49,24 @@ export interface IMyAppointment {
     },
   }
 }
+
+export interface IStaffAppointments {
+  id: string;
+  dateTime: Date;
+  isCompleted: boolean;
+  customer: {
+    id: string;
+    name: string;
+    surname: string;
+  }
+}
+
+export interface IGetAppointments {
+  startDate?: string;
+  endDate?: string;
+  isCompleted?: boolean;
+}
+
+export interface IChangeStatus {
+  isCompleted: boolean;
+}

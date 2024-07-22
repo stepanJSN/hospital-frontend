@@ -1,5 +1,6 @@
-import { GetDoctorsType, IAppointmentPayload, IAvailableTime, IDoctor, IDoctorShort, IMyAppointment, ISpecialization } from "@/types/appointment.type";
+import { GetDoctorsType, IAppointmentPayload, IAvailableTime, IChangeStatus, IDoctor, IDoctorShort, IGetAppointments, IMyAppointment, ISpecialization, IStaffAppointments } from "@/types/appointment.type";
 import { axiosWithAuth } from "./api";
+import { getUserId } from "./auth-token";
 
 class AppointmentService {
 	async getSpecialization(title: string) {
@@ -44,6 +45,20 @@ class AppointmentService {
 
 	async deleteMyAppointment(id: string) {
 		return (await axiosWithAuth.delete(`/appointments/${id}`));
+	}
+
+	async getByStaff(params: IGetAppointments) {
+		return (await axiosWithAuth.get<IStaffAppointments[]>(`/appointments/staff/${await getUserId()}`, {
+			params: {
+				startDate: params.startDate,
+				endDate: params.endDate,
+				isCompleted: params.isCompleted,
+			}
+		})).data;
+	}
+
+	async changeStatus(id: string, status: IChangeStatus) {
+		return (await axiosWithAuth.patch(`/appointments/${id}`, status)).data;
 	}
 }
 
