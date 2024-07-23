@@ -5,7 +5,7 @@ import { LoadingButton } from '@mui/lab';
 import { SubmitHandler, useForm } from 'react-hook-form'
 import FormInput from '@/components/Inputs/FormInput';
 import { useMutation } from '@tanstack/react-query';
-import { AuthService } from '@/services/auth';
+import { authService } from '@/services/auth';
 import { IAuthResponse, ISingIn } from '@/types/auth.type';
 import Select from '@/components/Select';
 import { useRouter } from 'next/navigation';
@@ -21,7 +21,7 @@ export default function SignIn() {
 
   const { mutate, isPending, error, isError } = useMutation({
 		mutationKey: ['signIn'],
-		mutationFn: (data: ISingIn) => new AuthService().signIn(data),
+		mutationFn: (data: ISingIn) => authService.signIn(data),
     onSuccess: (response) => push(`/${response.data.role === 'Customer' ? 'customer/book' : 'staff/profile'}`),
 	})
 

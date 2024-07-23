@@ -5,7 +5,7 @@ import { LoadingButton } from '@mui/lab';
 import { SubmitHandler, useForm } from 'react-hook-form'
 import FormInput from '@/components/Inputs/FormInput';
 import { useMutation } from '@tanstack/react-query';
-import { AuthService } from '@/services/auth';
+import { authService } from '@/services/auth';
 import { ISingUp } from '@/types/auth.type';
 import Select from '@/components/Select';
 import Link from '@/components/Link';
@@ -23,7 +23,7 @@ export default function SignIn() {
 
   const { mutate, isPending, error, isError, isSuccess } = useMutation({
 		mutationKey: ['signUp'],
-		mutationFn: (data: ISingUp) => new AuthService().signUp(data),
+		mutationFn: (data: ISingUp) => authService.signUp(data),
 	})
 
   const onSubmit: SubmitHandler<ISingUp> = (data) => mutate(data);

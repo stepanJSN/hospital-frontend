@@ -1,8 +1,7 @@
 import { IAuthResponse, ISingIn, ISingUp } from '@/types/auth.type'
 import { axiosClassic } from './api'
 import { setAccessToken, removeAccessToken, setUserId, removeUserId, setUserRole, removeUserRole } from './auth-token'
-
-export class AuthService {
+class AuthService {
 	async signIn(data: ISingIn) {
 		const response = await axiosClassic.post<IAuthResponse>('/auth/signin', data);
 
@@ -25,3 +24,5 @@ export class AuthService {
 		await removeUserRole()
 	}
 }
+
+export const authService = new AuthService();

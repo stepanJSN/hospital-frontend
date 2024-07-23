@@ -1,21 +1,23 @@
 "use client"
 
 import { customerService } from '@/services/customer'
-import { Avatar, Box, Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Skeleton, Typography } from '@mui/material'
-
+import { Avatar, Box, Button, Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Skeleton, Typography } from '@mui/material'
+import LogoutIcon from '@mui/icons-material/Logout';
 import { useQuery } from '@tanstack/react-query'
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { MenuList } from '@/types/menu.type';
 import { customerMenu, staffMenu } from '@/config/menuConfig';
 import { staffService } from '@/services/staff';
 import { getUserId, getUserRole } from '@/services/auth-token';
 import { useEffect, useState } from 'react';
+import { authService } from '@/services/auth';
 
 export default function Menu() {
   const pathname = usePathname().split('/');
   const currentPage = pathname[2];
   const [role, setRole] = useState<string | null>(null);
+  const { push } = useRouter()
 
   useEffect(() => {
     const fetchUserRole = async () => {
@@ -32,7 +34,8 @@ export default function Menu() {
         return customerService.get((await getUserId()) as string);
       }
       return staffService.getProfile();
-    }
+    },
+    enabled: !!role
 	})
 
   function getMenu(): MenuList {
@@ -44,6 +47,11 @@ export default function Menu() {
       default:
         return customerMenu;
     }
+  }
+
+  const logout = () => {
+    authService.logout();
+    push('/auth/signin');
   }
 
   return (
@@ -59,7 +67,7 @@ export default function Menu() {
       {isSuccess && <Typography variant="h6" component="p">{`${data?.name} ${data?.surname}`}</Typography>}
       {isPending && <Skeleton width="90%" sx={{ fontSize: '1.5rem' }} />}
       <Divider sx={{ width: '100%' }} />
-      <List>
+      <List sx={{ width: '100%' }}>
         {getMenu().map(element => (
           <ListItem key={element.pageName}>
             <ListItemButton
@@ -75,6 +83,13 @@ export default function Menu() {
           </ListItem>
         ))}
       </List>
+      <Button 
+        fullWidth 
+        startIcon={<LogoutIcon />}
+        onClick={logout}
+      >
+        Logout
+      </Button>
     </Box>
   )
 }
