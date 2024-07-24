@@ -21,8 +21,9 @@ export interface IDoctorShort extends Omit<IDoctor, "email" | "telephone" | "des
 }
 
 export type GetDoctorsType = {
-  specializationId: string; 
+  specializationId?: string; 
   date?: string
+  fullName?: string;
 }
 
 export interface IAvailableTime {

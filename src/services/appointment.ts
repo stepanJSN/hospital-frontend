@@ -10,7 +10,8 @@ class AppointmentService {
 		return (await axiosWithAuth.get<IDoctorShort[]>('/staff', 
 			{ params: { 
 				specializationId: data.specializationId,
-				date: data.date
+				date: data.date,
+				fullName: data.fullName
 			}}
 		)).data;
 	};

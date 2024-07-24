@@ -7,6 +7,7 @@ import React from 'react'
 import { Control, UseFormHandleSubmit } from 'react-hook-form'
 import { FormPayloadType } from './page'
 import Link from 'next/link'
+import FormInput from '@/components/Inputs/FormInput'
 
 type ActionBarProps = {
   handleSubmit: UseFormHandleSubmit<FormPayloadType, undefined>
@@ -26,11 +27,16 @@ export default function ActionBar({ handleSubmit, onSubmit, control, isFetching,
       mt={2}
       onSubmit={handleSubmit(onSubmit)}
     >
+      <FormInput
+        label='FullName'
+        control={control}
+        errorText='Incorrect name'
+        required={false}
+      />
       <AutocompleteAsync 
         id="specialization" 
         label="Specialization"
         control={control}
-        required
         startFromLetter={2}
         searchFunc={(title) => appointmentService.getSpecialization(title)}
         noOptionsText="Specialization not found"

@@ -11,8 +11,9 @@ import ActionBar from "./ActionBar";
 import useAdminRole from "@/hooks/useUserRole";
 
 export type FormPayloadType = {
-  date: string;
-  specialization: ISpecialization;
+  date?: string;
+  specialization?: ISpecialization;
+  fullname?: string;
 }
 
 export default function Book() {
@@ -28,13 +29,14 @@ export default function Book() {
     queryKey: ['doctors'],
 		queryFn: () => {
       const data = getValues()
+      console.log(data);
       const payload = {
         date: data.date,
-        specializationId: data.specialization.id,
+        specializationId: data.specialization?.id,
+        fullName: data.fullname
       }
       return appointmentService.getDoctors(payload)
     },
-    enabled: false,
   })
   
   const onSubmit = () => queryRefetch();

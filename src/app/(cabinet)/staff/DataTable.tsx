@@ -28,7 +28,7 @@ export default function DataTable({ data }: DataTableType) {
               <TableCell component="th" scope="row">
                 {`${row.name} ${row.surname}`}
               </TableCell>
-              <TableCell align="right">{row.specialization.title}</TableCell>
+              <TableCell align="right">{row.specialization?.title}</TableCell>
               <TableCell align="right">{row.experience}</TableCell>
               <TableCell align="right">{row.gender}</TableCell>
               <TableCell align="right">
