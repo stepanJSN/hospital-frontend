@@ -7,15 +7,14 @@ import { useQuery } from '@tanstack/react-query'
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { MenuList } from '@/types/menu.type';
-import { customerMenu, staffMenu } from '@/config/menuConfig';
+import { adminMenu, customerMenu, staffMenu } from '@/config/menuConfig';
 import { staffService } from '@/services/staff';
 import { getUserId, getUserRole } from '@/services/auth-token';
 import { useEffect, useState } from 'react';
 import { authService } from '@/services/auth';
 
 export default function Menu() {
-  const pathname = usePathname().split('/');
-  const currentPage = pathname[2];
+  const pathname = usePathname();
   const [role, setRole] = useState<string | null>(null);
   const { push } = useRouter()
 
@@ -40,8 +39,8 @@ export default function Menu() {
 
   function getMenu(): MenuList {
     switch (role) {
-      case "customer":
-        return customerMenu;
+      case "admin":
+        return adminMenu;
       case "staff":
         return staffMenu;
       default:
@@ -69,10 +68,10 @@ export default function Menu() {
       <Divider sx={{ width: '100%' }} />
       <List sx={{ width: '100%' }}>
         {getMenu().map(element => (
-          <ListItem key={element.pageName}>
+          <ListItem key={element.pageRoute}>
             <ListItemButton
-              href={`/${role}/${element.pageName}`}
-              selected={currentPage === element.pageName}
+              href={element.pageRoute}
+              selected={pathname === element.pageRoute}
               component={Link}
             >
               <ListItemIcon>

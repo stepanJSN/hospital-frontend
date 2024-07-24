@@ -1,5 +1,5 @@
 export type MenuList = {
-  pageName: string;
+  pageRoute: string;
   pageIcon: React.ReactNode;
   pageText: string
 }[]
