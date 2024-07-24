@@ -62,6 +62,7 @@ export interface IStaffAppointments {
 }
 
 export interface IGetAppointments {
+  staffId: string
   startDate?: string;
   endDate?: string;
   isCompleted?: boolean;

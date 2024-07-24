@@ -1,5 +1,7 @@
 import useGetDoctors from "@/hooks/useGetDoctroData";
-import { Avatar, Box, Divider, Skeleton, Typography } from "@mui/material";
+import useAdminRole from "@/hooks/useUserRole";
+import { Avatar, Box, Button, Divider, Skeleton, Typography } from "@mui/material";
+import Link from "next/link";
 
 type DoctorInfoProps = {
   doctorId: string;
@@ -7,6 +9,7 @@ type DoctorInfoProps = {
 
 export default function DoctorInfo({ doctorId }: DoctorInfoProps) {
   const { doctorData, isFetching, isError } = useGetDoctors(doctorId);
+  const isAdmin = useAdminRole();
 
   return (
     <>
@@ -19,7 +22,7 @@ export default function DoctorInfo({ doctorId }: DoctorInfoProps) {
         />}
         {(isFetching || isError) && <Skeleton variant="circular" width={150} height={150} />}
       </Box>
-      <Box marginLeft={3}>
+      <Box marginLeft={3} flex="auto">
         {(!isFetching && !isError) && <>
           <Typography 
             component="h1"
@@ -42,6 +45,14 @@ export default function DoctorInfo({ doctorId }: DoctorInfoProps) {
           <Skeleton width={200} />
         </>}
       </Box>
+      {isAdmin &&
+        <Button
+          component={Link}
+          href={`/staff/profile/${doctorId}`}
+          sx={{ maxHeight: '40px', marginRight: 2 }} 
+          variant="contained"
+        >Edit profile</Button>
+      }
     </Box>
     <Divider sx={{ color: 'grey' }} />
     {(!isFetching && !isError) && <Typography padding={2}>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Earum est doloremque voluptatem, ipsam corrupti id illum vitae, officia placeat nulla suscipit sapiente veritatis alias! Architecto libero autem eum alias quam.</Typography>}

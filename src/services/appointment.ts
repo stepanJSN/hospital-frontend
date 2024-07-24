@@ -1,6 +1,5 @@
 import { GetDoctorsType, IAppointmentPayload, IAvailableTime, IChangeStatus, IDoctor, IDoctorShort, IGetAppointments, IMyAppointment, ISpecialization, IStaffAppointments } from "@/types/appointment.type";
 import { axiosWithAuth } from "./api";
-import { getUserId } from "./auth-token";
 
 class AppointmentService {
 	async getSpecialization(title: string) {
@@ -48,7 +47,7 @@ class AppointmentService {
 	}
 
 	async getByStaff(params: IGetAppointments) {
-		return (await axiosWithAuth.get<IStaffAppointments[]>(`/appointments/staff/${await getUserId()}`, {
+		return (await axiosWithAuth.get<IStaffAppointments[]>(`/appointments/staff/${params.staffId}`, {
 			params: {
 				startDate: params.startDate,
 				endDate: params.endDate,

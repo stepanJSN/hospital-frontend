@@ -7,7 +7,9 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import CancelDialog from "../../customer/myAppointments/CancelDialog";
+import CancelDialog from "../../customer/appointments/CancelDialog";
+import useAdminRole from "@/hooks/useUserRole";
+import { getUserId } from "@/services/auth-token";
 
 const currentDate = dayjs().hour(0).minute(0);
 
@@ -18,26 +20,40 @@ type filtersType = {
 }
 
 export default function Appointments() {
+  const [staffId, setStaffId] = useState<string | null>();
   const [appointmentId, setAppointmentId] = useState<string | null>(null);
   const [filters, setFilters] = useState<filtersType>({ 
     startDate: currentDate,
     endDate: null,
     isCompleted: false,
   });
+  const isAdmin = useAdminRole();
 
   const { refetch, data, isFetching, isError, isSuccess } = useQuery({
     queryKey: ['appointments'],
 		queryFn: () => appointmentService.getByStaff({
+      staffId: staffId as string,
       startDate: filters.startDate?.toISOString(),
       endDate: filters.endDate?.toISOString(),
       isCompleted: filters.isCompleted,
     }),
+    enabled: !!staffId,
   })
 
   const { mutate, isPending, isError: isErrorMutation } = useMutation({
 		mutationFn: (data: { id: string, status: boolean }) => appointmentService.changeStatus(data.id, { isCompleted: data.status }),
     onSuccess: () => refetch(),
 	})
+
+  useEffect(() => {
+    const setId = async () => {
+      const id = await getUserId();
+      setStaffId(id);
+    }
+    if (!isAdmin) {
+      setId();
+    }
+  }, [isAdmin]);
 
   useEffect(() => {
     refetch()

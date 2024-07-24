@@ -6,17 +6,24 @@ import FormInput from '@/components/Inputs/FormInput'
 import Notification from '@/components/Notifications'
 import Select from '@/components/Select'
 import { removeEmptyFields } from '@/helpers/removeEmptyFields'
+import useAdminRole from '@/hooks/useUserRole'
 import { appointmentService } from '@/services/appointment'
-import { customerService } from '@/services/customer'
 import { staffService } from '@/services/staff'
-import { UpdateUser } from '@/types/customer.type'
 import { IStaff, UpdateStaff } from '@/types/staff.type'
 import { LoadingButton } from '@mui/lab'
-import { Alert, Avatar, Box, CircularProgress, Typography } from '@mui/material'
+import { Alert, Avatar, Box, Button, CircularProgress, Typography } from '@mui/material'
 import { useMutation, useQuery } from '@tanstack/react-query'
+import { useParams, useRouter } from 'next/navigation'
+import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import DeleteDialog from './DeleteDialog'
 
 export default function Profile() {
+  const { id } = useParams<{ id: string[] }>();
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const isAdmin = useAdminRole();
+  const { push } = useRouter()
+
   const {
     control,
     handleSubmit,
@@ -25,7 +32,7 @@ export default function Profile() {
 
   const { data, isSuccess: isProfileSuccess, isPending: isProfilePending, isError: isProfileDataError } = useQuery({
 		queryKey: ['profile'],
-		queryFn: () => staffService.getProfile(),
+		queryFn: () => staffService.getProfile(id ? id[0]: undefined),
 	})
 
   if (isProfileSuccess) {
@@ -38,11 +45,23 @@ export default function Profile() {
     setValue("experience", data.experience);
     setValue("room", data.room);
     setValue("description", data.description);
+    setValue("role", data.role);
   }
 
   const { mutate, isPending, error, isError, isSuccess } = useMutation({
 		mutationKey: ['profile'],
 		mutationFn: (data: UpdateStaff) => staffService.update(data),
+	})
+
+  const { mutate: deleteMutate, isError: isDeleteError } = useMutation({
+		mutationFn: (staffId?: string) => staffService.delete(staffId),
+    onSuccess: () => {
+      if (!id) {
+        push('/auth/sigin')
+      } else {
+        push('/staff')
+      }
+    }
 	})
 
   const onSubmit: SubmitHandler<IStaff> = (data) => {
@@ -53,6 +72,9 @@ export default function Profile() {
     }
     mutate(removeEmptyFields(payload))
   }
+
+  const handleClose = () => setIsDialogOpen(false);
+  const handleDelete = () => deleteMutate(id ? id[0]: undefined);
 
   return (
     <Box 
@@ -142,6 +164,13 @@ export default function Profile() {
             required={false}
             type="number"
           />
+          {isAdmin && <Select
+            label='Role'
+            control={control}
+            errorText='Gender is required'
+            options={['Admin', 'Staff']}
+            required={false}
+          />}
           <FormInput 
             label='Password'
             control={control}
@@ -154,13 +183,27 @@ export default function Profile() {
             fullWidth 
             type="submit"
             loadingPosition="start"
+            sx={{ mb: 1 }}
           >
             Update
           </LoadingButton>
+          <Button 
+            variant="contained"
+            color="error"
+            fullWidth
+            onClick={() => setIsDialogOpen(true)}
+          >
+            Delete profile
+          </Button>
         </Box>
       }
       {isProfilePending && <CircularProgress size={65} sx={{ alignSelf: "center" }} />}
       <Notification trigger={isProfileDataError} />
+      <DeleteDialog 
+        open={isDialogOpen}
+        handleClose={handleClose}
+        handleDelete={handleDelete}
+      />
     </Box>
   )
 }
