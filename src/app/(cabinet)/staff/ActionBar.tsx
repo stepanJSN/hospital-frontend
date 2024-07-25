@@ -8,6 +8,7 @@ import { Control, UseFormHandleSubmit } from 'react-hook-form'
 import { FormPayloadType } from './page'
 import Link from 'next/link'
 import FormInput from '@/components/Inputs/FormInput'
+import { specializationService } from '@/services/specialization'
 
 type ActionBarProps = {
   handleSubmit: UseFormHandleSubmit<FormPayloadType, undefined>
@@ -38,7 +39,7 @@ export default function ActionBar({ handleSubmit, onSubmit, control, isFetching,
         label="Specialization"
         control={control}
         startFromLetter={2}
-        searchFunc={(title) => appointmentService.getSpecialization(title)}
+        searchFunc={(title) => specializationService.getAll(title)}
         noOptionsText="Specialization not found"
         sx={{
           flex: "0 0 50%"

@@ -17,6 +17,7 @@ import { useParams, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import DeleteDialog from '@/components/Dialogs/DeleteDialog'
+import { specializationService } from '@/services/specialization'
 
 export default function Profile() {
   const { id } = useParams<{ id: string[] }>();
@@ -138,7 +139,7 @@ export default function Profile() {
             control={control}
             required
             startFromLetter={2}
-            searchFunc={(title) => appointmentService.getSpecialization(title)}
+            searchFunc={(title) => specializationService.getAll(title)}
             noOptionsText="Specialization not found"
             sx={{
               flex: "0 0 50%"

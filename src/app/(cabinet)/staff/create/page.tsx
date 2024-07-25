@@ -5,6 +5,7 @@ import AutocompleteAsync from '@/components/Inputs/AutocompleteAsync'
 import FormInput from '@/components/Inputs/FormInput'
 import Select from '@/components/Select'
 import { appointmentService } from '@/services/appointment'
+import { specializationService } from '@/services/specialization'
 import { staffService } from '@/services/staff'
 import { IStaff } from '@/types/staff.type'
 import { LoadingButton } from '@mui/lab'
@@ -89,7 +90,7 @@ export default function Create() {
           label="Specialization"
           control={control}
           startFromLetter={2}
-          searchFunc={(title) => appointmentService.getSpecialization(title)}
+          searchFunc={(title) => specializationService.getAll(title)}
           noOptionsText="Specialization not found"
           sx={{
             flex: "0 0 50%"

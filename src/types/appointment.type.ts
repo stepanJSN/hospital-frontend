@@ -1,8 +1,3 @@
-export interface ISpecialization {
-  id: string
-  title: string
-}
-
 export interface IDoctor {
   email: string;
   name: string;
