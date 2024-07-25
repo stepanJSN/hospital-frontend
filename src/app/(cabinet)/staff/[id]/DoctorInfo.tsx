@@ -30,7 +30,7 @@ export default function DoctorInfo({ doctorId }: DoctorInfoProps) {
             paddingBottom={2}
             paddingTop={2}
           >{`${doctorData?.name} ${doctorData?.surname}`}</Typography>
-          <Typography>{'Specialization: ' + doctorData?.specialization.title}</Typography>
+          <Typography>{'Specialization: ' + doctorData?.specialization?.title}</Typography>
           <Typography>{'Experience: ' + doctorData?.experience + ' year'}</Typography>
           <Typography>{'Email: ' + doctorData?.email}</Typography>
           <Typography>{'Telephone: ' + doctorData?.telephone}</Typography>
@@ -46,12 +46,24 @@ export default function DoctorInfo({ doctorId }: DoctorInfoProps) {
         </>}
       </Box>
       {isAdmin &&
-        <Button
-          component={Link}
-          href={`/staff/profile/${doctorId}`}
-          sx={{ maxHeight: '40px', marginRight: 2 }} 
-          variant="contained"
-        >Edit profile</Button>
+        <Box 
+          display="flex" 
+          flexDirection="column"
+          gap={1}
+        >
+          <Button
+            component={Link}
+            href={`/staff/profile/${doctorId}`}
+            sx={{ maxHeight: '40px', marginRight: 2 }} 
+            variant="contained"
+          >Edit profile</Button>
+          <Button
+            component={Link}
+            href={`/staff/appointments/${doctorId}`}
+            sx={{ maxHeight: '40px', marginRight: 2 }} 
+            variant="contained"
+          >See appointments</Button>
+        </Box>
       }
     </Box>
     <Divider sx={{ color: 'grey' }} />

@@ -54,11 +54,6 @@ export const staffMenu: MenuList = [
 
 export const adminMenu: MenuList = [
   {
-    pageRoute: "/staff/appointments",
-    pageIcon: <CalendarMonthIcon />,
-    pageText: "Appointments"
-  },
-  {
     pageRoute: "/staff",
     pageIcon: <PeopleIcon />,
     pageText: "Staff"
