@@ -1,5 +1,4 @@
 import Notification from "@/components/Notifications";
-import { getUserId } from "@/services/auth-token";
 import { scheduleService } from "@/services/schedule";
 import { IChangeSchedule, ISchedule } from "@/types/schedule.type";
 import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material";
@@ -8,6 +7,7 @@ import { useDebounce, useRenderCount } from "@uidotdev/usehooks";
 import { ChangeEvent, useEffect, useState } from "react";
 
 type ScheduleTableProps = {
+  id: Promise<string>;
   days: string[];
   schedule: ISchedule[];
   refetch: () => void;
@@ -27,7 +27,7 @@ const defaultSchedule = Array.from({ length: 7 }, (_, i) => ({
   disabled: true,
 }))
 
-export default function ScheduleTable({ schedule, days, refetch }: ScheduleTableProps) {
+export default function ScheduleTable({ id, schedule, days, refetch }: ScheduleTableProps) {
   const [scheduleData, setScheduleData] = useState<Schedule[]>(defaultSchedule);
   const debouncedScheduleData = useDebounce(scheduleData, 2000);
   const renderCount = useRenderCount();
@@ -48,9 +48,8 @@ export default function ScheduleTable({ schedule, days, refetch }: ScheduleTable
   useEffect(() => {
     const query = async () => {
       if (renderCount > 6) {
-        const staffId = await getUserId() as string
         mutate({
-          staffId,
+          staffId: await id,
           schedule: scheduleData.filter(scheduleItem => !scheduleItem.disabled),
         });
       }
@@ -127,7 +126,7 @@ export default function ScheduleTable({ schedule, days, refetch }: ScheduleTable
                     onClick={() => changeDayType(scheduleItem.dayOfWeek)}
                     variant={scheduleItem.disabled ? "contained" : "outlined"}
                     sx={{ width: '280px' }}
-                  >{scheduleItem.disabled ? "Make it a non-business day" : "Make it a business day"}</Button>
+                  >{!scheduleItem.disabled ? "Make it a non-business day" : "Make it a business day"}</Button>
                 </TableCell>
               </TableRow>
             ))}

@@ -4,19 +4,27 @@ import { scheduleService } from "@/services/schedule"
 import { Alert, Box, CircularProgress } from "@mui/material"
 import { useQuery } from "@tanstack/react-query"
 import ScheduleTable from "./ScheduleTable"
+import { useParams } from "next/navigation"
+import { getUserId } from "@/services/auth-token"
 
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
 export default function Schedule() {
+  const { staffId } = useParams<{ staffId: string[] }>();
+
+  const getId = async () => {
+    return staffId ? staffId[0] : await getUserId() as string;
+  }
+
   const { data, refetch, isSuccess, isPending, isError } = useQuery({
-		queryKey: ['schedule'],
-		queryFn: () => scheduleService.get(),
+		queryKey: ['schedule', staffId[0]],
+		queryFn: async () => scheduleService.get(await getId()),
 	})
 
   return (
     <>
       <Box width="100%">
-        {isSuccess && <ScheduleTable days={days} schedule={data} refetch={refetch} />}
+        {isSuccess && <ScheduleTable id={getId()} days={days} schedule={data} refetch={refetch} />}
         {isPending && <CircularProgress sx={{ position: 'relative', top: '40%', left: '50%' }} />}
         {isError && <Alert severity="error" sx={{ m: 2 }}>Error. Can&apos;t load schedule.</Alert>}
       </Box>

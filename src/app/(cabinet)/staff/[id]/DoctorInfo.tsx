@@ -63,6 +63,12 @@ export default function DoctorInfo({ doctorId }: DoctorInfoProps) {
             sx={{ maxHeight: '40px', marginRight: 2 }} 
             variant="contained"
           >See appointments</Button>
+          <Button
+            component={Link}
+            href={`/staff/schedule/${doctorId}`}
+            sx={{ maxHeight: '40px', marginRight: 2 }} 
+            variant="contained"
+          >Edit schedule</Button>
         </Box>
       }
     </Box>
