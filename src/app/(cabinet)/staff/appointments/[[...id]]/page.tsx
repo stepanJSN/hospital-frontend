@@ -21,7 +21,6 @@ type filtersType = {
 
 export default function Appointments() {
   const { id } = useParams<{ id: string[] }>();
-  const [staffId, setStaffId] = useState<string | null>();
   const [appointmentId, setAppointmentId] = useState<string | null>(null);
   const [filters, setFilters] = useState<filtersType>({ 
     startDate: currentDate,
@@ -29,15 +28,18 @@ export default function Appointments() {
     isCompleted: false,
   });
 
+  const getId = async () => {
+    return id ? id[0] : await getUserId() as string;
+  }
+
   const { refetch, data, isFetching, isError, isSuccess } = useQuery({
     queryKey: ['appointments'],
-		queryFn: () => appointmentService.getByStaff({
-      staffId: staffId as string,
+		queryFn: async () => appointmentService.getByStaff({
+      staffId: await getId(),
       startDate: filters.startDate?.toISOString(),
       endDate: filters.endDate?.toISOString(),
       isCompleted: filters.isCompleted,
-    }),
-    enabled: !!staffId,
+    })
   })
 
   const { mutate, isPending, isError: isErrorMutation } = useMutation({
@@ -46,22 +48,8 @@ export default function Appointments() {
 	})
 
   useEffect(() => {
-    const setId = async () => {
-      if(id) {
-        setStaffId(id[0]);
-        return;
-      }
-      const currentId = await getUserId();
-      setStaffId(currentId);
-    }
-    setId();
-  }, []);
-
-  useEffect(() => {
-    if (staffId) {
-      refetch();
-    }
-  }, [filters.startDate, filters.endDate, filters.isCompleted, refetch, staffId]);
+    refetch();
+  }, [filters.startDate, filters.endDate, filters.isCompleted, refetch]);
 
   const closeDialog = () => setAppointmentId(null);
 
