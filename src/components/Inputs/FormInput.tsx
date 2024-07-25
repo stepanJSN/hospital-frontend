@@ -4,17 +4,18 @@ import { Control, Controller } from "react-hook-form";
 type InputProps = {
   control: Control<any>;
   label: string;
-  errorText: string;
+  name?: string
+  errorText?: string;
   type?: string;
   required?: boolean
   pattern?: RegExp;
   multiline?: boolean;
 }
 
-export default function FormInput({ control, label, errorText, type = "text", required = true, pattern, multiline = false }: InputProps) {
+export default function FormInput({ control, label, name, errorText, type = "text", required = true, pattern, multiline = false }: InputProps) {
   return (
     <Controller
-      name={label.toLowerCase()}
+      name={name ?? label.toLowerCase()}
       control={control}
       rules={{
         required,

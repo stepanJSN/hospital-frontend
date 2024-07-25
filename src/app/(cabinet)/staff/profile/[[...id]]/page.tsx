@@ -16,7 +16,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { useParams, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import DeleteDialog from './DeleteDialog'
+import DeleteDialog from '@/components/Dialogs/DeleteDialog'
 
 export default function Profile() {
   const { id } = useParams<{ id: string[] }>();

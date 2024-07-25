@@ -7,7 +7,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import CancelDialog from "../../customer/appointments/CancelDialog";
+import CancelDialog from "../../customers/appointments/CancelDialog";
 import useAdminRole from "@/hooks/useUserRole";
 import { getUserId } from "@/services/auth-token";
 

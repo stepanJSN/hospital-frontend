@@ -2,11 +2,12 @@ import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Dialog
 
 type DeleteDialogProps = {
   open: boolean;
+  title?: string
   handleClose: () => void;
   handleDelete: () => void;
 }
 
-export default function DeleteDialog({ open, handleClose, handleDelete }: DeleteDialogProps) {
+export default function DeleteDialog({ open, title, handleClose, handleDelete }: DeleteDialogProps) {
 
   return (
     <Dialog
@@ -16,7 +17,7 @@ export default function DeleteDialog({ open, handleClose, handleDelete }: Delete
       aria-describedby="alert-dialog-description"
     >
       <DialogTitle id="alert-dialog-title">
-        Are you sure you want to delete your profile?
+        {title ?? 'Are you sure you want to perform this action?'}
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">

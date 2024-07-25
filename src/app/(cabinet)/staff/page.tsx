@@ -16,7 +16,7 @@ export type FormPayloadType = {
   fullname?: string;
 }
 
-export default function Book() {
+export default function Staff() {
   const isAdmin = useAdminRole();
   const {
     control,
