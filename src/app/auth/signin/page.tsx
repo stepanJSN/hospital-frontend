@@ -6,10 +6,11 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import FormInput from '@/components/Inputs/FormInput';
 import { useMutation } from '@tanstack/react-query';
 import { authService } from '@/services/auth';
-import { IAuthResponse, ISingIn } from '@/types/auth.type';
+import { ISingIn } from '@/types/auth.type';
 import Select from '@/components/Select';
 import { useRouter } from 'next/navigation';
 import Link from '@/components/Link';
+import { AxiosError } from 'axios';
 
 export default function SignIn() {
   const {
@@ -24,8 +25,20 @@ export default function SignIn() {
 		mutationFn: (data: ISingIn) => authService.signIn(data),
     onSuccess: (response) => push(`/${response.data.role === 'Customer' ? 'staff' : 'staff/profile'}`),
 	})
-
   const onSubmit: SubmitHandler<ISingIn> = (data) => mutate(data)
+
+  const getErrorMessage = (statusCode: number | undefined) => {
+    switch (statusCode) {
+      case 404:
+        return "User with such email not found";
+
+      case 401:
+        return "Wrong email or password";
+    
+      default:
+        return "Error. Try again";
+    }
+  }
 
   return (
     <Box 
@@ -40,7 +53,7 @@ export default function SignIn() {
         variant='h5' 
         mb={1}
       >Sign In</Typography>
-      {isError && <Alert severity="error">{error.message}</Alert>}
+      {isError && <Alert severity="error">{getErrorMessage((error as AxiosError).response?.status)}</Alert>}
       <FormInput 
         label='Email'
         control={control}
@@ -51,12 +64,13 @@ export default function SignIn() {
         label='Password'
         control={control}
         errorText='Incorrect password'
+        pattern={/^.{8,24}$/}
         type='password'
       />
       <Select 
         label='Role'
         control={control}
-        errorText='Role is required'
+        defaultValue='Customer'
         options={['Customer', 'Staff']}
       />
       <LoadingButton 

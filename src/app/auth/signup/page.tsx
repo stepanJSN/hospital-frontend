@@ -10,6 +10,7 @@ import { ISingUp } from '@/types/auth.type';
 import Select from '@/components/Select';
 import Link from '@/components/Link';
 import DatePicker from '@/components/DatePicker';
+import { AxiosError } from 'axios';
 
 export default function SignIn() {
   const {
@@ -25,8 +26,15 @@ export default function SignIn() {
 		mutationKey: ['signUp'],
 		mutationFn: (data: ISingUp) => authService.signUp(data),
 	})
-
   const onSubmit: SubmitHandler<ISingUp> = (data) => mutate(data);
+
+  const getErrorMessage = (statusCode: number | undefined) => {
+    if (statusCode === 400) {
+      return "User with such email exists";
+    }
+
+    return "Error. Try again";
+  }
 
   return (
     <Box 
@@ -45,7 +53,7 @@ export default function SignIn() {
       <Alert severity="success">
         Account was created. <Link href='/auth/signin'>You can Sign In</Link>
       </Alert>}
-      {isError && <Alert severity="error">{error.message}</Alert>}
+      {isError && <Alert severity="error">{getErrorMessage((error as AxiosError).response?.status)}</Alert>}
       <FormInput 
         label='Email'
         control={control}
@@ -56,29 +64,34 @@ export default function SignIn() {
         label='Name'
         control={control}
         errorText='Incorrect name'
+        pattern={/^[a-zA-Z]{2,}$/}
       />
       <FormInput 
         label='Surname'
         control={control}
         errorText='Incorrect surname'
+        pattern={/^[a-zA-Z]{2,}$/}
       />
       <FormInput 
         label='Telephone'
         control={control}
-        errorText='Incorrect telephone'
+        errorText='Incorrect telephone. Example: 380956732134'
         required={false}
+        pattern={/^\d{12}$/}
       />
       <DatePicker label="birthday" control={control} />
       <Select 
         label='Gender'
         control={control}
-        errorText='Gender is required'
+        defaultValue='female'
         options={['male', 'female']}
       />
       <FormInput 
         label='Password'
         control={control}
-        errorText='Incorrect password'
+        type="password"
+        errorText='Incorrect password. Password must be at least 8 characters long but no more than 25.'
+        pattern={/^.{8,24}$/}
       />
       <LoadingButton 
         loading={isPending}

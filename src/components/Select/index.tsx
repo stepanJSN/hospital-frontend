@@ -4,12 +4,12 @@ import { Control, Controller } from "react-hook-form";
 type SelectProps = {
   control: Control<any>;
   label: string;
-  errorText: string;
   required?: boolean;
+  defaultValue: string;
   options: Array<string | { value: number, text: string }>;
 }
 
-export default function Select({control, label, errorText, options, required = true}: SelectProps) {
+export default function Select({control, label, defaultValue, options, required = true}: SelectProps) {
   return (
     <Controller
       name={label.toLowerCase()}
@@ -17,7 +17,7 @@ export default function Select({control, label, errorText, options, required = t
       rules={{
         required,
       }}
-      defaultValue="female"
+      defaultValue={defaultValue}
       render={({
         field: { onChange, value },
         fieldState: { error },
