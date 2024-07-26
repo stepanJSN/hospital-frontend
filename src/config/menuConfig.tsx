@@ -13,17 +13,17 @@ export const customerMenu: MenuList = [
     pageText: "Make an appointment with a doctor"
   },
   {
-    pageRoute: "/customer/appointments",
+    pageRoute: "/customers/appointments",
     pageIcon: <FormatListBulletedIcon />,
     pageText: "My appointments"
   },
   {
-    pageRoute: "/customer/notifications",
+    pageRoute: "/customers/notifications",
     pageIcon: <NotificationsIcon />,
     pageText: "Notifications"
   },
   {
-    pageRoute: "/customer/profile",
+    pageRoute: "/customers/profile",
     pageIcon: <PersonIcon />,
     pageText: "Profile"
   }

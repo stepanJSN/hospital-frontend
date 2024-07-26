@@ -1,5 +1,5 @@
 import { IAuthResponse, ISingIn, ISingUp } from '@/types/auth.type'
-import { axiosClassic } from './api'
+import { axiosClassic, axiosWithAuth } from './api'
 import { setAccessToken, removeAccessToken, setUserId, removeUserId, setUserRole, removeUserRole } from './auth-token'
 class AuthService {
 	async signIn(data: ISingIn) {
@@ -17,8 +17,14 @@ class AuthService {
 		return response
 	};
 
+	async getNewTokens() {
+		return await axiosClassic.post<string>(
+			'/auth/access-token'
+		)
+	}
+
 	async logout() {
-		// const response = await axiosClassic.post<boolean>('/auth/logout')
+		await axiosClassic.get('/auth/logout')
     await removeAccessToken()
 		await removeUserId()
 		await removeUserRole()

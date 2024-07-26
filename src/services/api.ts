@@ -1,10 +1,11 @@
-import axios, { AxiosError, type CreateAxiosDefaults } from 'axios'
+import axios, { AxiosError, InternalAxiosRequestConfig, type CreateAxiosDefaults } from 'axios'
 
-import { getAccessToken } from './auth-token'
+import { getAccessToken, setAccessToken } from './auth-token'
 import { authService } from './auth'
 
 const options: CreateAxiosDefaults = {
 	baseURL: 'http://localhost:8080',
+	withCredentials: true,
 	headers: {
 		'Content-Type': 'application/json'
 	},
@@ -25,12 +26,23 @@ axiosWithAuth.interceptors.request.use(async config => {
 
 axiosWithAuth.interceptors.response.use(function (response) {
 	return response;
-}, function (error: AxiosError) {
-	
-	console.log(error.response?.status);
+}, async function (error: AxiosError) {
+	const originalRequest = error.config
 
+	if (error.response?.status === 401 && error.config) {
+			const token = (await authService.getNewTokens()).data;
+			if (token) await setAccessToken(token)
+			return axiosWithAuth.request(originalRequest as InternalAxiosRequestConfig<any>)
+	}
+
+	return Promise.reject(error);
+});
+
+axiosClassic.interceptors.response.use(function (response) {
+	return response;
+}, async function (error: AxiosError) {
 	if (error.response?.status === 401) {
-			authService.logout();
+		authService.logout();
 	}
 
 	return Promise.reject(error);
