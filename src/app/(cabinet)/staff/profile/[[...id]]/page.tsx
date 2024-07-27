@@ -3,16 +3,14 @@
 import DatePicker from '@/components/DatePicker'
 import AutocompleteAsync from '@/components/Inputs/AutocompleteAsync'
 import FormInput from '@/components/Inputs/FormInput'
-import Notification from '@/components/Notifications'
 import Select from '@/components/Select'
 import { removeEmptyFields } from '@/helpers/removeEmptyFields'
 import useAdminRole from '@/hooks/useUserRole'
-import { appointmentService } from '@/services/appointment'
 import { staffService } from '@/services/staff'
-import { IStaff, UpdateStaff } from '@/types/staff.type'
+import { UpdateStaff } from '@/types/staff.type'
 import { LoadingButton } from '@mui/lab'
 import { Alert, Avatar, Box, Button, CircularProgress, Typography } from '@mui/material'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -23,13 +21,14 @@ export default function Profile() {
   const { id } = useParams<{ id: string[] }>();
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const isAdmin = useAdminRole();
-  const { push } = useRouter()
+  const { push } = useRouter();
+  const queryClient = useQueryClient();
 
   const {
     control,
     handleSubmit,
     setValue,
-  } = useForm<IStaff>();
+  } = useForm<UpdateStaff>();
 
   const { data, isSuccess: isProfileSuccess, isPending: isProfilePending, isError: isProfileDataError } = useQuery({
 		queryKey: ['profile'],
@@ -49,12 +48,14 @@ export default function Profile() {
     setValue("role", data.role);
   }
 
+  const idFromParam = id ? id[0]: undefined;
+
   const { mutate, isPending, error, isError, isSuccess } = useMutation({
-		mutationKey: ['profile'],
-		mutationFn: (data: UpdateStaff) => staffService.update(data),
+		mutationFn: (data: UpdateStaff) => staffService.update(data, idFromParam),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['profile'] }),
 	})
 
-  const { mutate: deleteMutate, isError: isDeleteError } = useMutation({
+  const { mutate: deleteMutate, isPending: isDeletePending, isError: isDeleteError } = useMutation({
 		mutationFn: (staffId?: string) => staffService.delete(staffId),
     onSuccess: () => {
       if (!id) {
@@ -65,17 +66,17 @@ export default function Profile() {
     }
 	})
 
-  const onSubmit: SubmitHandler<IStaff> = (data) => {
+  const onSubmit: SubmitHandler<UpdateStaff> = (data) => {
     const { specialization, ...rest } = data;
     const payload = {
       ...rest,
-      specializationId: data.specialization.id
+      specializationId: data.specialization ? data.specialization.id : null,
     }
     mutate(removeEmptyFields(payload))
   }
 
   const handleClose = () => setIsDialogOpen(false);
-  const handleDelete = () => deleteMutate(id ? id[0]: undefined);
+  const handleDelete = () => deleteMutate(idFromParam);
 
   return (
     <Box 
@@ -112,24 +113,27 @@ export default function Profile() {
             control={control}
             errorText='Incorrect name'
             required={false}
+            pattern={/^[a-zA-Z]{2,}$/}
           />
           <FormInput 
             label='Surname'
             control={control}
             errorText='Incorrect surname'
             required={false}
+            pattern={/^[a-zA-Z]{2,}$/}
           />
           <FormInput 
             label='Telephone'
             control={control}
-            errorText='Incorrect telephone'
+            errorText='Incorrect telephone. Example: 380956732134'
             required={false}
+            pattern={/^\d{12}$/}
           />
           <DatePicker label="birthday" control={control} />
           <Select 
             label='Gender'
             control={control}
-            errorText='Gender is required'
+            defaultValue='male'
             options={['male', 'female']}
             required={false}
           />
@@ -137,7 +141,6 @@ export default function Profile() {
             id="specialization" 
             label="Specialization"
             control={control}
-            required
             startFromLetter={2}
             searchFunc={(title) => specializationService.getAll(title)}
             noOptionsText="Specialization not found"
@@ -168,14 +171,15 @@ export default function Profile() {
           {isAdmin && <Select
             label='Role'
             control={control}
-            errorText='Gender is required'
+            defaultValue='Staff'
             options={['Admin', 'Staff']}
             required={false}
           />}
           <FormInput 
             label='Password'
             control={control}
-            errorText='Incorrect password'
+            errorText='Incorrect password. Password must be at least 8 characters long but no more than 25.'
+            pattern={/^.{8,24}$/}
             required={false}
           />
           <LoadingButton 
@@ -188,7 +192,7 @@ export default function Profile() {
           >
             Update
           </LoadingButton>
-          <Button 
+          <Button
             variant="contained"
             color="error"
             fullWidth
@@ -199,9 +203,19 @@ export default function Profile() {
         </Box>
       }
       {isProfilePending && <CircularProgress size={65} sx={{ alignSelf: "center" }} />}
-      <Notification trigger={isProfileDataError} />
+      {isProfileDataError && 
+        <Typography 
+          color="error"
+          position="absolute"
+          top="30%"
+          fontSize={20}
+        >
+          Error. Unable to load profile
+        </Typography>
+      }
       <DeleteDialog 
         open={isDialogOpen}
+        isError={isDeletePending}
         handleClose={handleClose}
         handleDelete={handleDelete}
       />

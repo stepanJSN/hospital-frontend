@@ -11,7 +11,7 @@ export interface IStaff extends IUser {
   description: string;
 }
 
-export type UpdateStaff = Partial<Omit<IStaff, 'id' | 'specialization'> & { 
+export type UpdateStaff = Partial<Omit<IStaff, 'id'> & { 
   password: string;
   specializationId: string;
 }>

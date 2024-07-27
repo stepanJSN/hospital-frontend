@@ -11,8 +11,8 @@ class StaffService {
 		return (await axiosWithAuth.get<IStaff>(`/staff/${staffId ?? await getUserId()}`)).data;
 	};
 
-  async update(data: UpdateStaff) {
-    return (await axiosWithAuth.patch<IStaff>('/staff/current', data)).data;
+  async update(data: UpdateStaff, staffId?: string) {
+    return (await axiosWithAuth.patch<IStaff>(`/staff/${staffId ?? await getUserId()}/`, data)).data;
   }
 
   async delete(staffId?: string) {

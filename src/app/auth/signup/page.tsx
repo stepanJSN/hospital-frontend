@@ -11,6 +11,7 @@ import Select from '@/components/Select';
 import Link from '@/components/Link';
 import DatePicker from '@/components/DatePicker';
 import { AxiosError } from 'axios';
+import { removeEmptyFields } from '@/helpers/removeEmptyFields';
 
 export default function SignIn() {
   const {
@@ -26,7 +27,7 @@ export default function SignIn() {
 		mutationKey: ['signUp'],
 		mutationFn: (data: ISingUp) => authService.signUp(data),
 	})
-  const onSubmit: SubmitHandler<ISingUp> = (data) => mutate(data);
+  const onSubmit: SubmitHandler<ISingUp> = (data) => mutate(removeEmptyFields(data) as ISingUp);
 
   const getErrorMessage = (statusCode: number | undefined) => {
     if (statusCode === 400) {

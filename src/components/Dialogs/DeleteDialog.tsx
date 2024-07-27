@@ -1,13 +1,14 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
+import { Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 
 type DeleteDialogProps = {
   open: boolean;
-  title?: string
+  title?: string;
+  isError?: boolean;
   handleClose: () => void;
   handleDelete: () => void;
 }
 
-export default function DeleteDialog({ open, title, handleClose, handleDelete }: DeleteDialogProps) {
+export default function DeleteDialog({ open, title, handleClose, handleDelete, isError }: DeleteDialogProps) {
 
   return (
     <Dialog
@@ -18,6 +19,7 @@ export default function DeleteDialog({ open, title, handleClose, handleDelete }:
     >
       <DialogTitle id="alert-dialog-title">
         {title ?? 'Are you sure you want to perform this action?'}
+        {isError && <Alert severity="error">Error. Try again</Alert>}
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">

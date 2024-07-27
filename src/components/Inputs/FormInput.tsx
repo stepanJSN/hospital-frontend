@@ -37,7 +37,7 @@ export default function FormInput({ control, label, name, errorText, type = "tex
             onChange(event.target.value ? +event.target.value : '') :
             onChange(event.target.value)
           }
-          value={value}
+          value={value ?? ""}
           label={label}
           fullWidth
           multiline={multiline}

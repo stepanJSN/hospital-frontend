@@ -1,26 +1,30 @@
 "use client"
 
 import DatePicker from '@/components/DatePicker'
+import DeleteDialog from '@/components/Dialogs/DeleteDialog'
 import FormInput from '@/components/Inputs/FormInput'
-import Notification from '@/components/Notifications'
 import Select from '@/components/Select'
 import { removeEmptyFields } from '@/helpers/removeEmptyFields'
 import { getUserId } from '@/services/auth-token'
 import { customerService } from '@/services/customer'
 import { UpdateUser } from '@/types/customer.type'
 import { LoadingButton } from '@mui/lab'
-import { Alert, Avatar, Box, CircularProgress, Typography } from '@mui/material'
+import { Alert, Avatar, Box, Button, CircularProgress, Typography } from '@mui/material'
 import { useMutation, useQuery } from '@tanstack/react-query'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 export default function Profile() {
+  const { push } = useRouter();
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const {
     control,
     handleSubmit,
     setValue,
-  } = useForm<UpdateUser>()
+  } = useForm<UpdateUser>();
 
-  const { data, isSuccess: isProfileSuccess, isPending: isProfilePending, isError: isProfileDataError } = useQuery({
+  const { refetch, data, isSuccess: isProfileSuccess, isPending: isProfilePending, isError: isProfileDataError } = useQuery({
 		queryKey: ['profile'],
 		queryFn: async () => customerService.get((await getUserId()) as string),
 	})
@@ -33,12 +37,19 @@ export default function Profile() {
     setValue("gender", data.gender,{ shouldValidate: true })
   }
 
-  const { mutate, isPending, error, isError, isSuccess } = useMutation({
-		mutationKey: ['profile'],
+  const { mutate, isPending, isError, isSuccess } = useMutation({
 		mutationFn: (data: UpdateUser) => customerService.update(data),
+    onSuccess: () => refetch(),
+	})
+
+  const { mutate: deleteMutate, isPending: isDeletePending, isError: isDeleteError } = useMutation({
+		mutationFn: () => customerService.delete(),
+    onSuccess: () => push('/auth/sigin')
 	})
 
   const onSubmit: SubmitHandler<UpdateUser> = (data) => mutate(removeEmptyFields(data))
+  const handleClose = () => setIsDialogOpen(false);
+  const handleDelete = () => deleteMutate();
 
   return (
     <Box 
@@ -69,37 +80,41 @@ export default function Profile() {
           <Alert severity="success">
             Profile info was updated
           </Alert>}
-          {isError && <Alert severity="error">{error.message}</Alert>}
+          {isError && <Alert severity="error">{isError && "Error. Try again"}</Alert>}
           <FormInput 
             label='Name'
             control={control}
             errorText='Incorrect name'
             required={false}
+            pattern={/^[a-zA-Z]{2,}$/}
           />
           <FormInput 
             label='Surname'
             control={control}
             errorText='Incorrect surname'
             required={false}
+            pattern={/^[a-zA-Z]{2,}$/}
           />
           <FormInput 
             label='Telephone'
             control={control}
-            errorText='Incorrect telephone'
+            errorText='Incorrect telephone. Example: 380956732134'
             required={false}
+            pattern={/^\d{12}$/}
           />
           <DatePicker label="birthday" control={control} />
           <Select 
             label='Gender'
             control={control}
-            errorText='Gender is required'
+            defaultValue='male'
             options={['male', 'female']}
             required={false}
           />
           <FormInput 
             label='Password'
             control={control}
-            errorText='Incorrect password'
+            errorText='Incorrect password. Password must be at least 8 characters long but no more than 25.'
+            pattern={/^.{8,24}$/}
             required={false}
           />
           <LoadingButton 
@@ -108,13 +123,37 @@ export default function Profile() {
             fullWidth 
             type="submit"
             loadingPosition="start"
+            sx={{ mb: 1 }}
           >
             Update
           </LoadingButton>
+          <Button
+            variant="contained"
+            color="error"
+            fullWidth
+            onClick={() => setIsDialogOpen(true)}
+          >
+            Delete profile
+          </Button>
         </Box>
       }
       {isProfilePending && <CircularProgress size={65} sx={{ alignSelf: "center" }} />}
-      <Notification trigger={isProfileDataError} />
+      {isProfileDataError && 
+        <Typography 
+          color="error"
+          position="absolute"
+          top="30%"
+          fontSize={20}
+        >
+          Error. Unable to load profile
+        </Typography>
+      }
+      <DeleteDialog 
+        open={isDialogOpen}
+        isError={isDeleteError}
+        handleClose={handleClose}
+        handleDelete={handleDelete}
+      />
     </Box>
   )
 }

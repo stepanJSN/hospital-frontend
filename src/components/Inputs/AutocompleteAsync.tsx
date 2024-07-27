@@ -1,6 +1,6 @@
 "use client"
 
-import { ISpecialization } from "@/types/appointment.type";
+import { ISpecialization } from "@/types/specialization.type";
 import { Autocomplete, TextField } from "@mui/material";
 import { useDebounce } from "@uidotdev/usehooks";
 import { useEffect, useState } from "react";
