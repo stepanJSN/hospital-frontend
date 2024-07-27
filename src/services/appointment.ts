@@ -1,5 +1,6 @@
-import { GetDoctorsType, IAppointmentPayload, IAvailableTime, IChangeStatus, IDoctor, IDoctorShort, IGetAppointments, IMyAppointment, IStaffAppointments } from "@/types/appointment.type";
+import { GetDoctorsType, IAppointmentPayload, IAvailableTime, IChangeStatus, IGetAppointments, IMyAppointment, IStaffAppointments } from "@/types/appointment.type";
 import { axiosWithAuth } from "./api";
+import { IDoctorShort } from "@/types/staff.type";
 
 class AppointmentService {
 	async getDoctors(data: GetDoctorsType) {
@@ -11,10 +12,6 @@ class AppointmentService {
 			}}
 		)).data;
 	};
-
-	async getDoctorById(id: string) {
-		return (await axiosWithAuth.get<IDoctor>(`/staff/${id}`)).data;
-	}
 
 	async getAvailableTime(staffId: string, startDate: string, endDate: string) {
 		return (await axiosWithAuth.get<IAvailableTime[]>('/staff/schedule', 

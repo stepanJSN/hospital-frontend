@@ -6,7 +6,6 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import ConfirmBookingDialog from "./ConfirmBookingDialog";
 import dayjs from 'dayjs';
-import Notification from "@/components/Notifications";
 
 type AvailableTimeProps = {
   staffId: string;
@@ -20,8 +19,8 @@ export default function AvailableTime({ staffId }: AvailableTimeProps) {
   const [selectedDateTime, setSelectedDateTime] = useState<null | Date>(null);
   const [openConfirmDialog, setOpenConfirmDialog] = useState<boolean>(false);
   
-  const { refetch: queryRefetch, data, isFetching, isError } = useQuery({
-    queryKey: ['appointment', staffId, dateRange],
+  const { refetch: queryRefetch, data, isFetching, isError, isSuccess } = useQuery({
+    queryKey: ['availableTime', staffId, dateRange],
 		queryFn: () => appointmentService.getAvailableTime(staffId, dateRange.startDate.toString(), dateRange.endDate.toString())
   })
 
@@ -57,8 +56,6 @@ export default function AvailableTime({ staffId }: AvailableTimeProps) {
   const closeDialog = () => setOpenConfirmDialog(false);
   const openDialog = () => setOpenConfirmDialog(true);
 
-  console.log(new Date().getDate() === dateRange.startDate.getDate());
-
   return (
     <>
       <Box>
@@ -75,7 +72,7 @@ export default function AvailableTime({ staffId }: AvailableTimeProps) {
           <Typography marginX={2}>{`${dateRange.startDate.toLocaleDateString()} - ${dateRange.endDate.toLocaleDateString()}`}</Typography>
           <Button variant="outlined" onClick={changeWeekForward}>Next</Button>
         </Box>
-        {!isFetching && 
+        {isSuccess && 
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="appointment table">
             <TableHead>
@@ -89,10 +86,10 @@ export default function AvailableTime({ staffId }: AvailableTimeProps) {
               {timeArray?.map((hour) => (
                 <TableRow
                   key={hour}
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  // sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
                   {data && renderAvailableTime(hour).map((time, index) => (
-                    <TableCell key={index}>
+                    <TableCell key={index} sx={{ height: '58px', padding: '10px', border: '1px solid rgba(224, 224, 224, 1)' }}>
                       {time && <Button onClick={() => handleDateSelect(time, index)}>{`${time}:00`}</Button>}
                     </TableCell>
                   ))}
@@ -110,8 +107,13 @@ export default function AvailableTime({ staffId }: AvailableTimeProps) {
         bookingDateTime={selectedDateTime}
         refetchAppointments={queryRefetch}
       />}
-      {console.log({ isError })}
-      <Notification trigger={isError} />
+      {isError && 
+        <Typography 
+          variant="h6" 
+          color="error"
+          textAlign="center"
+        >Error. Try again</Typography>
+      }
     </>
   )
 }

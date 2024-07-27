@@ -1,4 +1,4 @@
-import { IDoctorShort } from "@/types/appointment.type";
+import { IDoctorShort } from "@/types/staff.type";
 import { TableCell, TableContainer, TableHead, TableRow, Table, TableBody, Paper, Button } from "@mui/material";
 import Link from "next/link";
 
@@ -13,9 +13,9 @@ export default function DataTable({ data }: DataTableType) {
         <TableHead>
           <TableRow>
             <TableCell sx={{ fontWeight: '600' }}>Name Surname</TableCell>
-            <TableCell align="right" sx={{ fontWeight: '600' }}>Specialization</TableCell>
-            <TableCell align="right" sx={{ fontWeight: '600' }}>Experience</TableCell>
-            <TableCell align="right" sx={{ fontWeight: '600' }}>Gender</TableCell>
+            <TableCell sx={{ fontWeight: '600' }}>Specialization</TableCell>
+            <TableCell sx={{ fontWeight: '600' }}>Experience</TableCell>
+            <TableCell sx={{ fontWeight: '600' }}>Gender</TableCell>
             <TableCell align="right" sx={{ fontWeight: '600' }}>Action</TableCell>
           </TableRow>
         </TableHead>
@@ -28,9 +28,9 @@ export default function DataTable({ data }: DataTableType) {
               <TableCell component="th" scope="row">
                 {`${row.name} ${row.surname}`}
               </TableCell>
-              <TableCell align="right">{row.specialization?.title}</TableCell>
-              <TableCell align="right">{row.experience}</TableCell>
-              <TableCell align="right">{row.gender}</TableCell>
+              <TableCell>{row.specialization?.title}</TableCell>
+              <TableCell>{row.experience}</TableCell>
+              <TableCell>{row.gender}</TableCell>
               <TableCell align="right">
                 <Button 
                   variant="outlined" 

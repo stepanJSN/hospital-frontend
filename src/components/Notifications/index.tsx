@@ -5,9 +5,13 @@ type NotificationProps = {
   trigger: boolean;
   type?: 'error' | 'success';
   text?: string;
+  position?: {
+    vertical: 'top' | 'bottom';
+    horizontal: 'center' | 'left' |'right';
+  }
 }
 
-export default function Notification({trigger, type = "error", text = "Error. Try again later"}: NotificationProps) {
+export default function Notification({trigger, type = "error", text = "Error. Try again later", position}: NotificationProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   useEffect(() => {
@@ -23,6 +27,7 @@ export default function Notification({trigger, type = "error", text = "Error. Tr
       open={isOpen}
       autoHideDuration={6000}
       onClose={handleClose}
+      anchorOrigin={position}
     >
       <Alert
         severity={type}

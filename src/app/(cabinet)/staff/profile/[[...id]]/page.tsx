@@ -32,7 +32,7 @@ export default function Profile() {
 
   const { data, isSuccess: isProfileSuccess, isPending: isProfilePending, isError: isProfileDataError } = useQuery({
 		queryKey: ['profile'],
-		queryFn: () => staffService.getProfile(id ? id[0]: undefined),
+		queryFn: () => staffService.get(id ? id[0]: undefined),
 	})
 
   if (isProfileSuccess) {

@@ -1,21 +1,22 @@
+import Notification from "@/components/Notifications";
 import useGetDoctors from "@/hooks/useGetDoctroData";
 import useAdminRole from "@/hooks/useUserRole";
 import { Avatar, Box, Button, Divider, Skeleton, Typography } from "@mui/material";
 import Link from "next/link";
 
 type DoctorInfoProps = {
-  doctorId: string;
+  staffId: string;
 }
 
-export default function DoctorInfo({ doctorId }: DoctorInfoProps) {
-  const { doctorData, isFetching, isError } = useGetDoctors(doctorId);
+export default function DoctorInfo({ staffId }: DoctorInfoProps) {
+  const { doctorData, isFetching, isError } = useGetDoctors(staffId);
   const isAdmin = useAdminRole();
 
   return (
     <>
     <Box display="flex" margin={3} width="100%">
       <Box>
-        {(!isFetching && !isError) && <Avatar 
+        {doctorData && <Avatar 
           alt="No avatar"
           src="/images/no-avatar.png"
           sx={{ width: 150, height: 150 }}
@@ -23,7 +24,7 @@ export default function DoctorInfo({ doctorId }: DoctorInfoProps) {
         {(isFetching || isError) && <Skeleton variant="circular" width={150} height={150} />}
       </Box>
       <Box marginLeft={3} flex="auto">
-        {(!isFetching && !isError) && <>
+        {doctorData && <>
           <Typography 
             component="h1"
             variant="h4"
@@ -35,9 +36,11 @@ export default function DoctorInfo({ doctorId }: DoctorInfoProps) {
           <Typography>{'Email: ' + doctorData?.email}</Typography>
           <Typography>{'Telephone: ' + doctorData?.telephone}</Typography>
           <Typography>{'Gender: ' + doctorData?.gender}</Typography>
+          <Typography>{'Room: ' + doctorData?.room}</Typography>
         </>}
         {(isFetching || isError) && <>
           <Skeleton component="h4" width={200} />
+          <Skeleton width={200} />
           <Skeleton width={200} />
           <Skeleton width={200} />
           <Skeleton width={200} />
@@ -53,19 +56,19 @@ export default function DoctorInfo({ doctorId }: DoctorInfoProps) {
         >
           <Button
             component={Link}
-            href={`/staff/profile/${doctorId}`}
+            href={`/staff/profile/${staffId}`}
             sx={{ maxHeight: '40px', marginRight: 2 }} 
             variant="contained"
           >Edit profile</Button>
           <Button
             component={Link}
-            href={`/staff/appointments/${doctorId}`}
+            href={`/staff/appointments/${staffId}`}
             sx={{ maxHeight: '40px', marginRight: 2 }} 
             variant="contained"
           >See appointments</Button>
           <Button
             component={Link}
-            href={`/staff/schedule/${doctorId}`}
+            href={`/staff/schedule/${staffId}`}
             sx={{ maxHeight: '40px', marginRight: 2 }} 
             variant="contained"
           >Edit schedule</Button>
@@ -73,8 +76,12 @@ export default function DoctorInfo({ doctorId }: DoctorInfoProps) {
       }
     </Box>
     <Divider sx={{ color: 'grey' }} />
-    {(!isFetching && !isError) && <Typography padding={2}>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Earum est doloremque voluptatem, ipsam corrupti id illum vitae, officia placeat nulla suscipit sapiente veritatis alias! Architecto libero autem eum alias quam.</Typography>}
+    {doctorData && <Typography padding={2}>{doctorData?.description ?? 'Description not provided'}</Typography>}
     {(isFetching || isError) && <Skeleton width="100%" height={100} />}
+    <Notification 
+      trigger={isError}
+      position={{ vertical: 'top', horizontal: 'center' }}
+    />
     </>
   )
 }

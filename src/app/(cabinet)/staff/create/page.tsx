@@ -6,7 +6,7 @@ import FormInput from '@/components/Inputs/FormInput'
 import Select from '@/components/Select'
 import { specializationService } from '@/services/specialization'
 import { staffService } from '@/services/staff'
-import { IStaff } from '@/types/staff.type'
+import { ICreateStaff, IStaff } from '@/types/staff.type'
 import { LoadingButton } from '@mui/lab'
 import { Alert, Avatar, Box } from '@mui/material'
 import { useMutation } from '@tanstack/react-query'
@@ -26,10 +26,17 @@ export default function Create() {
 
   const { mutate, isPending, error, isError, isSuccess } = useMutation({
 		mutationKey: ['createStaff'],
-		mutationFn: (data: IStaff) => staffService.create(data),
+		mutationFn: (data: ICreateStaff) => staffService.create(data),
 	})
 
-  const onSubmit: SubmitHandler<IStaff> = (data) => mutate(data);
+  const onSubmit: SubmitHandler<IStaff> = (data) => {
+    const { specialization, ...rest } = data;
+    const payload = {
+      ...rest,
+      specializationId: data.specialization ? data.specialization.id : null,
+    }
+    mutate(payload)
+  };
 
   const getErrorMessage = (statusCode: number | undefined) => {
     if (statusCode === 400) {
@@ -108,6 +115,7 @@ export default function Create() {
           control={control}
           errorText='Experience must be a number'
           required={false}
+          type='number'
           pattern={/^\d+$/}
         />
         <FormInput 

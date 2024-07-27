@@ -1,13 +1,13 @@
 import { axiosWithAuth } from "./api";
-import { IStaff, UpdateStaff } from "@/types/staff.type";
+import { ICreateStaff, IStaff, UpdateStaff } from "@/types/staff.type";
 import { getUserId } from "./auth-token";
 
 class StaffService {
-  async create(data: IStaff) {
+  async create(data: ICreateStaff) {
     return (await axiosWithAuth.post<IStaff>('/staff', data)).data;
   }
 
-	async getProfile(staffId?: string) {
+	async get(staffId?: string) {
 		return (await axiosWithAuth.get<IStaff>(`/staff/${staffId ?? await getUserId()}`)).data;
 	};
 
