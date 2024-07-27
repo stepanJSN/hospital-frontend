@@ -32,7 +32,7 @@ export default function Menu() {
       if(role === 'customer') {
         return customerService.get((await getUserId()) as string);
       }
-      return staffService.getProfile();
+      return staffService.get();
     },
     enabled: !!role
 	})
@@ -58,7 +58,6 @@ export default function Menu() {
       display="flex"
       alignItems="center"
       flexDirection="column"
-      mr={1}
       flex="0 0 25%"
       sx={{ borderRight: '1px solid rgba(0, 0, 0, 0.12)' }}
     >

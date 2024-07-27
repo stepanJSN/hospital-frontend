@@ -4,9 +4,13 @@ import Menu from './Menu'
 
 export default function Layout({ children }: {children: React.ReactNode}) {
   return (
-    <Box display="flex" width="100vw" height="100vh">
+    <Box display="flex" minHeight="100vh">
       <Menu />
-      {children}
+      <Box 
+        flex="0 0 73%" 
+        paddingLeft={1}
+        paddingBottom={2}
+      >{children}</Box>
     </Box>
   )
 }
