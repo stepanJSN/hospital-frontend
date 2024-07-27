@@ -1,9 +1,8 @@
 "use client"
 
 import { useState } from "react";
-import { customerService } from "@/services/customer";
-import { Box, Button, CircularProgress, TextField, Typography } from "@mui/material";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { Box, Button, LinearProgress, TextField, Typography } from "@mui/material";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import DeleteDialog from "@/components/Dialogs/DeleteDialog";
 import { specializationService } from "@/services/specialization";
 import { useDebounce } from "@uidotdev/usehooks";
@@ -18,15 +17,16 @@ export default function Customer() {
   const [selectedSpecialization, setSelectedSpecialization] = useState<string>();
   const [inputValue, setInputValue] = useState<string>();
   const debouncedInputValue = useDebounce(inputValue, 500);
+  const queryClient = useQueryClient();
 
-  const { refetch, data, isPending, isError, isSuccess } = useQuery({
+  const { refetch, data, isFetching, isError, isSuccess } = useQuery({
     queryKey: ['specializations', debouncedInputValue],
 		queryFn: () => specializationService.getAll(debouncedInputValue),
   })
 
-  const { mutate: deleteMutation, isError: isDeleteError, isSuccess: isDeleteSuccess } = useMutation({
+  const { mutate: deleteMutation, isError: isDeleteError, isPending } = useMutation({
 		mutationFn: (id: string) => specializationService.delete(id),
-    onSuccess: () => refetch(),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['specializations'] }),
 	})
   
   const handleConfirmDelete = () => {
@@ -49,7 +49,8 @@ export default function Customer() {
 
   return (
     <Box width="100%" marginRight={1}>
-      <Box display="flex" alignItems="center">
+      {isFetching && <LinearProgress sx={{ height: '5px' }} />}
+      <Box display="flex" alignItems="center" mt={1}>
         <TextField
           id="specialization-title"
           label="Specialization"
@@ -57,12 +58,12 @@ export default function Customer() {
           margin='dense'
           variant="outlined"
           value={inputValue}
+          sx={{ width: '300px' }}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             setInputValue(event.target.value);
           }}
         />
-        <Button 
-          variant="contained"
+        <Button
           onClick={() => setIsCreateDialogOpen(true)}
           sx={{ 
             height: '40px',
@@ -70,9 +71,14 @@ export default function Customer() {
           }}
         >Create specialization</Button>
       </Box>
-      {isSuccess && !isPending && 
+      {isSuccess && data?.length !== 0 && 
       <>
-        <Typography component="h3" variant="h5">Specializations:</Typography>
+        <Typography 
+          component="h1" 
+          variant="h5"
+          mt={2}
+          mb={1}
+        >Specializations:</Typography>
         <SpecializationsDataTable 
           data={data} 
           onDelete={handleDelete} 
@@ -80,10 +86,27 @@ export default function Customer() {
         />
       </>
       }
-      {isPending && <CircularProgress sx={{ position: 'relative', top: '30%', left: '50%' }} />}
-      {isSuccess && data?.length === 0 && <Typography textAlign="center" component="h3" variant="h6">Specializations not found</Typography>}
+      {isSuccess && data?.length === 0 && 
+        <Typography 
+          textAlign="center"
+          component="h3" 
+          variant="h6"
+          mt={4}
+        >Specializations not found</Typography>
+      }
+      {isError && 
+        <Typography 
+          textAlign="center"
+          component="h3" 
+          variant="h5"
+          color="error"
+          mt={4}
+        >Error. Try again</Typography>
+      }
       <DeleteDialog 
         open={isDeleteDialogOpen}
+        isError={isDeleteError}
+        isLoading={isPending}
         handleClose={handleDialogClose}
         handleDelete={handleConfirmDelete}
       />

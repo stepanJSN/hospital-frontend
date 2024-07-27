@@ -1,6 +1,6 @@
 import FormInput from '@/components/Inputs/FormInput';
 import { specializationService } from '@/services/specialization';
-import { Alert, Box, Button, Dialog, DialogTitle } from '@mui/material'
+import { Alert, Box, Button, Dialog, DialogTitle, LinearProgress } from '@mui/material'
 import { useMutation } from '@tanstack/react-query';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
@@ -14,13 +14,15 @@ export default function CreateDialog({ open, handleClose, refetch }: CreateDialo
   const {
     control,
     handleSubmit,
+    reset,
   } = useForm<{ title: string }>()
 
-  const { mutate, isError } = useMutation({
+  const { mutate, isError, isPending } = useMutation({
 		mutationFn: (data: { title: string }) => specializationService.create(data),
     onSuccess: () => {
       refetch();
       handleClose();
+      reset();
     },
 	})
 
@@ -40,7 +42,9 @@ export default function CreateDialog({ open, handleClose, refetch }: CreateDialo
         component="form"
         onSubmit={handleSubmit(onSubmit)}
         margin={2}
+        mt={0}
       >
+        {isPending && <LinearProgress />}
         <FormInput 
           label='Specialization'
           name='title'

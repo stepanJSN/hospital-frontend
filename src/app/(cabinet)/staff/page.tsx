@@ -52,7 +52,7 @@ export default function Staff() {
       {isSuccess && data?.length !== 0 &&
         <>
           <Typography 
-            component="h3" 
+            component="h1" 
             variant="h5" 
             mt={2}
             mb={1}

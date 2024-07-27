@@ -13,7 +13,7 @@ export default function SpecializationsDataTable({ data, onDelete, onEdit }: Spe
       <Table sx={{ minWidth: 650 }} aria-label="doctors table">
         <TableHead>
           <TableRow>
-            <TableCell sx={{ fontWeight: '700' }}>Title</TableCell>
+            <TableCell sx={{ fontWeight: '600' }}>Title</TableCell>
             <TableCell></TableCell>
             <TableCell></TableCell>
           </TableRow>

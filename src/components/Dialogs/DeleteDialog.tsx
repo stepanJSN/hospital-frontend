@@ -1,14 +1,15 @@
-import { Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
+import { Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, LinearProgress } from "@mui/material";
 
 type DeleteDialogProps = {
   open: boolean;
   title?: string;
   isError?: boolean;
+  isLoading?: boolean;
   handleClose: () => void;
   handleDelete: () => void;
 }
 
-export default function DeleteDialog({ open, title, handleClose, handleDelete, isError }: DeleteDialogProps) {
+export default function DeleteDialog({ open, title, handleClose, handleDelete, isError, isLoading }: DeleteDialogProps) {
 
   return (
     <Dialog
@@ -20,6 +21,7 @@ export default function DeleteDialog({ open, title, handleClose, handleDelete, i
       <DialogTitle id="alert-dialog-title">
         {title ?? 'Are you sure you want to perform this action?'}
         {isError && <Alert severity="error">Error. Try again</Alert>}
+        {isLoading && <LinearProgress />}
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">

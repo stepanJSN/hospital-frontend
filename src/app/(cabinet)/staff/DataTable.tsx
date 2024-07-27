@@ -12,11 +12,11 @@ export default function DataTable({ data }: DataTableType) {
       <Table sx={{ minWidth: 650 }} aria-label="doctors table">
         <TableHead>
           <TableRow>
-            <TableCell>Name Surname</TableCell>
-            <TableCell align="right">Specialization</TableCell>
-            <TableCell align="right">Experience</TableCell>
-            <TableCell align="right">Gender</TableCell>
-            <TableCell align="right">Action</TableCell>
+            <TableCell sx={{ fontWeight: '600' }}>Name Surname</TableCell>
+            <TableCell align="right" sx={{ fontWeight: '600' }}>Specialization</TableCell>
+            <TableCell align="right" sx={{ fontWeight: '600' }}>Experience</TableCell>
+            <TableCell align="right" sx={{ fontWeight: '600' }}>Gender</TableCell>
+            <TableCell align="right" sx={{ fontWeight: '600' }}>Action</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

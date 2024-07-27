@@ -1,7 +1,7 @@
 import FormInput from '@/components/Inputs/FormInput';
 import { specializationService } from '@/services/specialization';
-import { Alert, Box, Button, Dialog, DialogTitle } from '@mui/material'
-import { useMutation } from '@tanstack/react-query';
+import { Alert, Box, Button, Dialog, DialogTitle, LinearProgress } from '@mui/material'
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 type EditDialogProps = {
@@ -12,20 +12,21 @@ type EditDialogProps = {
 }
 
 export default function EditDialog({ titleValue, specializationId, handleClose, refetch }: EditDialogProps) {
+  const queryClient = useQueryClient();
   const {
     control,
     handleSubmit,
     setValue,
-  } = useForm<{ title: string }>()
+  } = useForm<{ title: string }>();
 
   if (titleValue) {
     setValue("title", titleValue);
   }
 
-  const { mutate, isError } = useMutation({
+  const { mutate, isError, isPending } = useMutation({
 		mutationFn: (data: { title: string }) => specializationService.update(specializationId, data),
     onSuccess: () => {
-      refetch();
+      queryClient.invalidateQueries({ queryKey: ['specializations'] })
       handleClose();
     },
 	})
@@ -46,7 +47,9 @@ export default function EditDialog({ titleValue, specializationId, handleClose, 
         component="form"
         onSubmit={handleSubmit(onSubmit)}
         margin={2}
+        mt={0}
       >
+        {isPending && <LinearProgress />}
         <FormInput 
           label='Specialization'
           name='title'
