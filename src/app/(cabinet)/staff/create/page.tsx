@@ -95,7 +95,7 @@ export default function Create() {
           required={false}
           pattern={/^\d{12}$/}
         />
-        <DatePicker label="birthday" control={control} />
+        <DatePicker label="birthday" control={control} sx={{ width: '100%' }} />
         <Select 
           label='Gender'
           defaultValue='male'

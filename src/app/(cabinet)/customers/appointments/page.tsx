@@ -4,14 +4,17 @@ import DatePicker from "@/components/DatePicker";
 import { appointmentService } from "@/services/appointment";
 import { LoadingButton } from "@mui/lab";
 import { Box, Button, Divider, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import CancelDialog from "./CancelDialog";
 import dayjs from "dayjs";
 import Notification from "@/components/Notifications";
+import AppointmentsActionBar from "./AppointmentsActionBar";
+import Loader from "@/components/Loader";
+import DeleteDialog from "@/components/Dialogs/DeleteDialog";
 
-type FormPayloadType = {
+export type FormPayloadType = {
   startdate?: string;
   enddate?: string;
 }
@@ -22,10 +25,9 @@ export default function MyAppointments() {
     control,
     handleSubmit,
     getValues,
-    formState: { errors },
   } = useForm<FormPayloadType>();
 
-  const { refetch: queryRefetch, data, isFetching, error, isSuccess } = useQuery({
+  const { refetch: queryRefetch, data, isFetching, isError, isSuccess } = useQuery({
     queryKey: ['myAppointments'],
 		queryFn: () => {
       const data = getValues()
@@ -34,53 +36,35 @@ export default function MyAppointments() {
   })
   
   const onSubmit = () => queryRefetch();
+
+  const { mutate, isPending, isError: isDeleteError } = useMutation({
+    mutationKey: ['cancelAppointment'],
+		mutationFn: () => appointmentService.deleteMyAppointment(appointmentId as string),
+    onSuccess: () => { closeDialog(); queryRefetch() },
+  })
+
   const closeDialog = () => setAppointmentId(null);
+  const handleDelete = () => mutate();
 
   return (
     <Box margin={2} width="100%">
-      <Typography variant="h4" component="h1">Your appointments:</Typography>
-      <Box
-        component="form" 
-        display="flex"
-        alignItems="center"
-        onSubmit={handleSubmit(onSubmit)}
-        gap={2}
-        marginY={2}
-      >
-        <DatePicker
-          control={control}
-          label="StartDate"
-          required={false}
-         />
-         <Divider sx={{ width: '20px' }} />
-         <DatePicker
-          control={control}
-          label="EndDate"
-          required={false}
-         />
-         <LoadingButton 
-            loading={isFetching}
-            variant="contained" 
-            fullWidth
-            type="submit"
-            loadingPosition="start"
-            sx={{
-              height: "56px",
-              width: "250px"
-            }}
-          >
-            Show
-          </LoadingButton>
-      </Box>
+      <Typography variant="h5" component="h1">Your appointments:</Typography>
+      <AppointmentsActionBar
+        handleSubmit={handleSubmit}
+        onSubmit={onSubmit}
+        control={control}
+        isFetching={isFetching}
+      />
+      {isSuccess && data.length !== 0 &&
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="doctors table">
           <TableHead>
             <TableRow>
-              <TableCell>Date and Time</TableCell>
-              <TableCell align="right">Name Surname</TableCell>
-              <TableCell align="right">Specialization</TableCell>
-              <TableCell align="right">Status</TableCell>
-              <TableCell align="right">Action</TableCell>
+              <TableCell sx={{ fontWeight: 600 }}>Date and Time</TableCell>
+              <TableCell sx={{ fontWeight: 600 }}>Name Surname</TableCell>
+              <TableCell sx={{ fontWeight: 600 }}>Specialization</TableCell>
+              <TableCell sx={{ fontWeight: 600 }}>Status</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 600 }}>Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -92,9 +76,9 @@ export default function MyAppointments() {
                 <TableCell component="th" scope="row">
                   {dayjs(row.dateTime).format('DD.MM.YYYY HH:mm')}
                 </TableCell>
-                <TableCell align="right">{`${row.staff.name} ${row.staff.surname}`}</TableCell>
-                <TableCell align="right">{row.staff.specialization.title}</TableCell>
-                <TableCell align="right">{row.isCompleted ? 'Completed' : 'Planned'}</TableCell>
+                <TableCell>{`${row.staff.name} ${row.staff.surname}`}</TableCell>
+                <TableCell>{row.staff.specialization.title}</TableCell>
+                <TableCell>{row.isCompleted ? 'Completed' : 'Planned'}</TableCell>
                 <TableCell align="right">
                   <Button 
                     variant="outlined"
@@ -107,7 +91,24 @@ export default function MyAppointments() {
             ))}
           </TableBody>
         </Table>
-      </TableContainer>
+      </TableContainer>}
+      {isSuccess && data?.length === 0 && 
+        <Typography 
+          textAlign="center" 
+          component="h3" 
+          variant="h6"
+        >{"You don't have any doctor's appointments."}</Typography>
+      }
+      {isError && 
+        <Typography 
+          textAlign="center"
+          component="h3" 
+          variant="h5"
+          color="error"
+          mt={4}
+        >Error. Try again</Typography>
+      }
+      <Loader isLoading={isFetching} />
       {appointmentId && 
       <CancelDialog
         id={appointmentId}
@@ -115,7 +116,15 @@ export default function MyAppointments() {
         closeDialog={closeDialog}
         refetchMyAppointments={queryRefetch}
       />}
-      <Notification trigger={!!error} />
+      <DeleteDialog
+        open={!!appointmentId}
+        isLoading={isPending}
+        isError={isDeleteError}
+        title="Are you sure you want to cancel the appointment?"
+        content="After cancellation, you can always make an appointment again."
+        handleClose={closeDialog}
+        handleDelete={handleDelete}
+      />
     </Box>
   )
 }

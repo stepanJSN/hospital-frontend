@@ -5,10 +5,11 @@ import { DatePicker as DatePickerUI } from '@mui/x-date-pickers';
 type DatePickerProps = {
   label: string;
   control: Control<any>;
-  required?: boolean
+  required?: boolean;
+  sx?: object;
 }
 
-export default function DatePicker({ label, control, required = true }: DatePickerProps) {
+export default function DatePicker({ label, control, required = true, sx }: DatePickerProps) {
   return (
     <Controller
       name={label.toLowerCase()}
@@ -23,11 +24,8 @@ export default function DatePicker({ label, control, required = true }: DatePick
           label={label}
           value={value ? dayjs(value): null}
           onChange={value => onChange(value?.toISOString())}
-          sx={{ 
-            width: '100%',
-            marginTop: '8px',
-            marginBottom: '4px'
-          }}
+          slotProps={{ textField: { size: 'small' } }}
+          sx={sx}
         />
       )}
     />

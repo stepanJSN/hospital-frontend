@@ -129,7 +129,7 @@ export default function Profile() {
             required={false}
             pattern={/^\d{12}$/}
           />
-          <DatePicker label="birthday" control={control} />
+          <DatePicker label="birthday" control={control} sx={{ width: '100%' }} />
           <Select 
             label='Gender'
             control={control}

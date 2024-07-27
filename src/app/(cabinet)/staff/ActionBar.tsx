@@ -55,9 +55,9 @@ export default function ActionBar({ handleSubmit, onSubmit, control, isFetching,
         Create new profile
       </Button>
       : <DatePicker
-        control={control}
-        label="Date"
-        required={false}
+          control={control}
+          label="Date"
+          required={false}
         />
       }
       <LoadingButton 

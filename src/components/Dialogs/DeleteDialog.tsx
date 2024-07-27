@@ -3,13 +3,14 @@ import { Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText,
 type DeleteDialogProps = {
   open: boolean;
   title?: string;
+  content?: string;
   isError?: boolean;
   isLoading?: boolean;
   handleClose: () => void;
   handleDelete: () => void;
 }
 
-export default function DeleteDialog({ open, title, handleClose, handleDelete, isError, isLoading }: DeleteDialogProps) {
+export default function DeleteDialog({ open, title, content, handleClose, handleDelete, isError, isLoading }: DeleteDialogProps) {
 
   return (
     <Dialog
@@ -25,7 +26,7 @@ export default function DeleteDialog({ open, title, handleClose, handleDelete, i
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          This action cannot be undone. All data will be lost
+          {content ?? "This action cannot be undone. All data will be lost"}
         </DialogContentText>
       </DialogContent>
       <DialogActions>

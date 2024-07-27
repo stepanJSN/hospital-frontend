@@ -102,7 +102,7 @@ export default function Profile() {
             required={false}
             pattern={/^\d{12}$/}
           />
-          <DatePicker label="birthday" control={control} />
+          <DatePicker label="birthday" control={control} sx={{ width: '100%' }} />
           <Select 
             label='Gender'
             control={control}
@@ -137,7 +137,7 @@ export default function Profile() {
           </Button>
         </Box>
       }
-      {isProfilePending && <CircularProgress size={65} sx={{ alignSelf: "center" }} />}
+      {isProfilePending && <CircularProgress size={65} sx={{ position: 'absolute', top: '40%', }} />}
       {isProfileDataError && 
         <Typography 
           color="error"
