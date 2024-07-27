@@ -8,7 +8,7 @@ type DataTableType = {
 
 export default function DataTable({ data }: DataTableType) {
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} sx={{ mt: 1 }}>
       <Table sx={{ minWidth: 650 }} aria-label="doctors table">
         <TableHead>
           <TableRow>

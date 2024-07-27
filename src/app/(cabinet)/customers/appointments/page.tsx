@@ -1,15 +1,11 @@
 "use client"
 
-import DatePicker from "@/components/DatePicker";
 import { appointmentService } from "@/services/appointment";
-import { LoadingButton } from "@mui/lab";
-import { Box, Button, Divider, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import CancelDialog from "./CancelDialog";
 import dayjs from "dayjs";
-import Notification from "@/components/Notifications";
 import AppointmentsActionBar from "./AppointmentsActionBar";
 import Loader from "@/components/Loader";
 import DeleteDialog from "@/components/Dialogs/DeleteDialog";
@@ -109,13 +105,6 @@ export default function MyAppointments() {
         >Error. Try again</Typography>
       }
       <Loader isLoading={isFetching} />
-      {appointmentId && 
-      <CancelDialog
-        id={appointmentId}
-        isOpen={!!appointmentId} 
-        closeDialog={closeDialog}
-        refetchMyAppointments={queryRefetch}
-      />}
       <DeleteDialog
         open={!!appointmentId}
         isLoading={isPending}

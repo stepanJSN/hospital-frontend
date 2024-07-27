@@ -42,6 +42,11 @@ export default function Staff() {
 
   return (
     <Box width="100%" marginRight={1}>
+      <Typography 
+        component="h1" 
+        variant="h5" 
+        mt={2}
+      >{isAdmin ? "Staff:" : "Doctors:"}</Typography>
       <ActionBar
         isAdmin={isAdmin}
         handleSubmit={handleSubmit}
@@ -49,16 +54,8 @@ export default function Staff() {
         control={control}
         isFetching={isFetching}
       />
-      {isSuccess && data?.length !== 0 &&
-        <>
-          <Typography 
-            component="h1" 
-            variant="h5" 
-            mt={2}
-            mb={1}
-          >{isAdmin ? "Staff:" : "Doctors:"}</Typography>
-          <DataTable data={data} />
-        </>
+      {isSuccess && data?.length !== 0 &&      
+        <DataTable data={data} />
       }
       <Loader isLoading={isFetching} />
       {isSuccess && data?.length === 0 && 
