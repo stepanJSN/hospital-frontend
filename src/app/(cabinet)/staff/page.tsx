@@ -1,14 +1,14 @@
 "use client"
 
 import { appointmentService } from "@/services/appointment";
-import { ISpecialization } from "@/types/appointment.type";
-import { Box, CircularProgress, Typography } from "@mui/material";
+import { ISpecialization } from "@/types/specialization.type";
+import { Box, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import DataTable from "./DataTable";
-import Notification from "@/components/Notifications";
 import ActionBar from "./ActionBar";
 import useAdminRole from "@/hooks/useUserRole";
+import Loader from "@/components/Loader";
 
 export type FormPayloadType = {
   date?: string;
@@ -22,7 +22,6 @@ export default function Staff() {
     control,
     handleSubmit,
     getValues,
-    formState: { errors },
   } = useForm<FormPayloadType>()
 
   const { refetch: queryRefetch, data, isFetching, isError, isSuccess } = useQuery({
@@ -50,11 +49,35 @@ export default function Staff() {
         control={control}
         isFetching={isFetching}
       />
-      <Typography component="h3" variant="h5">Doctors:</Typography>
-      {isSuccess && !isFetching && <DataTable data={data} />}
-      {isFetching && <CircularProgress sx={{ position: 'relative', top: '30%', left: '50%' }} />}
-      {isSuccess && data?.length === 0 && <Typography textAlign="center" component="h3" variant="h6">Doctors not found</Typography>}
-      <Notification trigger={isError} />
+      {isSuccess && data?.length !== 0 &&
+        <>
+          <Typography 
+            component="h3" 
+            variant="h5" 
+            mt={2}
+            mb={1}
+          >{isAdmin ? "Staff:" : "Doctors:"}</Typography>
+          <DataTable data={data} />
+        </>
+      }
+      <Loader isLoading={isFetching} />
+      {isSuccess && data?.length === 0 && 
+        <Typography 
+          textAlign="center"
+          component="h3" 
+          variant="h5"
+          mt={4}
+        >Doctors not found</Typography>
+      }
+      {isError && 
+        <Typography 
+          textAlign="center"
+          component="h3" 
+          variant="h5"
+          color="error"
+          mt={4}
+        >Error. Try again</Typography>
+      }
     </Box>
   )
 }

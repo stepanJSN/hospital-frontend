@@ -151,8 +151,9 @@ export default function Profile() {
           <FormInput 
             label='Experience'
             control={control}
-            errorText='Incorrect experience'
+           errorText='Experience must be a number'
             required={false}
+            pattern={/^\d+$/}
           />
            <FormInput 
             label='Description'
@@ -164,9 +165,10 @@ export default function Profile() {
           <FormInput 
             label='Room'
             control={control}
-            errorText='Incorrect room'
+            errorText='Room number must be a number from 1 to 999'
             required={false}
             type="number"
+            pattern={/^\d{1,3}$/}
           />
           {isAdmin && <Select
             label='Role'

@@ -4,14 +4,13 @@ import DatePicker from '@/components/DatePicker'
 import AutocompleteAsync from '@/components/Inputs/AutocompleteAsync'
 import FormInput from '@/components/Inputs/FormInput'
 import Select from '@/components/Select'
-import { appointmentService } from '@/services/appointment'
 import { specializationService } from '@/services/specialization'
 import { staffService } from '@/services/staff'
 import { IStaff } from '@/types/staff.type'
 import { LoadingButton } from '@mui/lab'
 import { Alert, Avatar, Box } from '@mui/material'
 import { useMutation } from '@tanstack/react-query'
-import React from 'react'
+import { AxiosError } from 'axios'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 export default function Create() {
@@ -31,6 +30,14 @@ export default function Create() {
 	})
 
   const onSubmit: SubmitHandler<IStaff> = (data) => mutate(data);
+
+  const getErrorMessage = (statusCode: number | undefined) => {
+    if (statusCode === 400) {
+      return "User with such email exists";
+    }
+
+    return "Error. Try again";
+  }
 
   return (
     <Box 
@@ -55,7 +62,7 @@ export default function Create() {
         <Alert severity="success">
           User was created
         </Alert>}
-        {isError && <Alert severity="error">{error.message}</Alert>}
+        {isError && <Alert severity="error">{getErrorMessage((error as AxiosError).response?.status)}</Alert>}
         <FormInput 
           label='Email'
           control={control}
@@ -66,23 +73,26 @@ export default function Create() {
           label='Name'
           control={control}
           errorText='Incorrect name'
+          pattern={/^[a-zA-Z]{2,}$/}
         />
         <FormInput 
           label='Surname'
           control={control}
           errorText='Incorrect surname'
+          pattern={/^[a-zA-Z]{2,}$/}
         />
         <FormInput 
           label='Telephone'
           control={control}
-          errorText='Incorrect telephone'
+          errorText='Incorrect telephone. Example: 380956732134'
           required={false}
+          pattern={/^\d{12}$/}
         />
         <DatePicker label="birthday" control={control} />
         <Select 
           label='Gender'
+          defaultValue='male'
           control={control}
-          errorText='Gender is required'
           options={['male', 'female']}
         />
         <AutocompleteAsync 
@@ -92,15 +102,13 @@ export default function Create() {
           startFromLetter={2}
           searchFunc={(title) => specializationService.getAll(title)}
           noOptionsText="Specialization not found"
-          sx={{
-            flex: "0 0 50%"
-          }}
         />
         <FormInput 
           label='Experience'
           control={control}
-          errorText='Incorrect experience'
+          errorText='Experience must be a number'
           required={false}
+          pattern={/^\d+$/}
         />
         <FormInput 
           label='Description'
@@ -112,21 +120,23 @@ export default function Create() {
         <FormInput 
           label='Room'
           control={control}
-          errorText='Incorrect room'
+          errorText='Room number must be a number from 1 to 999'
           required={false}
           type="number"
+          pattern={/^\d{1,3}$/}
         />
         <Select
           label='Role'
+          defaultValue='Staff'
           control={control}
-          errorText='Gender is required'
           options={['Admin', 'Staff']}
         />
         <FormInput
           type="password"
           label='Password'
           control={control}
-          errorText='Incorrect password'
+          errorText='Incorrect password. Password must be at least 8 characters long but no more than 25.'
+          pattern={/^.{8,24}$/}
         />
         <LoadingButton 
           loading={isPending}

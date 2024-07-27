@@ -52,6 +52,7 @@ export default function AutocompleteAsync({ id, label, control, searchFunc, star
           id={id}
           options={options}
           sx={sx}
+          size="small"
           getOptionLabel={(option) => option.title}
           value={value}
           loading={isLoading}

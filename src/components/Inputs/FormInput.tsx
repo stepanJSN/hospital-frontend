@@ -6,13 +6,18 @@ type InputProps = {
   label: string;
   name?: string
   errorText?: string;
+  fullWidth?: boolean;
   type?: string;
   required?: boolean
   pattern?: RegExp;
   multiline?: boolean;
+  sx?: object;
+  margin?: 'dense' | 'normal' | 'none'
 }
 
-export default function FormInput({ control, label, name, errorText, type = "text", required = true, pattern, multiline = false }: InputProps) {
+export default function FormInput({ 
+  control, label, name, errorText, type = "text", required = true, pattern, multiline = false, fullWidth = true, sx, margin = 'dense'
+}: InputProps) {
   return (
     <Controller
       name={name ?? label.toLowerCase()}
@@ -30,7 +35,7 @@ export default function FormInput({ control, label, name, errorText, type = "tex
           required={required}
           helperText={error ? errorText : null}
           size="small"
-          margin='dense'
+          margin={margin}
           error={!!error}
           onChange={
             (event) => type === "number" ? 
@@ -39,10 +44,11 @@ export default function FormInput({ control, label, name, errorText, type = "tex
           }
           value={value ?? ""}
           label={label}
-          fullWidth
+          fullWidth={fullWidth}
           multiline={multiline}
           type={type}
           variant="outlined"
+          sx={sx}
         />
       )}
     />

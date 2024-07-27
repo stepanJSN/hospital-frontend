@@ -33,6 +33,9 @@ export default function ActionBar({ handleSubmit, onSubmit, control, isFetching,
         control={control}
         errorText='Incorrect name'
         required={false}
+        fullWidth={false}
+        sx={{ minWidth: '250px' }}
+        margin='none'
       />
       <AutocompleteAsync 
         id="specialization" 
@@ -41,13 +44,11 @@ export default function ActionBar({ handleSubmit, onSubmit, control, isFetching,
         startFromLetter={2}
         searchFunc={(title) => specializationService.getAll(title)}
         noOptionsText="Specialization not found"
-        sx={{
-          flex: "0 0 50%"
-        }}
+        sx={{ minWidth: '250px', flex: 'auto' }}
       />
       {isAdmin ? 
       <Button 
-        sx={{ width: '300px', height: '56px' }}
+        sx={{ width: '200px', height: '40px' }}
         component={Link}
         href='/staff/create'
       >
@@ -66,7 +67,7 @@ export default function ActionBar({ handleSubmit, onSubmit, control, isFetching,
         type="submit"
         loadingPosition="start"
         sx={{
-          height: "56px",
+          height: "40px",
           width: "200px"
         }}
       >
