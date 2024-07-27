@@ -41,7 +41,6 @@ export default function CustomerActionBar({ handleSubmit, onSubmit, control, isF
         type="submit"
         loadingPosition="start"
         sx={{
-          height: "56px",
           width: "200px"
         }}
       >

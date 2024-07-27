@@ -11,7 +11,7 @@ export default function Customer() {
   const { id } = useParams<{ id: string }>();
 
   const { data, isFetching, isError } = useQuery({
-    queryKey: ['staffId', id],
+    queryKey: ['customerId', id],
     queryFn: () => customerService.get(id),
     enabled: !!id,
   })
@@ -51,6 +51,10 @@ export default function Customer() {
       </Box>
       <Notification 
         trigger={isError}
+        position={{ 
+          horizontal: 'center',
+          vertical: 'top'
+        }}
       />
     </>
   )

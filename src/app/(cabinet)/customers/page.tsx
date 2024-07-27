@@ -3,12 +3,13 @@
 import { useState } from "react";
 import { customerService } from "@/services/customer";
 import { GetAll } from "@/types/customer.type";
-import { Box, CircularProgress, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import CustomerActionBar from "./CustomersActionBar";
 import CustomerDataTable from "./CustomerDataTable";
 import DeleteDialog from "@/components/Dialogs/DeleteDialog";
+import Loader from "@/components/Loader";
 
 export default function Customer() {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
@@ -17,7 +18,6 @@ export default function Customer() {
     control,
     handleSubmit,
     getValues,
-    formState: { errors },
   } = useForm<GetAll>()
 
   const { refetch, data, isFetching, isError, isSuccess } = useQuery({
@@ -56,16 +56,32 @@ export default function Customer() {
         control={control}
         isFetching={isFetching}
       />
-      {isSuccess && !isFetching && 
+      {isSuccess && data?.length !== 0 && 
       <>
-        <Typography component="h3" variant="h5">Customers:</Typography>
+        <Typography 
+          component="h3" 
+          variant="h5"
+          mt={2}
+          mb={1}
+        >Customers:</Typography>
         <CustomerDataTable data={data} onClick={handleDelete} />
       </>
       }
-      {isFetching && <CircularProgress sx={{ position: 'relative', top: '30%', left: '50%' }} />}
+      <Loader isLoading={isFetching} />
       {isSuccess && data?.length === 0 && <Typography textAlign="center" component="h3" variant="h6">Customers not found</Typography>}
+      {isError && 
+        <Typography 
+          textAlign="center"
+          component="h3" 
+          variant="h5"
+          color="error"
+          mt={4}
+        >Error. Try again</Typography>
+      }
       <DeleteDialog 
         open={isDialogOpen}
+        isLoading={isPending}
+        isError={isDeleteError}
         handleClose={handleDialogClose}
         handleDelete={handleConfirmDelete}
       />
