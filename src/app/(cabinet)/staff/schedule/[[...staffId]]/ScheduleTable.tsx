@@ -2,7 +2,7 @@ import Notification from "@/components/Notifications";
 import { scheduleService } from "@/services/schedule";
 import { IChangeSchedule, ISchedule } from "@/types/schedule.type";
 import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useDebounce, useRenderCount } from "@uidotdev/usehooks";
 import { ChangeEvent, useEffect, useState } from "react";
 
@@ -10,7 +10,6 @@ type ScheduleTableProps = {
   id: Promise<string>;
   days: string[];
   schedule: ISchedule[];
-  refetch: () => void;
 }
 
 type Schedule = {
@@ -27,14 +26,15 @@ const defaultSchedule = Array.from({ length: 7 }, (_, i) => ({
   disabled: true,
 }))
 
-export default function ScheduleTable({ id, schedule, days, refetch }: ScheduleTableProps) {
+export default function ScheduleTable({ id, schedule, days }: ScheduleTableProps) {
+  const queryClient = useQueryClient();
   const [scheduleData, setScheduleData] = useState<Schedule[]>(defaultSchedule);
-  const debouncedScheduleData = useDebounce(scheduleData, 2000);
+  const debouncedScheduleData = useDebounce(scheduleData, 1500);
   const renderCount = useRenderCount();
 
-  const { mutate, isPending, isError, isSuccess } = useMutation({
+  const { mutate, isError, isSuccess } = useMutation({
 		mutationFn: (data: IChangeSchedule) => scheduleService.update(data),
-    onError: refetch
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['schedule'] })
 	})
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export default function ScheduleTable({ id, schedule, days, refetch }: ScheduleT
       return newItem ? { disabled: false, ...newItem } : item;
     });
     setScheduleData(updatedSchedule);
-  }, [schedule]);
+  }, []);
 
   useEffect(() => {
     const query = async () => {

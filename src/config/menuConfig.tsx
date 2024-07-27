@@ -17,11 +17,11 @@ export const customerMenu: MenuList = [
     pageIcon: <FormatListBulletedIcon />,
     pageText: "My appointments"
   },
-  {
-    pageRoute: "/customers/notifications",
-    pageIcon: <NotificationsIcon />,
-    pageText: "Notifications"
-  },
+  // {
+  //   pageRoute: "/customers/notifications",
+  //   pageIcon: <NotificationsIcon />,
+  //   pageText: "Notifications"
+  // },
   {
     pageRoute: "/customers/profile",
     pageIcon: <PersonIcon />,
@@ -40,11 +40,11 @@ export const staffMenu: MenuList = [
     pageIcon: <CalendarMonthIcon />,
     pageText: "My schedule"
   },
-  {
-    pageRoute: "notifications",
-    pageIcon: <NotificationsIcon />,
-    pageText: "Notifications"
-  },
+  // {
+  //   pageRoute: "notifications",
+  //   pageIcon: <NotificationsIcon />,
+  //   pageText: "Notifications"
+  // },
   {
     pageRoute: "profile",
     pageIcon: <PersonIcon />,
