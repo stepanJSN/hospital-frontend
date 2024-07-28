@@ -11,8 +11,8 @@ import Loader from "@/components/Loader";
 import DeleteDialog from "@/components/Dialogs/DeleteDialog";
 
 export type FormPayloadType = {
-  startdate?: string;
-  enddate?: string;
+  from?: string;
+  to?: string;
 }
 
 export default function MyAppointments() {
@@ -27,7 +27,7 @@ export default function MyAppointments() {
     queryKey: ['myAppointments'],
 		queryFn: () => {
       const data = getValues()
-      return appointmentService.getMyAppointment(data.startdate, data.enddate)
+      return appointmentService.getMyAppointment(data.from, data.to)
     },
   })
   

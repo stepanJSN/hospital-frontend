@@ -1,6 +1,5 @@
 import { IUser } from "@/types/customer.type";
 import { TableCell, TableContainer, TableHead, TableRow, Table, TableBody, Paper, Button } from "@mui/material";
-import dayjs from "dayjs";
 import Link from "next/link";
 
 type CustomerDataTableType = {
@@ -33,7 +32,7 @@ export default function CustomerDataTable({ data, onClick }: CustomerDataTableTy
               </TableCell>
               <TableCell>{row.email}</TableCell>
               <TableCell>{row.telephone}</TableCell>
-              <TableCell>{dayjs(row.birthday).format('DD.MM.YYYY')}</TableCell>
+              <TableCell>{row.birthday}</TableCell>
               <TableCell>{row.gender}</TableCell>
               <TableCell>
                 <Button 

@@ -3,10 +3,11 @@ import { TableCell, TableContainer, TableHead, TableRow, Table, TableBody, Paper
 import Link from "next/link";
 
 type DataTableType = {
-  data: IDoctorShort[]
+  data: IDoctorShort[];
+  isAdmin: boolean;
 }
 
-export default function DataTable({ data }: DataTableType) {
+export default function DataTable({ data, isAdmin }: DataTableType) {
   return (
     <TableContainer component={Paper} sx={{ mt: 1 }}>
       <Table sx={{ minWidth: 650 }} aria-label="doctors table">
@@ -36,7 +37,7 @@ export default function DataTable({ data }: DataTableType) {
                   variant="outlined" 
                   component={Link}
                   href={`/staff/${row.id}`}
-                >Visit</Button>
+                >{isAdmin ? 'Manage' : 'Visit'}</Button>
               </TableCell>
             </TableRow>
           ))}

@@ -9,6 +9,8 @@ import DataTable from "./DataTable";
 import ActionBar from "./ActionBar";
 import useAdminRole from "@/hooks/useUserRole";
 import Loader from "@/components/Loader";
+import ExportExcel from "@/components/ExportExcel";
+import { IDoctorShort } from "@/types/staff.type";
 
 export type FormPayloadType = {
   date?: string;
@@ -40,13 +42,23 @@ export default function Staff() {
   
   const onSubmit = () => queryRefetch();
 
+  const mapData = (data: IDoctorShort[]) => {
+    return data.map(item => ({
+      ...item,
+      specialization: item.specialization?.title,
+    }));
+  }
+
   return (
     <Box width="100%" marginRight={1}>
-      <Typography 
-        component="h1" 
-        variant="h5" 
-        mt={2}
-      >{isAdmin ? "Staff:" : "Doctors:"}</Typography>
+      <Box display="flex" mt={2}>
+        <Typography 
+          component="h1" 
+          variant="h5" 
+          flex="auto"
+        >{isAdmin ? "Staff:" : "Doctors:"}</Typography>
+        {isAdmin && isSuccess && <ExportExcel data={mapData(data)} fileName="staff" />}
+      </Box>
       <ActionBar
         isAdmin={isAdmin}
         handleSubmit={handleSubmit}
@@ -55,7 +67,7 @@ export default function Staff() {
         isFetching={isFetching}
       />
       {isSuccess && data?.length !== 0 &&      
-        <DataTable data={data} />
+        <DataTable data={data} isAdmin={isAdmin} />
       }
       <Loader isLoading={isFetching} />
       {isSuccess && data?.length === 0 && 

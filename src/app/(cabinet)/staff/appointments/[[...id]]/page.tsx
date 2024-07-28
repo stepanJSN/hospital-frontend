@@ -108,6 +108,7 @@ export default function Appointments() {
          } label="show only scheduled" />
          {isSuccess && <ExportExcel data={mapData(data)} fileName="appointments" />}
       </Box>
+      {isSuccess && data?.length !== 0 && 
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="appointments table">
           <TableHead>
@@ -130,7 +131,7 @@ export default function Appointments() {
                 <TableCell>
                   <UILink 
                     component={Link}
-                    href={`/customer/${row.customer.id}`}
+                    href={`/customers/${row.customer.id}`}
                   >
                     {`${row.customer.name} ${row.customer.surname}`}
                   </UILink>
@@ -159,7 +160,7 @@ export default function Appointments() {
             ))}
           </TableBody>
         </Table>
-      </TableContainer>
+      </TableContainer>}
       {isSuccess && data?.length === 0 && 
         <Typography 
           textAlign="center" 

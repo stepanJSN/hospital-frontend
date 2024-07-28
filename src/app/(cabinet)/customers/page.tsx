@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { customerService } from "@/services/customer";
-import { GetAll } from "@/types/customer.type";
+import { GetAll, IUser } from "@/types/customer.type";
 import { Box, Typography } from "@mui/material";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
@@ -10,6 +10,8 @@ import CustomerActionBar from "./CustomersActionBar";
 import CustomerDataTable from "./CustomerDataTable";
 import DeleteDialog from "@/components/Dialogs/DeleteDialog";
 import Loader from "@/components/Loader";
+import ExportExcel from "@/components/ExportExcel";
+import dayjs from "dayjs";
 
 export default function Customer() {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
@@ -48,8 +50,25 @@ export default function Customer() {
     setIsDialogOpen(true);
   }
 
+  const mapData = (data: IUser[]) => {
+    return data.map(item => ({
+      ...item,
+      birthday: dayjs(item.birthday).format('DD.MM.YYYY'),
+    }));
+  }
+
   return (
     <Box width="100%" marginRight={1}>
+      <Box display="flex" mt={2}>
+        <Typography 
+          component="h3" 
+          variant="h5"
+          flex="auto"
+        >
+          Customers:
+        </Typography>
+        {isSuccess && <ExportExcel data={mapData(data)} fileName="customers" />}
+      </Box>
       <CustomerActionBar
         handleSubmit={handleSubmit}
         onSubmit={onSubmit}
@@ -57,15 +76,7 @@ export default function Customer() {
         isFetching={isFetching}
       />
       {isSuccess && data?.length !== 0 && 
-      <>
-        <Typography 
-          component="h3" 
-          variant="h5"
-          mt={2}
-          mb={1}
-        >Customers:</Typography>
-        <CustomerDataTable data={data} onClick={handleDelete} />
-      </>
+        <CustomerDataTable data={mapData(data)} onClick={handleDelete} />
       }
       <Loader isLoading={isFetching} />
       {isSuccess && data?.length === 0 && <Typography textAlign="center" component="h3" variant="h6">Customers not found</Typography>}

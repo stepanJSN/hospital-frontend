@@ -19,7 +19,7 @@ export default function CustomerActionBar({ handleSubmit, onSubmit, control, isF
       display="flex"
       alignItems="center"
       gap={2}
-      mt={2}
+      mt={1}
       onSubmit={handleSubmit(onSubmit)}
     >
       <FormInput

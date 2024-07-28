@@ -9,6 +9,7 @@ import { useDebounce } from "@uidotdev/usehooks";
 import SpecializationsDataTable from "./SpecializationsDataTable";
 import CreateDialog from "./CreateDialog";
 import EditDialog from "./EditDialog";
+import ExportExcel from "@/components/ExportExcel";
 
 export default function Customer() {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
@@ -70,6 +71,7 @@ export default function Customer() {
             marginLeft: 1
           }}
         >Create specialization</Button>
+        {isSuccess && <ExportExcel data={data} fileName="specializations" />}
       </Box>
       {isSuccess && data?.length !== 0 && 
       <>

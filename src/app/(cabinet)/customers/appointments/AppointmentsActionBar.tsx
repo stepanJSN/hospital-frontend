@@ -23,14 +23,14 @@ export default function AppointmentsActionBar({ handleSubmit, onSubmit, control,
     >
       <DatePicker
         control={control}
-        label="StartDate"
+        label="From"
         required={false}
         sx={{ width: '100%' }}
         />
         <Divider sx={{ width: '20px' }} />
         <DatePicker
         control={control}
-        label="EndDate"
+        label="To"
         required={false}
         sx={{ width: '100%' }}
         />

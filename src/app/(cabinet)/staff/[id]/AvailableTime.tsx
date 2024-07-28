@@ -12,7 +12,7 @@ type AvailableTimeProps = {
 }
 
 const daysName = ['Sun', 'Mon', 'Tu', 'Wed', 'Thur', 'Fr', 'St'];
-const timeArray = [9,10,11,12,13,14,15,16,17,18];
+const timeArray = [8,9,10,11,12,13,14,15,16,17,18];
 
 export default function AvailableTime({ staffId }: AvailableTimeProps) {
   const [dateRange, setDateRange] = useState({ startDate: new Date(), endDate: dayjs().add(7, 'day').toDate() });

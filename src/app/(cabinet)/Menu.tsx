@@ -59,6 +59,7 @@ export default function Menu() {
       alignItems="center"
       flexDirection="column"
       flex="0 0 25%"
+      mt={1}
       sx={{ borderRight: '1px solid rgba(0, 0, 0, 0.12)' }}
     >
       <Avatar sx={{ width: 56, height: 56 }}>{data?.name.charAt(0)}</Avatar>
