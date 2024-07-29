@@ -4,7 +4,7 @@ import { getAccessToken, setAccessToken } from './auth-token'
 import { authService } from './auth'
 
 const options: CreateAxiosDefaults = {
-	baseURL: 'http://localhost:8080',
+	baseURL: process.env.NEXT_PUBLIC_SERVER_ADDRESS,
 	withCredentials: true,
 	headers: {
 		'Content-Type': 'application/json'
