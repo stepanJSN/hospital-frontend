@@ -121,8 +121,9 @@ export default function Create() {
         <FormInput 
           label='Description'
           control={control}
-          errorText='Incorrect description'
+          errorText='Description must be between 2 and 1000 characters long'
           required={false}
+          pattern={/^[a-zA-Z]{2,1000}$/}
           multiline
         />
         <FormInput 

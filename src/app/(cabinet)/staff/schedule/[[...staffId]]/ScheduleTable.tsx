@@ -85,7 +85,7 @@ export default function ScheduleTable({ id, schedule, days }: ScheduleTableProps
               <TableCell>Day</TableCell>
               <TableCell>Start time</TableCell>
               <TableCell>End Time</TableCell>
-              <TableCell>Day Type</TableCell>
+              <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -97,26 +97,28 @@ export default function ScheduleTable({ id, schedule, days }: ScheduleTableProps
                 <TableCell component="th" scope="row">
                   {days[scheduleItem.dayOfWeek]}
                 </TableCell>
-                <TableCell align="right">
+                <TableCell>
                   <TextField
                     size="small"
                     margin='dense'
                     disabled={scheduleItem.disabled}
                     value={scheduleItem.startTime}
-                    label="Start time"
+                    label="From"
                     onChange={(event) => handleTimeChange(index, 'startTime', event)}
+                    InputProps={{ inputProps: { min: 8, max: 18 } }}
                     type="number"
                     variant="outlined"
                   />
                 </TableCell>
-                <TableCell align="right">
+                <TableCell>
                   <TextField
                     size="small"
                     margin='dense'
                     disabled={scheduleItem.disabled}
                     value={scheduleItem.endTime}
                     onChange={(event) => handleTimeChange(index, 'endTime', event)}
-                    label="Start time"
+                    InputProps={{ inputProps: { min: 8, max: 18 } }}
+                    label="To"
                     type="number"
                     variant="outlined"
                   />

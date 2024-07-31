@@ -158,7 +158,8 @@ export default function Profile() {
            <FormInput 
             label='Description'
             control={control}
-            errorText='Incorrect description'
+            errorText='Description must be between 2 and 1000 characters long'
+            pattern={/^[a-zA-Z]{2,1000}$/}
             required={false}
             multiline
           />
