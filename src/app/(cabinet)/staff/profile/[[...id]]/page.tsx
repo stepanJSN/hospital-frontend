@@ -16,6 +16,7 @@ import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import DeleteDialog from '@/components/Dialogs/DeleteDialog'
 import { specializationService } from '@/services/specialization'
+import FileUpload from '@/components/Inputs/FileUpload'
 
 export default function Profile() {
   const { id } = useParams<{ id: string[] }>();
@@ -78,6 +79,10 @@ export default function Profile() {
   const handleClose = () => setIsDialogOpen(false);
   const handleDelete = () => deleteMutate(idFromParam);
 
+  const updateAvatar = async (avatar: File) => {
+    await staffService.updateAvatar(avatar)
+  }
+
   return (
     <Box 
       flex="auto"
@@ -90,14 +95,18 @@ export default function Profile() {
           onSubmit={handleSubmit(onSubmit)}
           maxWidth="600px"
         >
-          <Avatar sx={{
-            position: 'relative', 
-            left: '50%', 
-            transform: 'translateX(-50%)',
-            width: 100,
-            height: 100,
-            fontSize: 35
-          }}>{data?.name.charAt(0)}</Avatar>
+          <Avatar 
+            sx={{
+              position: 'relative', 
+              left: '50%', 
+              transform: 'translateX(-50%)',
+              width: 100,
+              height: 100,
+              fontSize: 35
+            }}
+            src={data.avatarUrl}
+          />
+          <FileUpload updateAvatar={updateAvatar} />
           <Typography 
             textAlign="center" 
             marginTop={1}

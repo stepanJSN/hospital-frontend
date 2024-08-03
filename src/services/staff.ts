@@ -15,6 +15,16 @@ class StaffService {
     return (await axiosWithAuth.patch<IStaff>(`/staff/${staffId ?? await getUserId()}/`, data)).data;
   }
 
+  async updateAvatar(avatar: File) {
+    const formData = new FormData();
+    formData.append('file', avatar);
+    return (await axiosWithAuth.put('/staff/avatar', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    }));
+  }
+
   async delete(staffId?: string) {
     await axiosWithAuth.delete(`/staff/${staffId ?? await getUserId()}`);
   }

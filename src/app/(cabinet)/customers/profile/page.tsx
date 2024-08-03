@@ -58,6 +58,10 @@ export default function Profile() {
   const handleClose = () => setIsDialogOpen(false);
   const handleDelete = () => deleteMutate();
 
+  const updateAvatar = async (avatar: File) => {
+    await customerService.updateAvatar(avatar)
+  }
+
   return (
     <Box 
       flex="auto"
@@ -81,7 +85,7 @@ export default function Profile() {
             }}
             src={data.avatarUrl}
           />
-          <FileUpload />
+          <FileUpload updateAvatar={updateAvatar} />
           <Typography 
             textAlign="center" 
             marginTop={1}

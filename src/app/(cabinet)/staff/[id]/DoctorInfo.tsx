@@ -17,8 +17,8 @@ export default function DoctorInfo({ staffId }: DoctorInfoProps) {
     <Box display="flex" margin={3} width="100%">
       <Box>
         {doctorData && <Avatar 
-          alt="No avatar"
-          src="/images/no-avatar.png"
+          alt="Avatar"
+          src={doctorData.avatarUrl}
           sx={{ width: 150, height: 150 }}
         />}
         {(isFetching || isError) && <Skeleton variant="circular" width={150} height={150} />}

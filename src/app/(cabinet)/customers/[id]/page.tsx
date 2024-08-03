@@ -21,7 +21,7 @@ export default function Customer() {
       <Box display="flex" margin={3} width="100%">
         <Box>
           {(!isFetching && !isError) && <Avatar 
-            alt="No avatar"
+            alt="Avatar"
             src={data?.avatarUrl}
             sx={{ width: 150, height: 150 }}
           />}

@@ -3,12 +3,16 @@ import { Button, styled } from '@mui/material';
 import { useQueryClient } from '@tanstack/react-query';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
-const FileUpload = () => {
+type FileUploadProps = {
+  updateAvatar: (file: File) => Promise<any>;
+}
+
+const FileUpload = ({ updateAvatar }: FileUploadProps) => {
   const queryClient = useQueryClient()
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      await customerService.updateAvatar(e.target.files[0]);
+      await updateAvatar(e.target.files[0]);
       queryClient.invalidateQueries({ queryKey: ['profile'] })
     }
   };
