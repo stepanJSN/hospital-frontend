@@ -20,6 +20,16 @@ class CustomerService {
     return (await axiosWithAuth.patch<IUser>('/customers/current', data)).data;
   }
 
+  async updateAvatar(avatar: File) {
+    const formData = new FormData();
+    formData.append('file', avatar);
+    return (await axiosWithAuth.put('/customers/avatar', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    }));
+  }
+
   async delete(id?: string) {
     await axiosWithAuth.delete(`/customers/${id ?? await getUserId()}`);
   }

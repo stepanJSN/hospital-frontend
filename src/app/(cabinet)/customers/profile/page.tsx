@@ -2,6 +2,7 @@
 
 import DatePicker from '@/components/DatePicker'
 import DeleteDialog from '@/components/Dialogs/DeleteDialog'
+import FileUpload from '@/components/Inputs/FileUpload'
 import FormInput from '@/components/Inputs/FormInput'
 import Select from '@/components/Select'
 import { removeEmptyFields } from '@/helpers/removeEmptyFields'
@@ -10,7 +11,7 @@ import { customerService } from '@/services/customer'
 import { UpdateUser } from '@/types/customer.type'
 import { LoadingButton } from '@mui/lab'
 import { Alert, Avatar, Box, Button, CircularProgress, Typography } from '@mui/material'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -19,12 +20,15 @@ export default function Profile() {
   const { push } = useRouter();
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const {
+    register,
     control,
     handleSubmit,
     setValue,
   } = useForm<UpdateUser>();
 
-  const { refetch, data, isSuccess: isProfileSuccess, isPending: isProfilePending, isError: isProfileDataError } = useQuery({
+  const queryClient = useQueryClient()
+
+  const { data, isSuccess: isProfileSuccess, isPending: isProfilePending, isError: isProfileDataError } = useQuery({
 		queryKey: ['profile'],
 		queryFn: async () => customerService.get((await getUserId()) as string),
 	})
@@ -39,7 +43,7 @@ export default function Profile() {
 
   const { mutate, isPending, isError, isSuccess } = useMutation({
 		mutationFn: (data: UpdateUser) => customerService.update(data),
-    onSuccess: () => refetch(),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['profile'] }),
 	})
 
   const { mutate: deleteMutate, isPending: isDeletePending, isError: isDeleteError } = useMutation({
@@ -47,7 +51,10 @@ export default function Profile() {
     onSuccess: () => push('/auth/sigin')
 	})
 
-  const onSubmit: SubmitHandler<UpdateUser> = (data) => mutate(removeEmptyFields(data))
+  const onSubmit: SubmitHandler<UpdateUser> = (data) => {
+    console.log(data);
+    mutate(removeEmptyFields(data))
+  }
   const handleClose = () => setIsDialogOpen(false);
   const handleDelete = () => deleteMutate();
 
@@ -63,14 +70,18 @@ export default function Profile() {
           onSubmit={handleSubmit(onSubmit)}
           maxWidth="600px"
         >
-          <Avatar sx={{
-            position: 'relative', 
-            left: '50%', 
-            transform: 'translateX(-50%)',
-            width: 100,
-            height: 100,
-            fontSize: 35
-          }}>{data?.name.charAt(0)}</Avatar>
+          <Avatar 
+            sx={{
+              position: 'relative', 
+              left: '50%', 
+              transform: 'translateX(-50%)',
+              width: 100,
+              height: 100,
+              fontSize: 35
+            }}
+            src={data.avatarUrl}
+          />
+          <FileUpload />
           <Typography 
             textAlign="center" 
             marginTop={1}

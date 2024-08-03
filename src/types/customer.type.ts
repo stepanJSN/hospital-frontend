@@ -4,6 +4,7 @@ export interface IUser {
 	email: string
   surname: string
   telephone?: number
+  avatarUrl?: string
   birthday: string
   gender: 'male' | 'female'
 }

@@ -62,7 +62,10 @@ export default function Menu() {
       mt={1}
       sx={{ borderRight: '1px solid rgba(0, 0, 0, 0.12)' }}
     >
-      <Avatar sx={{ width: 56, height: 56 }}>{data?.name.charAt(0)}</Avatar>
+      <Avatar 
+        src={data?.avatarUrl}
+        sx={{ width: 56, height: 56 }}
+      />
       {isSuccess && <Typography variant="h6" component="p">{`${data?.name} ${data?.surname}`}</Typography>}
       {isPending && <Skeleton width="90%" sx={{ fontSize: '1.5rem' }} />}
       <Divider sx={{ width: '100%' }} />

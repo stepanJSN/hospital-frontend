@@ -22,7 +22,7 @@ export default function Customer() {
         <Box>
           {(!isFetching && !isError) && <Avatar 
             alt="No avatar"
-            src="/images/no-avatar.png"
+            src={data?.avatarUrl}
             sx={{ width: 150, height: 150 }}
           />}
           {(isFetching || isError) && <Skeleton variant="circular" width={150} height={150} />}
