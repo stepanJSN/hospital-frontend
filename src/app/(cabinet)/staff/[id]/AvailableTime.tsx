@@ -19,7 +19,7 @@ export default function AvailableTime({ staffId }: AvailableTimeProps) {
   const [selectedDateTime, setSelectedDateTime] = useState<null | Date>(null);
   const [openConfirmDialog, setOpenConfirmDialog] = useState<boolean>(false);
   
-  const { refetch: queryRefetch, data, isFetching, isError, isSuccess } = useQuery({
+  const { data, isFetching, isError, isSuccess } = useQuery({
     queryKey: ['availableTime', staffId, dateRange],
 		queryFn: () => appointmentService.getAvailableTime(staffId, dateRange.startDate.toString(), dateRange.endDate.toString())
   })
@@ -105,7 +105,6 @@ export default function AvailableTime({ staffId }: AvailableTimeProps) {
         closeDialog={closeDialog}
         doctorId={staffId}
         bookingDateTime={selectedDateTime}
-        refetchAppointments={queryRefetch}
       />}
       {isError && 
         <Typography 
