@@ -31,22 +31,22 @@ export const customerMenu: MenuList = [
 
 export const staffMenu: MenuList = [
   {
-    pageRoute: "appointments",
+    pageRoute: "/staff/appointments",
     pageIcon: <FormatListBulletedIcon />,
     pageText: "Appointments"
   },
   {
-    pageRoute: "schedule",
+    pageRoute: "/staff/schedule",
     pageIcon: <CalendarMonthIcon />,
     pageText: "My schedule"
   },
-  // {
-  //   pageRoute: "notifications",
-  //   pageIcon: <NotificationsIcon />,
-  //   pageText: "Notifications"
-  // },
   {
-    pageRoute: "profile",
+    pageRoute: "/staff/notifications",
+    pageIcon: <NotificationsIcon />,
+    pageText: "Notifications"
+  },
+  {
+    pageRoute: "/staff/profile",
     pageIcon: <PersonIcon />,
     pageText: "Profile"
   }
