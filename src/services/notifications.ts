@@ -4,8 +4,12 @@ import { getUserId } from "./auth-token";
 
 class NotificationsService {
 
-	async getAllByUserId() {
-		return (await axiosWithAuth.get<INotification[]>(`/notifications/${await getUserId()}`)).data;
+	async getAllByUserId(onlyUnread: boolean) {
+		return (await axiosWithAuth.get<INotification[]>(`/notifications/${await getUserId()}`, {
+      params: {
+        onlyUnread,
+      }
+    })).data;
 	};
 
   async markAsRead(messageId: string) {

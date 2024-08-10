@@ -1,8 +1,9 @@
 "use client"
+import { useState } from "react";
 import Loader from "@/components/Loader"
 import { notificationsService } from "@/services/notifications"
 import { INotification } from "@/types/notifications.type"
-import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material"
+import { Box, Button, FormControlLabel, Paper, Switch, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import dayjs from "dayjs"
 import InfoIcon from '@mui/icons-material/Info';
@@ -10,11 +11,12 @@ import WarningIcon from '@mui/icons-material/Warning';
 import ReportIcon from '@mui/icons-material/Report';
 
 export default function Notifications() {
+  const [onlyUnread, setOnlyUnread] = useState<boolean>(true);
   const queryClient = useQueryClient();
 
   const { data, isFetching, isError, isSuccess } = useQuery({
-    queryKey: ['notifications'],
-		queryFn: () => notificationsService.getAllByUserId(),
+    queryKey: ['notifications', onlyUnread],
+		queryFn: () => notificationsService.getAllByUserId(onlyUnread),
   })
 
   const { mutate: mutateMessageStatus } = useMutation({
@@ -36,6 +38,12 @@ export default function Notifications() {
   return (
     <Box margin={2} width="100%">
       <Typography variant="h5" component="h1">Notifications:</Typography>
+      <FormControlLabel control={
+          <Switch 
+            checked={onlyUnread}
+            onChange={() => setOnlyUnread(prevState => !prevState)}
+          />
+      } label="show only unread" />
       {isSuccess && data.length !== 0 &&
       <TableContainer>
         <Table sx={{ minWidth: 650, borderCollapse: 'separate', borderSpacing: '0 8px' }} aria-label="notifications table">
