@@ -3,17 +3,24 @@ import Loader from "@/components/Loader"
 import { notificationsService } from "@/services/notifications"
 import { INotification } from "@/types/notifications.type"
 import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material"
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import dayjs from "dayjs"
 import InfoIcon from '@mui/icons-material/Info';
 import WarningIcon from '@mui/icons-material/Warning';
 import ReportIcon from '@mui/icons-material/Report';
 
 export default function Notifications() {
+  const queryClient = useQueryClient();
+
   const { data, isFetching, isError, isSuccess } = useQuery({
     queryKey: ['notifications'],
 		queryFn: () => notificationsService.getAllByUserId(),
   })
+
+  const { mutate: mutateMessageStatus } = useMutation({
+		mutationFn: (messageId: string) => notificationsService.markAsRead(messageId),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['notifications'] }),
+	})
 
   function defineIcon(type: INotification['type']) {
     switch (type) {
@@ -55,6 +62,7 @@ export default function Notifications() {
                   <Button 
                     variant="outlined"
                     disabled={row.isRead}
+                    onClick={() => mutateMessageStatus(row._id)}
                   >Mark as read</Button>
                 </TableCell>
               </TableRow>
