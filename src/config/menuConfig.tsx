@@ -18,11 +18,6 @@ export const customerMenu: MenuList = [
     pageText: "My appointments"
   },
   {
-    pageRoute: "/notifications",
-    pageIcon: <NotificationsIcon />,
-    pageText: "Notifications"
-  },
-  {
     pageRoute: "/customers/profile",
     pageIcon: <PersonIcon />,
     pageText: "Profile"
@@ -41,11 +36,6 @@ export const staffMenu: MenuList = [
     pageText: "My schedule"
   },
   {
-    pageRoute: "/notifications",
-    pageIcon: <NotificationsIcon />,
-    pageText: "Notifications"
-  },
-  {
     pageRoute: "/staff/profile",
     pageIcon: <PersonIcon />,
     pageText: "Profile"
@@ -62,11 +52,6 @@ export const adminMenu: MenuList = [
     pageRoute: "/customers",
     pageIcon: <PersonIcon />,
     pageText: "Customers"
-  },
-  {
-    pageRoute: "/notifications",
-    pageIcon: <NotificationsIcon />,
-    pageText: "Notifications"
   },
   {
     pageRoute: "/staff/specializations",

@@ -27,7 +27,7 @@ export default function Notifications() {
   function defineIcon(type: INotification['type']) {
     switch (type) {
       case 'Warning':
-        return <WarningIcon sx={{ color: "orange" }} />
+        return <WarningIcon color="warning" />
       case 'Error':
         return <ReportIcon color="error" />
       default:

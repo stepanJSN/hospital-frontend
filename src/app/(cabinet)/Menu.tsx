@@ -1,7 +1,7 @@
 "use client"
 
 import { customerService } from '@/services/customer'
-import { Avatar, Box, Button, Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Skeleton, Typography } from '@mui/material'
+import { Avatar, Badge, Box, Button, Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Skeleton, Typography } from '@mui/material'
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useQuery } from '@tanstack/react-query'
 import { usePathname, useRouter } from 'next/navigation';
@@ -12,6 +12,8 @@ import { staffService } from '@/services/staff';
 import { getUserId, getUserRole } from '@/services/auth-token';
 import { useEffect, useState } from 'react';
 import { authService } from '@/services/auth';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import { notificationsService } from '@/services/notifications';
 
 export default function Menu() {
   const pathname = usePathname();
@@ -36,6 +38,11 @@ export default function Menu() {
     },
     enabled: !!role
 	})
+
+  const { data: notificationsData } = useQuery({
+    queryKey: ['notifications', true],
+		queryFn: () => notificationsService.getAllByUserId(true),
+  })
 
   function getMenu(): MenuList {
     switch (role) {
@@ -85,6 +92,25 @@ export default function Menu() {
           </ListItem>
         ))}
       </List>
+      <ListItemButton
+        href="/notifications"
+        selected={pathname === "/notifications"}
+        component={Link}
+        sx={{ maxHeight: '48px', width: '90%' }}
+      >
+        <ListItemIcon>
+          <Badge 
+            badgeContent={notificationsData?.length} 
+            invisible={notificationsData?.length === 0} 
+            color="warning"
+          >
+            <NotificationsIcon />
+          </Badge>
+        </ListItemIcon>
+
+          <ListItemText primary="Notifications" />
+
+      </ListItemButton>
       <Button 
         fullWidth 
         startIcon={<LogoutIcon />}
