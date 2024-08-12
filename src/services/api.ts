@@ -30,22 +30,25 @@ axiosWithAuth.interceptors.response.use(function (response) {
 	const originalRequest = error.config
 
 	if (error.response?.status === 401 && error.config) {
-			const token = (await authService.getNewTokens()).data;
-			if (token) await setAccessToken(token)
-			return axiosWithAuth.request(originalRequest as InternalAxiosRequestConfig<any>)
+		if (originalRequest?.data) {
+				originalRequest.data._isRetry = true;
+		}
+		const token = (await authService.getNewTokens()).data;
+		if (token) await setAccessToken(token)
+		return axiosWithAuth.request(originalRequest as InternalAxiosRequestConfig<{ _isRetry: boolean }>)
 	}
 
 	return Promise.reject(error);
 });
 
-axiosClassic.interceptors.response.use(function (response) {
-	return response;
-}, async function (error: AxiosError) {
-	if (error.response?.status === 401) {
-		authService.logout();
-	}
+// axiosClassic.interceptors.response.use(function (response) {
+// 	return response;
+// }, async function (error: AxiosError) {
+// 	if (error.response?.status === 401) {
+// 		authService.logout();
+// 	}
 
-	return Promise.reject(error);
-});
+// 	return Promise.reject(error);
+// });
 
 export { axiosClassic, axiosWithAuth }
