@@ -1,6 +1,6 @@
 "use client"
 
-import { Alert, Box, Typography } from '@mui/material'
+import { Alert, Box, Link, Typography } from '@mui/material'
 import { LoadingButton } from '@mui/lab';
 import { SubmitHandler, useForm } from 'react-hook-form'
 import FormInput from '@/components/Inputs/FormInput';
@@ -8,9 +8,8 @@ import { useMutation } from '@tanstack/react-query';
 import { authService } from '@/services/auth';
 import { ISingIn } from '@/types/auth.type';
 import Select from '@/components/Select';
-import { useRouter } from 'next/navigation';
-import Link from '@/components/Link';
-import { AxiosError } from 'axios';
+import { useRouter} from 'next/navigation';
+import NextLink from 'next/link';
 
 export default function SignIn() {
   const {
@@ -21,7 +20,6 @@ export default function SignIn() {
   const { push } = useRouter()
 
   const { mutate, isPending, error, isError } = useMutation({
-		mutationKey: ['signIn'],
 		mutationFn: (data: ISingIn) => authService.signIn(data),
     onSuccess: (response) => push(`/${response.data.role === 'Customer' ? 'staff' : 'staff/profile'}`),
 	})
@@ -53,7 +51,7 @@ export default function SignIn() {
         variant='h5' 
         mb={1}
       >Sign In</Typography>
-      {isError && <Alert severity="error">{getErrorMessage((error as AxiosError).response?.status)}</Alert>}
+      {isError && <Alert severity="error">{getErrorMessage(error.response?.status)}</Alert>}
       <FormInput 
         label='Email'
         control={control}
@@ -82,7 +80,16 @@ export default function SignIn() {
       >
         Submit
       </LoadingButton>
-      <Link href='/auth/signup' fullwidth>Register</Link>
+      <Link 
+        component={NextLink} 
+        href='/auth/signup'
+        mt={1}
+        textAlign="center"
+        display="inline-block"
+        width="100%"
+      >
+        Register
+      </Link>
     </Box>
   )
 }

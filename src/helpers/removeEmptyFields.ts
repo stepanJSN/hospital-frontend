@@ -1,12 +1,12 @@
-export function removeEmptyFields(data: Record<string, any>): Record<string, any> {
-  const newObj: Record<string, any> = {};
+export function removeEmptyFields<T extends Record<string, any>>(data: T): T {
+  const newObj: Partial<T> = {};
   for (const key in data) {
     if (data[key] === '') {
-      newObj[key] = null;
+      newObj[key] = null as any;
     } else if (data[key] !== undefined) {
       newObj[key] = data[key];
     }
   }
 
-  return newObj;
+  return newObj as T;
 }

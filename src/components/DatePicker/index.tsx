@@ -23,7 +23,7 @@ export default function DatePicker({ label, control, required = true, sx }: Date
         <DatePickerUI
           label={label}
           value={value ? dayjs(value): null}
-          onChange={value => onChange(value?.toISOString())}
+          onChange={value => onChange(value)}
           slotProps={{ textField: { size: 'small' } }}
           sx={sx}
         />

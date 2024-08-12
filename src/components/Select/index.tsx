@@ -20,7 +20,6 @@ export default function Select({control, label, defaultValue, options, required 
       defaultValue={defaultValue}
       render={({
         field: { onChange, value },
-        fieldState: { error },
       }) => (
         <FormControl 
           fullWidth 
@@ -28,10 +27,9 @@ export default function Select({control, label, defaultValue, options, required 
           size="small"
           margin="dense"
         >
-          <InputLabel id="demo-simple-select-label">{label}</InputLabel>
+          <InputLabel id={label}>{label}</InputLabel>
           <SelectComponent
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
+            labelId={label}
             value={value}
             label={label}
             onChange={onChange}

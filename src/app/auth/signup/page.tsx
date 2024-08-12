@@ -1,6 +1,6 @@
 "use client"
 
-import { Alert, Box, Typography } from '@mui/material'
+import { Alert, Box, Link, Typography } from '@mui/material'
 import { LoadingButton } from '@mui/lab';
 import { SubmitHandler, useForm } from 'react-hook-form'
 import FormInput from '@/components/Inputs/FormInput';
@@ -8,10 +8,9 @@ import { useMutation } from '@tanstack/react-query';
 import { authService } from '@/services/auth';
 import { ISingUp } from '@/types/auth.type';
 import Select from '@/components/Select';
-import Link from '@/components/Link';
 import DatePicker from '@/components/DatePicker';
-import { AxiosError } from 'axios';
 import { removeEmptyFields } from '@/helpers/removeEmptyFields';
+import NextLink from 'next/link';
 
 export default function SignIn() {
   const {
@@ -24,10 +23,9 @@ export default function SignIn() {
   })
 
   const { mutate, isPending, error, isError, isSuccess } = useMutation({
-		mutationKey: ['signUp'],
 		mutationFn: (data: ISingUp) => authService.signUp(data),
 	})
-  const onSubmit: SubmitHandler<ISingUp> = (data) => mutate(removeEmptyFields(data) as ISingUp);
+  const onSubmit: SubmitHandler<ISingUp> = (data) => mutate(removeEmptyFields(data));
 
   const getErrorMessage = (statusCode: number | undefined) => {
     if (statusCode === 400) {
@@ -52,9 +50,9 @@ export default function SignIn() {
       >Patient registration</Typography>
       {isSuccess && 
       <Alert severity="success">
-        Account was created. <Link href='/auth/signin'>You can Sign In</Link>
+        Account was created. <Link component={NextLink} href='/auth/signin'>You can Sign In</Link>
       </Alert>}
-      {isError && <Alert severity="error">{getErrorMessage((error as AxiosError).response?.status)}</Alert>}
+      {isError && <Alert severity="error">{getErrorMessage(error.response?.status)}</Alert>}
       <FormInput 
         label='Email'
         control={control}
@@ -64,13 +62,13 @@ export default function SignIn() {
       <FormInput 
         label='Name'
         control={control}
-        errorText='Incorrect name'
+        errorText='The name must consist of letters and have at least two characters'
         pattern={/^[a-zA-Z]{2,}$/}
       />
       <FormInput 
         label='Surname'
         control={control}
-        errorText='Incorrect surname'
+        errorText='The surname must consist of letters and have at least two characters'
         pattern={/^[a-zA-Z]{2,}$/}
       />
       <FormInput 
@@ -80,7 +78,15 @@ export default function SignIn() {
         required={false}
         pattern={/^\d{12}$/}
       />
-      <DatePicker label="birthday" control={control} sx={{ width: '100%' }} />
+      <DatePicker 
+        label="Birthday" 
+        control={control} 
+        sx={{ 
+          width: '100%',
+          mt: '8px',
+          mb: '4px'
+        }} 
+      />
       <Select 
         label='Gender'
         control={control}
@@ -103,7 +109,14 @@ export default function SignIn() {
       >
         Submit
       </LoadingButton>
-      <Link href='/auth/signin' fullwidth>Sign In</Link>
+      <Link 
+        component={NextLink} 
+        href='/auth/signin'
+        mt={1}
+        textAlign="center"
+        display="inline-block"
+        width="100%"
+      >Sign In</Link>
     </Box>
   )
 }
