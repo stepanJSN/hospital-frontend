@@ -9,9 +9,11 @@ import dayjs from "dayjs"
 import InfoIcon from '@mui/icons-material/Info';
 import WarningIcon from '@mui/icons-material/Warning';
 import ReportIcon from '@mui/icons-material/Report';
+import ReadMoreDialog from "./ReadMoreDialog";
 
 export default function Notifications() {
   const [onlyUnread, setOnlyUnread] = useState<boolean>(true);
+  const [selectedNotification, setSelectedNotification] = useState<INotification | null>(null);
   const queryClient = useQueryClient();
 
   const { data, isFetching, isError, isSuccess } = useQuery({
@@ -33,6 +35,14 @@ export default function Notifications() {
       default:
         return <InfoIcon color="primary" />
     }
+  }
+
+  const handleReadMoreDialogClose = () => setSelectedNotification(null);
+  const handleDialogMarkAsRead = () => {
+    if(isSuccess && selectedNotification) {
+      mutateMessageStatus(selectedNotification._id);
+    }
+    setSelectedNotification(null);
   }
 
   return (
@@ -63,7 +73,12 @@ export default function Notifications() {
                 <TableCell component="th" scope="row">
                   {row.senderName}
                 </TableCell>
-                <TableCell>{row.message}</TableCell>
+                <TableCell 
+                  sx={{ '&:hover': { cursor: 'pointer' } }}
+                  onClick={() => setSelectedNotification(row)}
+                >
+                  {row.message.length > 25 ? `${row.message.substring(0, 23)}...` : row.message}
+                </TableCell>
                 <TableCell>{row.isRead ? 'Read' : 'Unread'}</TableCell>
                 <TableCell component="th" scope="row">{dayjs(row.date).format('DD.MM.YYYY HH:mm')}</TableCell>
                 <TableCell align="right">
@@ -78,6 +93,11 @@ export default function Notifications() {
           </TableBody>
         </Table>
       </TableContainer>}
+      <ReadMoreDialog 
+        data={selectedNotification}
+        handleClose={handleReadMoreDialogClose}
+        markAsRead={handleDialogMarkAsRead}
+      />
       {isSuccess && data?.length === 0 && 
         <Typography 
           textAlign="center" 
