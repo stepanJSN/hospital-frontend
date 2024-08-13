@@ -12,8 +12,8 @@ class CustomerService {
     })).data;
   }
 
-	async get(id: string) {
-		return (await axiosWithAuth.get<IUser>(`/customers/${id}`)).data;
+	async get(id?: string) {
+		return (await axiosWithAuth.get<IUser>(`/customers/${id ?? await getUserId()}`)).data;
 	};
 
   async update(data: UpdateUser) {

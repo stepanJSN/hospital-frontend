@@ -1,19 +1,19 @@
 "use client"
 
-import { customerService } from '@/services/customer'
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import { Avatar, Badge, Box, Button, Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Skeleton, Typography } from '@mui/material'
 import LogoutIcon from '@mui/icons-material/Logout';
-import { useQuery } from '@tanstack/react-query'
-import { usePathname, useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { MenuList } from '@/types/menu.type';
-import { adminMenu, customerMenu, staffMenu } from '@/config/menuConfig';
-import { staffService } from '@/services/staff';
-import { getUserId, getUserRole } from '@/services/auth-token';
-import { useEffect, useState } from 'react';
-import { authService } from '@/services/auth';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import { useQuery } from '@tanstack/react-query'
+import { adminMenu, customerMenu, staffMenu } from '@/config/menuConfig';
+import { getUserRole } from '@/services/auth-token';
+import { authService } from '@/services/auth';
+import { customerService } from '@/services/customer'
+import { staffService } from '@/services/staff';
 import { notificationsService } from '@/services/notifications';
+import { MenuList } from '@/types/menu.type';
 
 export default function Menu() {
   const pathname = usePathname();
@@ -32,7 +32,7 @@ export default function Menu() {
 		queryKey: ['profile'],
 		queryFn: async () => {
       if(role === 'customer') {
-        return customerService.get((await getUserId()) as string);
+        return customerService.get();
       }
       return staffService.get();
     },
@@ -73,7 +73,9 @@ export default function Menu() {
         src={data?.avatarUrl}
         sx={{ width: 56, height: 56 }}
       />
-      {isSuccess && <Typography variant="h6" component="p">{`${data?.name} ${data?.surname}`}</Typography>}
+      {isSuccess && 
+        <Typography variant="h6" component="p">{`${data?.name} ${data?.surname}`}</Typography>
+      }
       {isPending && <Skeleton width="90%" sx={{ fontSize: '1.5rem' }} />}
       <Divider sx={{ width: '100%' }} />
       <List sx={{ width: '100%' }}>
@@ -107,9 +109,7 @@ export default function Menu() {
             <NotificationsIcon />
           </Badge>
         </ListItemIcon>
-
-          <ListItemText primary="Notifications" />
-
+        <ListItemText primary="Notifications" />
       </ListItemButton>
       <Button 
         fullWidth 
