@@ -4,11 +4,11 @@ import DatePicker from '@/components/DatePicker'
 import DeleteDialog from '@/components/Dialogs/DeleteDialog'
 import FileUpload from '@/components/Inputs/FileUpload'
 import FormInput from '@/components/Inputs/FormInput'
+import Notification from '@/components/Notifications'
 import Select from '@/components/Select'
 import { removeEmptyFields } from '@/helpers/removeEmptyFields'
-import { getUserId } from '@/services/auth-token'
 import { customerService } from '@/services/customer'
-import { UpdateUser } from '@/types/customer.type'
+import { IUpdateAvatarResponse, IUser, UpdateUser } from '@/types/customer.type'
 import { LoadingButton } from '@mui/lab'
 import { Alert, Avatar, Box, Button, CircularProgress, Typography } from '@mui/material'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -20,7 +20,6 @@ export default function Profile() {
   const { push } = useRouter();
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const {
-    register,
     control,
     handleSubmit,
     setValue,
@@ -30,7 +29,7 @@ export default function Profile() {
 
   const { data, isSuccess: isProfileSuccess, isPending: isProfilePending, isError: isProfileDataError } = useQuery({
 		queryKey: ['profile'],
-		queryFn: async () => customerService.get((await getUserId()) as string),
+		queryFn: async () => customerService.get(),
 	})
 
   if (isProfileSuccess) {
@@ -43,7 +42,7 @@ export default function Profile() {
 
   const { mutate, isPending, isError, isSuccess } = useMutation({
 		mutationFn: (data: UpdateUser) => customerService.update(data),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['profile'] }),
+    onSuccess: (data: IUser) => queryClient.setQueryData(['profile'], data),
 	})
 
   const { mutate: deleteMutate, isPending: isDeletePending, isError: isDeleteError } = useMutation({
@@ -51,22 +50,33 @@ export default function Profile() {
     onSuccess: () => push('/auth/sigin')
 	})
 
-  const onSubmit: SubmitHandler<UpdateUser> = (data) => {
-    console.log(data);
-    mutate(removeEmptyFields(data))
-  }
+  const { 
+    mutate: mutateAvatar, 
+    isPending: isAvatarMutationPending, 
+    isError: isAvatarMutationError,
+    isSuccess: isAvatarMutationSuccess,
+  } = useMutation({
+		mutationFn: (avatar: File) => customerService.updateAvatar(avatar),
+    onSuccess: (data: IUpdateAvatarResponse) => queryClient.setQueryData(['profile'], (oldProfileData: IUser) =>
+      (oldProfileData
+      ? {
+          ...oldProfileData,
+          avatarUrl: data.avatarUrl,
+        }
+      : oldProfileData
+    )),
+	})
+
+  const onSubmit: SubmitHandler<UpdateUser> = (data) => mutate(removeEmptyFields(data));
   const handleClose = () => setIsDialogOpen(false);
   const handleDelete = () => deleteMutate();
-
-  const updateAvatar = async (avatar: File) => {
-    await customerService.updateAvatar(avatar)
-  }
 
   return (
     <Box 
       flex="auto"
       display="flex"
       justifyContent="center"
+      mt={2}
     >
       {isProfileSuccess &&
         <Box
@@ -85,7 +95,11 @@ export default function Profile() {
             }}
             src={data.avatarUrl}
           />
-          <FileUpload updateAvatar={updateAvatar} />
+          <FileUpload 
+            update={mutateAvatar}
+            title="Update avatar"
+            isLoading={isAvatarMutationPending}
+          />
           <Typography 
             textAlign="center" 
             marginTop={1}
@@ -117,7 +131,7 @@ export default function Profile() {
             required={false}
             pattern={/^\d{12}$/}
           />
-          <DatePicker label="birthday" control={control} sx={{ width: '100%' }} />
+          <DatePicker label="Birthday" control={control} sx={{ width: '100%' }} />
           <Select 
             label='Gender'
             control={control}
@@ -166,8 +180,18 @@ export default function Profile() {
       <DeleteDialog 
         open={isDialogOpen}
         isError={isDeleteError}
+        isLoading={isDeletePending}
         handleClose={handleClose}
         handleDelete={handleDelete}
+      />
+      <Notification 
+        trigger={isAvatarMutationError}
+        text="Error. Unable to update avatar"
+      />
+      <Notification 
+        trigger={isAvatarMutationSuccess}
+        text="The avatar was successfully updated"
+        type="success"
       />
     </Box>
   )

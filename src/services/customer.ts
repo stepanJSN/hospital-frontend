@@ -1,4 +1,4 @@
-import { GetAll, IUser, UpdateUser } from "@/types/customer.type";
+import { GetAll, IUpdateAvatarResponse, IUser, UpdateUser } from "@/types/customer.type";
 import { axiosWithAuth } from "./api";
 import { getUserId } from "./auth-token";
 
@@ -23,11 +23,11 @@ class CustomerService {
   async updateAvatar(avatar: File) {
     const formData = new FormData();
     formData.append('file', avatar);
-    return (await axiosWithAuth.put('/customers/avatar', formData, {
+    return (await axiosWithAuth.put<IUpdateAvatarResponse>('/customers/avatar', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
-    }));
+    })).data;
   }
 
   async delete(id?: string) {

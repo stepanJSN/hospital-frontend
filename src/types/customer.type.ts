@@ -9,6 +9,10 @@ export interface IUser {
   gender: 'male' | 'female'
 }
 
+export interface IUpdateAvatarResponse {
+  avatarUrl: string;
+}
+
 export type GetAll = {
   firstName?: string;
   lastName?: string;

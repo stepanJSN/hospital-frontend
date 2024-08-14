@@ -1,19 +1,18 @@
-import { customerService } from '@/services/customer';
-import { Button, styled } from '@mui/material';
-import { useQueryClient } from '@tanstack/react-query';
+import { styled } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { LoadingButton } from '@mui/lab';
 
 type FileUploadProps = {
-  updateAvatar: (file: File) => Promise<any>;
+  update: (file: File) => void;
+  title: string;
+  isLoading?: boolean
 }
 
-const FileUpload = ({ updateAvatar }: FileUploadProps) => {
-  const queryClient = useQueryClient()
+const FileUpload = ({ update, title, isLoading }: FileUploadProps) => {
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      await updateAvatar(e.target.files[0]);
-      queryClient.invalidateQueries({ queryKey: ['profile'] })
+      update(e.target.files[0]);
     }
   };
 
@@ -30,9 +29,10 @@ const FileUpload = ({ updateAvatar }: FileUploadProps) => {
   });
 
   return (
-    <Button
+    <LoadingButton
       component="label"
       role={undefined}
+      loading={isLoading}
       variant="contained"
       tabIndex={-1}
       startIcon={<CloudUploadIcon />}
@@ -43,9 +43,9 @@ const FileUpload = ({ updateAvatar }: FileUploadProps) => {
         marginTop: 1,
       }}
     >
-      Upload avatar
+      {title}
       <VisuallyHiddenInput type="file" onChange={handleFileChange} />
-    </Button>
+    </LoadingButton>
   );
 };
 
