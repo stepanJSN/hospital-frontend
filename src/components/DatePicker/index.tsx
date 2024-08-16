@@ -4,15 +4,16 @@ import { DatePicker as DatePickerUI } from '@mui/x-date-pickers';
 
 type DatePickerProps = {
   label: string;
+  name?: string;
   control: Control<any>;
   required?: boolean;
   sx?: object;
 }
 
-export default function DatePicker({ label, control, required = true, sx }: DatePickerProps) {
+export default function DatePicker({ name, label, control, required = true, sx }: DatePickerProps) {
   return (
     <Controller
-      name={label.toLowerCase()}
+      name={name ?? label.toLowerCase()}
       control={control}
       rules={{
         required,
