@@ -3,15 +3,6 @@ import { axiosWithAuth } from "./api";
 import { IDoctorShort } from "@/types/staff.type";
 
 class AppointmentService {
-	async getDoctors(data: GetDoctorsType) {
-		return (await axiosWithAuth.get<IDoctorShort[]>('/staff', 
-			{ params: { 
-				specializationId: data.specializationId,
-				date: data.date,
-				fullName: data.fullName
-			}}
-		)).data;
-	};
 
 	async getAvailableTime(staffId: string, startDate: string, endDate: string) {
 		return (await axiosWithAuth.get<IAvailableTime[]>('/staff/schedule', 

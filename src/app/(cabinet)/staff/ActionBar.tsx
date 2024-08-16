@@ -1,19 +1,19 @@
 import DatePicker from '@/components/DatePicker'
 import AutocompleteAsync from '@/components/Inputs/AutocompleteAsync'
-import { appointmentService } from '@/services/appointment'
 import { LoadingButton } from '@mui/lab'
 import { Box, Button } from '@mui/material'
 import React from 'react'
 import { Control, UseFormHandleSubmit } from 'react-hook-form'
-import { FormPayloadType } from './page'
 import Link from 'next/link'
 import FormInput from '@/components/Inputs/FormInput'
 import { specializationService } from '@/services/specialization'
+import { FilterStaffType } from '@/types/staff.type'
+import { ISpecialization } from '@/types/specialization.type'
 
 type ActionBarProps = {
-  handleSubmit: UseFormHandleSubmit<FormPayloadType, undefined>
+  handleSubmit: UseFormHandleSubmit<FilterStaffType, undefined>
   onSubmit: () => void;
-  control:  Control<FormPayloadType, any>
+  control:  Control<FilterStaffType, any>
   isFetching: boolean;
   isAdmin: boolean
 }
@@ -29,15 +29,16 @@ export default function ActionBar({ handleSubmit, onSubmit, control, isFetching,
       onSubmit={handleSubmit(onSubmit)}
     >
       <FormInput
-        label='FullName'
+        label='Full name'
+        name='fullName'
         control={control}
-        errorText='Incorrect name'
+        errorText='Incorrect full name'
         required={false}
         fullWidth={false}
         sx={{ minWidth: '250px' }}
         margin='none'
       />
-      <AutocompleteAsync 
+      <AutocompleteAsync<ISpecialization> 
         id="specialization" 
         label="Specialization"
         control={control}

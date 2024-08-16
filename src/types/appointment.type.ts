@@ -1,9 +1,3 @@
-export type GetDoctorsType = {
-  specializationId?: string; 
-  date?: string
-  fullName?: string;
-}
-
 export interface IAvailableTime {
   dayOfWeek: number;
   startTime: number;

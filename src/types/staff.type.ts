@@ -1,4 +1,5 @@
 import { IUser } from "./customer.type";
+import { ISpecialization } from "./specialization.type";
 
 export interface IStaff extends IUser {
   room: number;
@@ -20,4 +21,10 @@ export type UpdateStaff = Partial<Omit<IStaff, 'id'> & {
   specializationId: string;
 }>
 
-export interface IDoctorShort extends Omit<IStaff, "email" | "telephone" | "description"> {}
+export interface IStaffShort extends Omit<IStaff, "email" | "telephone" | "description"> {}
+
+export type FilterStaffType = {
+  date?: string;
+  specialization?: ISpecialization;
+  fullName?: string;
+}

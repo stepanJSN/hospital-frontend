@@ -1,22 +1,15 @@
 "use client"
 
-import { appointmentService } from "@/services/appointment";
-import { ISpecialization } from "@/types/specialization.type";
-import { Box, Typography } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
+import { Box, LinearProgress, Typography } from "@mui/material";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import DataTable from "./DataTable";
+import StaffTable from "./StaffTable";
 import ActionBar from "./ActionBar";
 import useAdminRole from "@/hooks/useUserRole";
 import Loader from "@/components/Loader";
 import ExportExcel from "@/components/ExportExcel";
-import { IDoctorShort } from "@/types/staff.type";
-
-export type FormPayloadType = {
-  date?: string;
-  specialization?: ISpecialization;
-  fullname?: string;
-}
+import { FilterStaffType, IStaffShort } from "@/types/staff.type";
+import { staffService } from "@/services/staff";
 
 export default function Staff() {
   const isAdmin = useAdminRole();
@@ -24,25 +17,18 @@ export default function Staff() {
     control,
     handleSubmit,
     getValues,
-  } = useForm<FormPayloadType>()
+  } = useForm<FilterStaffType>();
 
-  const { refetch: queryRefetch, data, isFetching, isError, isSuccess } = useQuery({
-    queryKey: ['doctors'],
-		queryFn: () => {
-      const data = getValues()
-      console.log(data);
-      const payload = {
-        date: data.date,
-        specializationId: data.specialization?.id,
-        fullName: data.fullname
-      }
-      return appointmentService.getDoctors(payload)
-    },
+  const formValues = getValues();
+  const { refetch, data, isFetching, isPending, isError, isSuccess } = useQuery({
+    queryKey: ['staff', formValues],
+		queryFn: () =>  staffService.getAll(formValues),
+    placeholderData: keepPreviousData,
   })
   
-  const onSubmit = () => queryRefetch();
+  const onSubmit = () => refetch();
 
-  const mapData = (data: IDoctorShort[]) => {
+  const mapData = (data: IStaffShort[]) => {
     return data.map(item => ({
       ...item,
       specialization: item.specialization?.title,
@@ -66,10 +52,11 @@ export default function Staff() {
         control={control}
         isFetching={isFetching}
       />
+      {isFetching && !isPending && <LinearProgress sx={{ my: 1 }} />}
       {isSuccess && data?.length !== 0 &&      
-        <DataTable data={data} isAdmin={isAdmin} />
+        <StaffTable data={data} isAdmin={isAdmin} />
       }
-      <Loader isLoading={isFetching} />
+      <Loader isLoading={isPending} />
       {isSuccess && data?.length === 0 && 
         <Typography 
           textAlign="center"

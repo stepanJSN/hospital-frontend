@@ -1,5 +1,5 @@
 import { axiosWithAuth } from "./api";
-import { ICreateStaff, IStaff, UpdateStaff } from "@/types/staff.type";
+import { FilterStaffType, ICreateStaff, IStaff, IStaffShort, UpdateStaff } from "@/types/staff.type";
 import { getUserId } from "./auth-token";
 
 class StaffService {
@@ -9,6 +9,17 @@ class StaffService {
 
 	async get(staffId?: string) {
 		return (await axiosWithAuth.get<IStaff>(`/staff/${staffId ?? await getUserId()}`)).data;
+	};
+
+  async getAll(data: FilterStaffType) {
+    console.log(data);
+		return (await axiosWithAuth.get<IStaffShort[]>('/staff', 
+			{ params: { 
+				specializationId: data.specialization?.id,
+				date: data.date,
+				fullName: data.fullName
+			}}
+		)).data;
 	};
 
   async update(data: UpdateStaff, staffId?: string) {
