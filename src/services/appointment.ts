@@ -1,6 +1,6 @@
-import { GetDoctorsType, IAppointmentPayload, IAvailableTime, IChangeStatus, IGetAppointments, IMyAppointment, IStaffAppointments } from "@/types/appointment.type";
+import { IAppointmentPayload, IAvailableTime, IChangeStatus, IGetAppointments, IAppointment } from "@/types/appointment.type";
 import { axiosWithAuth } from "./api";
-import { IDoctorShort } from "@/types/staff.type";
+import { getUserId } from "./auth-token";
 
 class AppointmentService {
 
@@ -18,28 +18,28 @@ class AppointmentService {
 		await axiosWithAuth.post('/appointments', data);
 	}
 
-	async getMyAppointment(startDate?: string, endDate?: string) {
-		return (await axiosWithAuth.get<IMyAppointment[]>('/appointments', 
-			{ params: { 
-				startDate,
-				endDate,
+	async getByUserId(payload: IGetAppointments, userId?: string) {
+		return (await axiosWithAuth.get<IAppointment[]>('/appointments', 
+			{ params: {
+				userId: userId ?? await getUserId(),
+				...payload
 			}}
 		)).data;
 	}
 
-	async deleteMyAppointment(id: string) {
+	async delete(id: string) {
 		return (await axiosWithAuth.delete(`/appointments/${id}`));
 	}
 
-	async getByStaff(params: IGetAppointments) {
-		return (await axiosWithAuth.get<IStaffAppointments[]>(`/appointments/staff/${params.staffId}`, {
-			params: {
-				startDate: params.startDate,
-				endDate: params.endDate,
-				isCompleted: params.isCompleted,
-			}
-		})).data;
-	}
+	// async getByStaff(params: IGetAppointments) {
+	// 	return (await axiosWithAuth.get<IStaffAppointments[]>(`/appointments/staff/${params.staffId}`, {
+	// 		params: {
+	// 			startDate: params.startDate,
+	// 			endDate: params.endDate,
+	// 			isCompleted: params.isCompleted,
+	// 		}
+	// 	})).data;
+	// }
 
 	async changeStatus(id: string, status: IChangeStatus) {
 		return (await axiosWithAuth.patch(`/appointments/${id}`, status)).data;
