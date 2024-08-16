@@ -1,13 +1,15 @@
 import DatePicker from "@/components/DatePicker";
 import { LoadingButton } from "@mui/lab";
-import { Box, Divider } from "@mui/material";
+import { Box } from "@mui/material";
 import { Control, UseFormHandleSubmit } from "react-hook-form";
-import { FormPayloadType } from "./page";
+import FormInput from "@/components/Inputs/FormInput";
+import FormSwitch from "@/components/Switch/FormSwitch";
+import { IGetCustomerAppointmentsForm } from "@/types/appointment.type";
 
 type CustomerActionBarProps = {
-  handleSubmit: UseFormHandleSubmit<FormPayloadType, undefined>
+  handleSubmit: UseFormHandleSubmit<IGetCustomerAppointmentsForm, undefined>
   onSubmit: () => void;
-  control:  Control<FormPayloadType, any>
+  control:  Control<IGetCustomerAppointmentsForm, any>
   isFetching: boolean;
 }
 
@@ -18,34 +20,50 @@ export default function AppointmentsActionBar({ handleSubmit, onSubmit, control,
       display="flex"
       alignItems="center"
       onSubmit={handleSubmit(onSubmit)}
-      gap={2}
+      gap={1}
       marginY={2}
     >
       <DatePicker
         control={control}
         label="From"
+        name="fromDate"
         required={false}
-        sx={{ width: '100%' }}
-        />
-        <Divider sx={{ width: '20px' }} />
-        <DatePicker
+      />
+      <DatePicker
         control={control}
         label="To"
+        name="toDate"
         required={false}
-        sx={{ width: '100%' }}
-        />
-        <LoadingButton 
-          loading={isFetching}
-          variant="contained" 
-          fullWidth
-          type="submit"
-          loadingPosition="start"
-          sx={{
-            width: "250px"
-          }}
-        >
-          Show
-        </LoadingButton>
+      />
+      <FormInput
+        label='Doctor name'
+        name='staffName'
+        control={control}
+        errorText='Incorrect doctor name'
+        required={false}
+        fullWidth={false}
+        sx={{ minWidth: '100px' }}
+        margin='none'
+      />
+      <FormSwitch 
+        control={control}
+        defaultValue
+        label="only planned"
+        name="isCompleted"
+        sx={{ width: '150px' }}
+      />
+      <LoadingButton 
+        loading={isFetching}
+        variant="contained" 
+        fullWidth
+        type="submit"
+        loadingPosition="start"
+        sx={{
+          width: "100px"
+        }}
+      >
+        Show
+      </LoadingButton>
     </Box>
   )
 }

@@ -1,41 +1,37 @@
 "use client"
 
 import { appointmentService } from "@/services/appointment";
-import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { Box, LinearProgress, Typography } from "@mui/material";
+import { keepPreviousData, useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import dayjs from "dayjs";
 import AppointmentsActionBar from "./AppointmentsActionBar";
 import Loader from "@/components/Loader";
 import DeleteDialog from "@/components/Dialogs/DeleteDialog";
-
-export type FormPayloadType = {
-  from?: string;
-  to?: string;
-}
+import { IGetCustomerAppointmentsForm } from "@/types/appointment.type";
+import CustomerAppointmentsTable from "./CustomerAppointmentsTable";
 
 export default function MyAppointments() {
   const [appointmentId, setAppointmentId] = useState<string | null>(null);
+  const [filterData, setFilterData] = useState<IGetCustomerAppointmentsForm>({ isCompleted: true });
   const {
     control,
     handleSubmit,
     getValues,
-  } = useForm<FormPayloadType>();
+  } = useForm<IGetCustomerAppointmentsForm>();
 
-  const { refetch: queryRefetch, data, isFetching, isError, isSuccess } = useQuery({
-    queryKey: ['myAppointments'],
+  const { refetch: queryRefetch, data, isFetching, isPending, isError, isSuccess } = useQuery({
+    queryKey: ['customerAppointments', filterData],
 		queryFn: () => {
-      const data = getValues()
-      return appointmentService.getMyAppointment(data.from, data.to)
+      return appointmentService.getByUserId({ returnType: 'staff', ...filterData });
     },
+    placeholderData: keepPreviousData,
   })
   
-  const onSubmit = () => queryRefetch();
+  const onSubmit = () => setFilterData(getValues());
 
-  const { mutate, isPending, isError: isDeleteError } = useMutation({
-    mutationKey: ['cancelAppointment'],
-		mutationFn: () => appointmentService.deleteMyAppointment(appointmentId as string),
+  const { mutate, isError: isDeleteError } = useMutation({
+		mutationFn: () => appointmentService.delete(appointmentId as string),
     onSuccess: () => { closeDialog(); queryRefetch() },
   })
 
@@ -43,7 +39,7 @@ export default function MyAppointments() {
   const handleDelete = () => mutate();
 
   return (
-    <Box margin={2} width="100%">
+    <Box margin={1}>
       <Typography variant="h5" component="h1">Your appointments:</Typography>
       <AppointmentsActionBar
         handleSubmit={handleSubmit}
@@ -51,44 +47,13 @@ export default function MyAppointments() {
         control={control}
         isFetching={isFetching}
       />
-      {isSuccess && data.length !== 0 &&
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="doctors table">
-          <TableHead>
-            <TableRow>
-              <TableCell sx={{ fontWeight: 600 }}>Date and Time</TableCell>
-              <TableCell sx={{ fontWeight: 600 }}>Name Surname</TableCell>
-              <TableCell sx={{ fontWeight: 600 }}>Specialization</TableCell>
-              <TableCell sx={{ fontWeight: 600 }}>Status</TableCell>
-              <TableCell align="right" sx={{ fontWeight: 600 }}>Action</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {isSuccess && data.map((row) => (
-              <TableRow
-                component={Paper}
-                key={row.id}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 }}}
-              >
-                <TableCell component="th" scope="row">
-                  {dayjs(row.dateTime).format('DD.MM.YYYY HH:mm')}
-                </TableCell>
-                <TableCell>{`${row.staff.name} ${row.staff.surname}`}</TableCell>
-                <TableCell>{row.staff.specialization.title}</TableCell>
-                <TableCell>{row.isCompleted ? 'Completed' : 'Planned'}</TableCell>
-                <TableCell align="right">
-                  <Button 
-                    variant="outlined"
-                    color="error"
-                    disabled={row.isCompleted}
-                    onClick={() => setAppointmentId(row.id)}
-                  >Cancel</Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>}
+      {isFetching && !isPending && <LinearProgress sx={{ my: 1 }} />}
+      {isSuccess && data.length !== 0 && 
+        <CustomerAppointmentsTable 
+          data={data} 
+          setAppointmentId={(id) => setAppointmentId(id)} 
+        /> 
+      }
       {isSuccess && data?.length === 0 && 
         <Typography 
           textAlign="center" 
@@ -105,7 +70,7 @@ export default function MyAppointments() {
           mt={4}
         >Error. Try again</Typography>
       }
-      <Loader isLoading={isFetching} />
+      <Loader isLoading={isPending} />
       <DeleteDialog
         open={!!appointmentId}
         isLoading={isPending}
