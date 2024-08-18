@@ -10,7 +10,6 @@ type ReadMoreDialogProps = {
 }
 
 export default function ReadMoreDialog({ data, markAsRead, handleClose }: ReadMoreDialogProps) {
-  console.log(data);
   return (
     <Dialog open={!!data}>
       <DialogTitle>
