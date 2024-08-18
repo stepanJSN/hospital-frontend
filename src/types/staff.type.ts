@@ -16,9 +16,9 @@ export interface ICreateStaff extends Omit<IStaff, 'id' | 'specialization'> {
   specializationId: string | null;
 }
 
-export type UpdateStaff = Partial<Omit<IStaff, 'id'> & { 
+export type UpdateStaff = Partial<Omit<IStaff, 'id' | 'specialization'> & { 
   password: string;
-  specializationId: string;
+  specializationId: string | null;
 }>
 
 export interface IStaffShort extends Omit<IStaff, "email" | "telephone" | "description"> {}

@@ -1,6 +1,7 @@
 import { axiosWithAuth } from "./api";
 import { FilterStaffType, ICreateStaff, IStaff, IStaffShort, UpdateStaff } from "@/types/staff.type";
 import { getUserId } from "./auth-token";
+import { IUpdateAvatarResponse } from "@/types/customer.type";
 
 class StaffService {
   async create(data: ICreateStaff) {
@@ -26,14 +27,14 @@ class StaffService {
     return (await axiosWithAuth.patch<IStaff>(`/staff/${staffId ?? await getUserId()}/`, data)).data;
   }
 
-  async updateAvatar(avatar: File) {
+  async updateAvatar(avatar: File, staffId?: string) {
     const formData = new FormData();
     formData.append('file', avatar);
-    return (await axiosWithAuth.put('/staff/avatar', formData, {
+    return (await axiosWithAuth.put<IUpdateAvatarResponse>(`/staff/avatar/${staffId ?? await getUserId()}/`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
-    }));
+    })).data;
   }
 
   async delete(staffId?: string) {
