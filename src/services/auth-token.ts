@@ -34,7 +34,7 @@ export async function removeUserId() {
 
 export async function getUserRole() {
   'use server'
-  return await cookies().get("role")?.value;
+  return cookies().get("role")?.value;
 }
 
 export async function setUserRole(userRole:string) {

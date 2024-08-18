@@ -1,59 +1,40 @@
 "use client"
 
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { Avatar, Badge, Box, Button, Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Skeleton, Typography } from '@mui/material'
 import LogoutIcon from '@mui/icons-material/Logout';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { useQuery } from '@tanstack/react-query'
-import { adminMenu, customerMenu, staffMenu } from '@/config/menuConfig';
-import { getUserRole } from '@/services/auth-token';
 import { authService } from '@/services/auth';
-import { customerService } from '@/services/customer'
-import { staffService } from '@/services/staff';
 import { notificationsService } from '@/services/notifications';
 import { MenuList } from '@/types/menu.type';
+import { customerService } from '@/services/customer';
+import { staffService } from '@/services/staff';
 
-export default function Menu() {
+type MenuProps = {
+  menuList: MenuList;
+  userRole: string;
+};
+
+export default function Menu({ menuList, userRole }: MenuProps) {
   const pathname = usePathname();
-  const [role, setRole] = useState<string | null>(null);
   const { push } = useRouter()
-
-  useEffect(() => {
-    const fetchUserRole = async () => {
-      const userRole = await getUserRole();
-      setRole((userRole as string).toLowerCase());
-    };
-    fetchUserRole();
-  }, []);
 
   const { data, isSuccess, isPending } = useQuery({
 		queryKey: ['profile'],
-		queryFn: async () => {
-      if(role === 'customer') {
+		queryFn: () => {
+      if(userRole === 'Customer') {
         return customerService.get();
       }
       return staffService.get();
     },
-    enabled: !!role
 	})
 
   const { data: notificationsData } = useQuery({
     queryKey: ['notifications', true],
 		queryFn: () => notificationsService.getAllByUserId(true),
   })
-
-  function getMenu(): MenuList {
-    switch (role) {
-      case "admin":
-        return adminMenu;
-      case "staff":
-        return staffMenu;
-      default:
-        return customerMenu;
-    }
-  }
 
   const logout = () => {
     authService.logout();
@@ -79,7 +60,7 @@ export default function Menu() {
       {isPending && <Skeleton width="90%" sx={{ fontSize: '1.5rem' }} />}
       <Divider sx={{ width: '100%' }} />
       <List sx={{ width: '100%' }}>
-        {getMenu().map(element => (
+        {menuList.map(element => (
           <ListItem key={element.pageRoute}>
             <ListItemButton
               href={element.pageRoute}
