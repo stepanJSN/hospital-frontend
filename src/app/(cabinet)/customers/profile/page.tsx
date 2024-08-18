@@ -6,7 +6,7 @@ import FileUpload from '@/components/Inputs/FileUpload'
 import FormInput from '@/components/Inputs/FormInput'
 import Notification from '@/components/Notifications'
 import Select from '@/components/Select'
-import { removeEmptyFields } from '@/helpers/removeEmptyFields'
+import { replaceEmptyFieldsWithNull } from '@/helpers/replaceEmptyFieldsWithNull'
 import { customerService } from '@/services/customer'
 import { IUpdateAvatarResponse, IUser, UpdateUser } from '@/types/customer.type'
 import { LoadingButton } from '@mui/lab'
@@ -67,7 +67,7 @@ export default function Profile() {
     )),
 	})
 
-  const onSubmit: SubmitHandler<UpdateUser> = (data) => mutate(removeEmptyFields(data));
+  const onSubmit: SubmitHandler<UpdateUser> = (data) => mutate(replaceEmptyFieldsWithNull(data));
   const handleClose = () => setIsDialogOpen(false);
   const handleDelete = () => deleteMutate();
 
