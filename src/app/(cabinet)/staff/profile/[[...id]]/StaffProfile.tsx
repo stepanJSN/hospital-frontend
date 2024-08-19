@@ -181,15 +181,16 @@ export default function StaffProfile({ staffId, isAdmin }: StaffProfile) {
           <FormInput 
             label='Experience'
             control={control}
-           errorText='Experience must be a number'
+            errorText='Experience must be a number'
             required={false}
+            type="number"
             pattern={/^\d+$/}
           />
-           <FormInput 
+          <FormInput 
             label='Description'
             control={control}
             errorText='Description must be between 2 and 1000 characters long'
-            pattern={/^[a-zA-Z]{2,1000}$/}
+            pattern={/^[a-zA-Z\s,.]{2,1000}$/}
             required={false}
             multiline
           />
