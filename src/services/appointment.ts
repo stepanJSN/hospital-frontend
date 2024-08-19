@@ -31,16 +31,6 @@ class AppointmentService {
 		return (await axiosWithAuth.delete(`/appointments/${id}`));
 	}
 
-	// async getByStaff(params: IGetAppointments) {
-	// 	return (await axiosWithAuth.get<IStaffAppointments[]>(`/appointments/staff/${params.staffId}`, {
-	// 		params: {
-	// 			startDate: params.startDate,
-	// 			endDate: params.endDate,
-	// 			isCompleted: params.isCompleted,
-	// 		}
-	// 	})).data;
-	// }
-
 	async changeStatus(id: string, status: IChangeStatus) {
 		return (await axiosWithAuth.patch(`/appointments/${id}`, status)).data;
 	}

@@ -9,6 +9,8 @@ export interface IGetAppointments {
 
 export interface IGetCustomerAppointmentsForm extends Omit<IGetAppointments, 'returnType' | 'customerName'> {}
 
+export interface IGetStaffAppointmentsForm extends Omit<IGetAppointments, 'returnType' | 'staffName'> {}
+
 export interface IAvailableTime {
   dayOfWeek: number;
   startTime: number;
@@ -25,37 +27,19 @@ export interface IAppointment {
   id: string;
   dateTime: string;
   isCompleted: boolean;
-  staff?: {
+  staff: {
     name: string;
     surname: string;
     specialization: {
       title: string;
     },
   },
-  customer?: {
-    id: string;
-    name: string;
-    surname: string;
-  }
-}
-
-export interface IStaffAppointments {
-  id: string;
-  dateTime: Date;
-  isCompleted: boolean;
   customer: {
     id: string;
     name: string;
     surname: string;
   }
 }
-
-// export interface IGetAppointments {
-//   staffId: string
-//   startDate?: string;
-//   endDate?: string;
-//   isCompleted?: boolean;
-// }
 
 export interface IChangeStatus {
   isCompleted: boolean;
