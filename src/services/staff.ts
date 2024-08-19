@@ -13,7 +13,6 @@ class StaffService {
 	};
 
   async getAll(data: FilterStaffType) {
-    console.log(data);
 		return (await axiosWithAuth.get<IStaffShort[]>('/staff', 
 			{ params: { 
 				specializationId: data.specialization?.id,

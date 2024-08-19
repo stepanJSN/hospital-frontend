@@ -32,7 +32,7 @@ export default function AutocompleteAsync<T>({
 
   useEffect(() => {
     if(data) setOptions(data);
-  }, [debouncedSearchValue]);
+  }, [data]);
 
   return (
     <Controller
