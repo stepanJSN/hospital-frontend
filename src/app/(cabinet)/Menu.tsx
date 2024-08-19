@@ -5,7 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { Avatar, Badge, Box, Button, Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Skeleton, Typography } from '@mui/material'
 import LogoutIcon from '@mui/icons-material/Logout';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { useQuery } from '@tanstack/react-query'
+import { QueryClient, useQuery } from '@tanstack/react-query'
 import { authService } from '@/services/auth';
 import { notificationsService } from '@/services/notifications';
 import { MenuList } from '@/types/menu.type';
@@ -19,7 +19,8 @@ type MenuProps = {
 
 export default function Menu({ menuList, userRole }: MenuProps) {
   const pathname = usePathname();
-  const { push } = useRouter()
+  const { push } = useRouter();
+  const queryClient = new QueryClient();
 
   const { data, isSuccess, isPending } = useQuery({
 		queryKey: ['profile'],
@@ -38,6 +39,7 @@ export default function Menu({ menuList, userRole }: MenuProps) {
 
   const logout = () => {
     authService.logout();
+    queryClient.invalidateQueries();
     push('/auth/signin');
   }
 

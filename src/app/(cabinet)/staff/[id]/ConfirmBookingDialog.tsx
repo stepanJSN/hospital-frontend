@@ -25,7 +25,11 @@ export default function ConfirmBookingDialog({
 
   const { mutate, isPending, isError, error, reset } = useMutation({
 		mutationFn: (data: IAppointmentPayload) => appointmentService.makeAppointment(data),
-    onSuccess: () => {closeDialog(); queryClient.invalidateQueries({ queryKey: ['availableTime'] }) },
+    onSuccess: () => {
+      closeDialog(); 
+      queryClient.invalidateQueries({ queryKey: ['availableTime'] });
+      queryClient.invalidateQueries({ queryKey: ['customerAppointments'] });
+    },
   })
 
   const confirmAppointment = () => {
