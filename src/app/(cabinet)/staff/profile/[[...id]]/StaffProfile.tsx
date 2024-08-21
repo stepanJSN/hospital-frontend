@@ -18,6 +18,7 @@ import FileUpload from '@/components/Inputs/FileUpload'
 import { replaceEmptyFieldsWithNull } from '@/helpers/replaceEmptyFieldsWithNull'
 import { IUpdateAvatarResponse } from '@/types/customer.type'
 import Notification from '@/components/Notifications'
+import useLogout from '@/hooks/useLogout'
 
 type StaffProfile = {
   staffId?: string;
@@ -27,6 +28,7 @@ type StaffProfile = {
 export default function StaffProfile({ staffId, isAdmin }: StaffProfile) {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const { push } = useRouter();
+  const logout = useLogout();
   const queryClient = useQueryClient();
 
   const {
@@ -62,8 +64,9 @@ export default function StaffProfile({ staffId, isAdmin }: StaffProfile) {
 		mutationFn: (staffId?: string) => staffService.delete(staffId),
     onSuccess: () => {
       if (!staffId) {
-        push('/auth/sigin')
+        logout();
       } else {
+        queryClient.invalidateQueries({ queryKey: ['staff'] });
         push('/staff')
       }
     }
@@ -184,7 +187,7 @@ export default function StaffProfile({ staffId, isAdmin }: StaffProfile) {
             errorText='Experience must be a number'
             required={false}
             type="number"
-            pattern={/^\d+$/}
+            pattern={/^\d{1,3}$/}
           />
           <FormInput 
             label='Description'

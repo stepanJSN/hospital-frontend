@@ -7,17 +7,17 @@ import FormInput from '@/components/Inputs/FormInput'
 import Notification from '@/components/Notifications'
 import Select from '@/components/Select'
 import { replaceEmptyFieldsWithNull } from '@/helpers/replaceEmptyFieldsWithNull'
+import useLogout from '@/hooks/useLogout'
 import { customerService } from '@/services/customer'
 import { IUpdateAvatarResponse, IUser, UpdateUser } from '@/types/customer.type'
 import { LoadingButton } from '@mui/lab'
 import { Alert, Avatar, Box, Button, CircularProgress, Typography } from '@mui/material'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 export default function Profile() {
-  const { push } = useRouter();
+  const logout = useLogout();
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const {
     control,
@@ -47,7 +47,7 @@ export default function Profile() {
 
   const { mutate: deleteMutate, isPending: isDeletePending, isError: isDeleteError } = useMutation({
 		mutationFn: () => customerService.delete(),
-    onSuccess: () => push('/auth/sigin')
+    onSuccess: () => logout(),
 	})
 
   const { 

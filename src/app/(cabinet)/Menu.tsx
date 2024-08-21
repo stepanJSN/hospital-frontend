@@ -1,16 +1,16 @@
 "use client"
 
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { Avatar, Badge, Box, Button, Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Skeleton, Typography } from '@mui/material'
 import LogoutIcon from '@mui/icons-material/Logout';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { QueryClient, useQuery } from '@tanstack/react-query'
-import { authService } from '@/services/auth';
+import { useQuery } from '@tanstack/react-query'
 import { notificationsService } from '@/services/notifications';
 import { MenuList } from '@/types/menu.type';
 import { customerService } from '@/services/customer';
 import { staffService } from '@/services/staff';
+import useLogout from '@/hooks/useLogout';
 
 type MenuProps = {
   menuList: MenuList;
@@ -19,8 +19,7 @@ type MenuProps = {
 
 export default function Menu({ menuList, userRole }: MenuProps) {
   const pathname = usePathname();
-  const { push } = useRouter();
-  const queryClient = new QueryClient();
+  const logout = useLogout();
 
   const { data, isSuccess, isPending } = useQuery({
 		queryKey: ['profile'],
@@ -36,12 +35,6 @@ export default function Menu({ menuList, userRole }: MenuProps) {
     queryKey: ['notifications', true],
 		queryFn: () => notificationsService.getAllByUserId(true),
   })
-
-  const logout = () => {
-    authService.logout();
-    queryClient.invalidateQueries();
-    push('/auth/signin');
-  }
 
   return (
     <Box
