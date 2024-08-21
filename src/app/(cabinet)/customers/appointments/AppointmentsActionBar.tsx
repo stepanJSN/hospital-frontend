@@ -47,8 +47,8 @@ export default function AppointmentsActionBar({ handleSubmit, onSubmit, control,
       />
       <FormSwitch 
         control={control}
-        defaultValue
-        label="only planned"
+        defaultValue={false}
+        label="Show completed"
         name="isCompleted"
         sx={{ width: '150px' }}
       />

@@ -26,7 +26,7 @@ export default function StaffAppointmentsTable({ data, setAppointmentId, changeA
           align: 'right',
           accessor: (row) => (
             <Button 
-              variant="outlined"
+              variant="contained"
               color={row.isCompleted ? "error" : "success"}
               onClick={() => changeAppointmentStatus({ id: row.id, status: !row.isCompleted })}
             >

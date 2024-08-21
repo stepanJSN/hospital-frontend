@@ -13,7 +13,7 @@ import { removeEmptyFields } from "@/helpers/removeEmptyFields";
 
 export default function MyAppointments() {
   const [appointmentId, setAppointmentId] = useState<string | null>(null);
-  const [filterData, setFilterData] = useState<IGetCustomerAppointmentsForm>({ isCompleted: true });
+  const [filterData, setFilterData] = useState<IGetCustomerAppointmentsForm>({ isCompleted: false });
   const {
     control,
     handleSubmit,

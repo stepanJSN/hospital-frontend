@@ -6,7 +6,7 @@ export default async function MyAppointmentsPage() {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: ['customerAppointments', { isCompleted: true }],
+    queryKey: ['customerAppointments', { isCompleted: false }],
     queryFn: () => appointmentService.getByUserId({ returnType: 'staff' }),
   })
 
