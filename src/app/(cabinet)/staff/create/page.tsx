@@ -6,14 +6,15 @@ import FormInput from '@/components/Inputs/FormInput'
 import Select from '@/components/Select'
 import { specializationService } from '@/services/specialization'
 import { staffService } from '@/services/staff'
-import { ICreateStaff, IStaff } from '@/types/staff.type'
+import { ICreateStaff, IStaff, IStaffShort } from '@/types/staff.type'
 import { LoadingButton } from '@mui/lab'
-import { Alert, Avatar, Box } from '@mui/material'
-import { useMutation } from '@tanstack/react-query'
-import { AxiosError } from 'axios'
+import { Alert, Avatar, Box, Link } from '@mui/material'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import NextLink from 'next/link'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 export default function Create() {
+  const queryClient = useQueryClient();
   const {
     control,
     handleSubmit,
@@ -25,8 +26,10 @@ export default function Create() {
   })
 
   const { mutate, isPending, error, isError, isSuccess } = useMutation({
-		mutationKey: ['createStaff'],
 		mutationFn: (data: ICreateStaff) => staffService.create(data),
+    onSuccess: (newStaffMember) => queryClient.setQueryData(['staff', {}], (oldData: IStaffShort[]) => {
+      return [newStaffMember, ...oldData];
+    }),
 	})
 
   const onSubmit: SubmitHandler<IStaff> = (data) => {
@@ -42,7 +45,6 @@ export default function Create() {
     if (statusCode === 400) {
       return "User with such email exists";
     }
-
     return "Error. Try again";
   }
 
@@ -68,8 +70,9 @@ export default function Create() {
         {isSuccess && 
         <Alert severity="success">
           User was created
+          <Link component={NextLink} href='/staff'>Back to staff list</Link>
         </Alert>}
-        {isError && <Alert severity="error">{getErrorMessage((error as AxiosError).response?.status)}</Alert>}
+        {isError && <Alert severity="error">{getErrorMessage(error.response?.status)}</Alert>}
         <FormInput 
           label='Email'
           control={control}
@@ -123,7 +126,7 @@ export default function Create() {
           control={control}
           errorText='Description must be between 2 and 1000 characters long'
           required={false}
-          pattern={/^[a-zA-Z]{2,1000}$/}
+          pattern={/^[a-zA-Z\s,.]{2,1000}$/}
           multiline
         />
         <FormInput 
