@@ -25,7 +25,10 @@ export default function NotificationsTable({ data, setSelectedNotification, chan
 
   return (
     <TableContainer>
-        <Table sx={{ minWidth: 650, borderCollapse: 'separate', borderSpacing: '0 8px' }} aria-label="notifications table">
+        <Table 
+          sx={{ minWidth: 650, borderCollapse: 'separate', borderSpacing: '0 8px' }} 
+          aria-label="notifications table"
+        >
           <TableBody>
             {data.map((row) => (
               <TableRow
