@@ -4,16 +4,16 @@ import { INotification } from "@/types/notifications.type";
 import dayjs from "dayjs";
 
 type ReadMoreDialogProps = {
-  data: INotification| null;
+  notification: INotification | null;
   markAsRead: () => void;
   handleClose: () => void;
 }
 
-export default function ReadMoreDialog({ data, markAsRead, handleClose }: ReadMoreDialogProps) {
+export default function ReadMoreDialog({ notification, markAsRead, handleClose }: ReadMoreDialogProps) {
   return (
-    <Dialog open={!!data}>
+    <Dialog open={!!notification}>
       <DialogTitle>
-        {data?.senderName}
+        {notification?.senderName}
       </DialogTitle>
       <IconButton
         aria-label="close"
@@ -29,7 +29,7 @@ export default function ReadMoreDialog({ data, markAsRead, handleClose }: ReadMo
       </IconButton>
       <DialogContent dividers>
         <Typography gutterBottom>
-          {data?.message}
+          {notification?.message}
         </Typography>
       </DialogContent>
       <Box 
@@ -39,9 +39,9 @@ export default function ReadMoreDialog({ data, markAsRead, handleClose }: ReadMo
         m={1}
       >
         <Typography>
-          {dayjs(data?.date).format('DD.MM.YYYY HH:mm')}
+          {dayjs(notification?.date).format('DD.MM.YYYY HH:mm')}
         </Typography>
-        <Button disabled={data?.isRead} onClick={markAsRead}>
+        <Button disabled={notification?.isRead} onClick={markAsRead}>
           Mark as read
         </Button>
       </Box>

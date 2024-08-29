@@ -10,6 +10,8 @@ import DeleteDialog from "@/components/Dialogs/DeleteDialog";
 import { IGetCustomerAppointmentsForm } from "@/types/appointment.type";
 import CustomerAppointmentsTable from "./CustomerAppointmentsTable";
 import { removeEmptyFields } from "@/helpers/removeEmptyFields";
+import Error from "@/components/Errors/Error";
+import NoDataMessage from "@/components/Errors/NoDataMessage";
 
 export default function MyAppointments() {
   const [appointmentId, setAppointmentId] = useState<string | null>(null);
@@ -55,21 +57,9 @@ export default function MyAppointments() {
         /> 
       }
       {isSuccess && data?.length === 0 && 
-        <Typography 
-          textAlign="center" 
-          component="h3" 
-          variant="h6"
-        >{"You don't have any doctor's appointments."}</Typography>
+        <NoDataMessage message="You don't have any doctor's appointments." />
       }
-      {isError && 
-        <Typography 
-          textAlign="center"
-          component="h3" 
-          variant="h5"
-          color="error"
-          mt={4}
-        >Error. Try again</Typography>
-      }
+      {isError && <Error refetch={queryRefetch} />}
       <DeleteDialog
         open={!!appointmentId}
         isLoading={isPending}

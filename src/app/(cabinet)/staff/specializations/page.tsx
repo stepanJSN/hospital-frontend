@@ -10,6 +10,8 @@ import SpecializationsDataTable from "./SpecializationsDataTable";
 import CreateDialog from "./CreateDialog";
 import EditDialog from "./EditDialog";
 import ExportExcel from "@/components/ExportExcel";
+import Error from "@/components/Errors/Error";
+import NoDataMessage from "@/components/Errors/NoDataMessage";
 
 export default function Customer() {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
@@ -89,22 +91,9 @@ export default function Customer() {
       </>
       }
       {isSuccess && data?.length === 0 && 
-        <Typography 
-          textAlign="center"
-          component="h3" 
-          variant="h6"
-          mt={4}
-        >Specializations not found</Typography>
+        <NoDataMessage message="Specializations not found" />
       }
-      {isError && 
-        <Typography 
-          textAlign="center"
-          component="h3" 
-          variant="h5"
-          color="error"
-          mt={4}
-        >Error. Try again</Typography>
-      }
+      {isError && <Error refetch={refetch} />}
       <DeleteDialog 
         open={isDeleteDialogOpen}
         isError={isDeleteError}

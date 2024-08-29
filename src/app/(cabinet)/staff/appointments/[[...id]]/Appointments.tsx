@@ -1,13 +1,11 @@
 "use client"
 
 import { appointmentService } from "@/services/appointment";
-import { Box, Button, LinearProgress, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Link as UILink } from "@mui/material";
+import { Box, LinearProgress, Typography} from "@mui/material";
 import { keepPreviousData, useMutation, useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
-import Link from "next/link";
 import { useState } from "react";
 import DeleteDialog from "@/components/Dialogs/DeleteDialog";
-import Loader from "@/components/Loader";
 import Notification from "@/components/Notifications";
 import ExportExcel from "@/components/ExportExcel";
 import { IAppointment, IGetStaffAppointmentsForm } from "@/types/appointment.type";
@@ -15,12 +13,12 @@ import { useForm } from "react-hook-form";
 import AppointmentsActionBar from "./AppointmentsActionBar";
 import { removeEmptyFields } from "@/helpers/removeEmptyFields";
 import StaffAppointmentsTable from "./StaffAppointmentsTable";
+import Error from "@/components/Errors/Error";
+import NoDataMessage from "@/components/Errors/NoDataMessage";
 
 type AppointmentsProps = {
   staffId?: string;
 }
-
-const currentDate = dayjs().hour(0).minute(0);
 
 export default function Appointments({ staffId }: AppointmentsProps) {
   const [appointmentId, setAppointmentId] = useState<string | null>(null);
@@ -84,21 +82,9 @@ export default function Appointments({ staffId }: AppointmentsProps) {
         />
       }
       {isSuccess && data?.length === 0 && 
-        <Typography 
-          textAlign="center" 
-          component="h3" 
-          variant="h6"
-        >{"You don't have any appointments."}</Typography>
+        <NoDataMessage message="Appointments not found" />
       }
-      {isError && 
-        <Typography 
-          textAlign="center"
-          component="h3" 
-          variant="h5"
-          color="error"
-          mt={4}
-        >Error. Try again</Typography>
-      }
+      {isError && <Error refetch={refetch} />}
       <DeleteDialog
         open={!!appointmentId}
         isLoading={isDeletePending}

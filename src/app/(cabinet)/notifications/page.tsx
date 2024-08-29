@@ -6,13 +6,15 @@ import { Box, FormControlLabel, LinearProgress, Switch, Typography } from "@mui/
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import ReadMoreDialog from "./ReadMoreDialog";
 import NotificationsTable from "./NotificationsTable";
+import Error from "@/components/Errors/Error";
+import NoDataMessage from "@/components/Errors/NoDataMessage";
 
 export default function Notifications() {
   const [onlyUnread, setOnlyUnread] = useState<boolean>(true);
   const [selectedNotification, setSelectedNotification] = useState<INotification | null>(null);
   const queryClient = useQueryClient();
 
-  const { data, isFetching, isError, isSuccess } = useQuery({
+  const { refetch, data, isFetching, isError, isSuccess } = useQuery({
     queryKey: ['notifications', onlyUnread],
 		queryFn: () => notificationsService.getAllByUserId(onlyUnread),
   })
@@ -48,26 +50,14 @@ export default function Notifications() {
         />
       }
       <ReadMoreDialog 
-        data={selectedNotification}
+        notification={selectedNotification}
         handleClose={handleReadMoreDialogClose}
         markAsRead={handleDialogMarkAsRead}
       />
       {isSuccess && data?.length === 0 && 
-        <Typography 
-          textAlign="center" 
-          component="h3" 
-          variant="h6"
-        >{"You don't have any notifications."}</Typography>
+        <NoDataMessage message="You don't have any notifications." />
       }
-      {isError && 
-        <Typography 
-          textAlign="center"
-          component="h3" 
-          variant="h5"
-          color="error"
-          mt={4}
-        >Error. Try again</Typography>
-      }
+      {isError && <Error refetch={refetch} />}
     </Box>
   )
 }

@@ -10,6 +10,8 @@ import { FilterStaffType, IStaffShort } from "@/types/staff.type";
 import { staffService } from "@/services/staff";
 import { useState } from "react";
 import { removeEmptyFields } from "@/helpers/removeEmptyFields";
+import Error from "@/components/Errors/Error";
+import NoDataMessage from "@/components/Errors/NoDataMessage";
 
 type StaffProps = {
   isAdmin: boolean;
@@ -23,7 +25,7 @@ export default function Staff({ isAdmin }: StaffProps) {
     getValues,
   } = useForm<FilterStaffType>();
 
-  const { data, isFetching, isError, isSuccess } = useQuery({
+  const { refetch, data, isFetching, isError, isSuccess } = useQuery({
     queryKey: ['staff', staffFilter],
 		queryFn: () =>  staffService.getAll(staffFilter),
     placeholderData: keepPreviousData,
@@ -60,22 +62,9 @@ export default function Staff({ isAdmin }: StaffProps) {
         <StaffTable data={data} isAdmin={isAdmin} />
       }
       {isSuccess && data?.length === 0 && 
-        <Typography 
-          textAlign="center"
-          component="h3" 
-          variant="h5"
-          mt={4}
-        >Doctors not found</Typography>
+        <NoDataMessage message="Doctors not found" />
       }
-      {isError && 
-        <Typography 
-          textAlign="center"
-          component="h3" 
-          variant="h5"
-          color="error"
-          mt={4}
-        >Error. Try again</Typography>
-      }
+      {isError && <Error refetch={refetch} />}
     </Box>
   )
 }

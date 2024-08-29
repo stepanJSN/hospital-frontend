@@ -12,6 +12,8 @@ import DeleteDialog from "@/components/Dialogs/DeleteDialog";
 import ExportExcel from "@/components/ExportExcel";
 import dayjs from "dayjs";
 import { removeEmptyFields } from "@/helpers/removeEmptyFields";
+import Error from "@/components/Errors/Error";
+import NoDataMessage from "@/components/Errors/NoDataMessage";
 
 export default function CustomersPage() {
   const [selectedUser, setSelectedUser] = useState<string | null>();
@@ -82,16 +84,10 @@ export default function CustomersPage() {
         <CustomerDataTable data={mapData(data)} onClick={handleDelete} />
       }
       {isFetching && <LinearProgress sx={{ my: 1 }} />}
-      {isSuccess && data?.length === 0 && <Typography textAlign="center" component="h3" variant="h6">Customers not found</Typography>}
-      {isError && 
-        <Typography 
-          textAlign="center"
-          component="h3" 
-          variant="h5"
-          color="error"
-          mt={4}
-        >Error. Try again</Typography>
+      {isSuccess && data?.length === 0 && 
+        <NoDataMessage message="Customers not found" />
       }
+      {isError && <Error refetch={refetch} />}
       <DeleteDialog 
         open={!!selectedUser}
         isLoading={isPending}
