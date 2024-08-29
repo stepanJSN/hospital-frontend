@@ -1,18 +1,16 @@
 import { LoadingButton } from '@mui/lab'
 import { Box } from '@mui/material'
-import React from 'react'
-import { Control, UseFormHandleSubmit } from 'react-hook-form'
+import { Control } from 'react-hook-form'
 import FormInput from '@/components/Inputs/FormInput'
 import { GetAll } from '@/types/customer.type'
 
 type CustomerActionBarProps = {
-  handleSubmit: UseFormHandleSubmit<GetAll, undefined>
-  onSubmit: () => void;
+  handleSubmit: () => void;
   control:  Control<GetAll, any>
   isFetching: boolean;
 }
 
-export default function CustomerActionBar({ handleSubmit, onSubmit, control, isFetching }: CustomerActionBarProps) {
+export default function CustomerActionBar({ handleSubmit, control, isFetching }: CustomerActionBarProps) {
   return (
     <Box 
       component="form" 
@@ -20,7 +18,7 @@ export default function CustomerActionBar({ handleSubmit, onSubmit, control, isF
       alignItems="center"
       gap={2}
       mt={1}
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit}
     >
       <FormInput
         label='FirstName'

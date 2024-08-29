@@ -1,5 +1,6 @@
+import DataTable from "@/components/Table/DataTable";
 import { IUser } from "@/types/customer.type";
-import { TableCell, TableContainer, TableHead, TableRow, Table, TableBody, Paper, Button } from "@mui/material";
+import { Button } from "@mui/material";
 import Link from "next/link";
 
 type CustomerDataTableType = {
@@ -9,42 +10,32 @@ type CustomerDataTableType = {
 
 export default function CustomerDataTable({ data, onClick }: CustomerDataTableType) {
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="doctors table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Name Surname</TableCell>
-            <TableCell>Email</TableCell>
-            <TableCell>Telephone</TableCell>
-            <TableCell>Birthday</TableCell>
-            <TableCell>Gender</TableCell>
-            <TableCell>Action</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data.map((row) => (
-            <TableRow
-              key={row.id}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+    <DataTable
+      keyExtractor={(row) => row.id}
+      data={data}
+      columns={[
+        { header: 'Name Surname', accessor: (row) => (
+          <Link href={`/customers/${row.id}`}>{`${row.name} ${row.surname}`}</Link>
+        )},
+        { header: 'Email', accessor: (row) => row.email },
+        { header: 'Telephone', accessor: (row) => row.telephone },
+        { header: 'Birthday', accessor: (row) => row.birthday },
+        { header: 'Gender', accessor: (row) => row.gender },
+        { 
+          header: 'Action', 
+          align: 'right',
+          accessor: (row) => (
+            <Button 
+              variant="outlined"
+              color="error"
+              onClick={() => onClick(row.id)}
             >
-              <TableCell component="th" scope="row">
-                <Link href={`/customers/${row.id}`}>{`${row.name} ${row.surname}`}</Link>
-              </TableCell>
-              <TableCell>{row.email}</TableCell>
-              <TableCell>{row.telephone}</TableCell>
-              <TableCell>{row.birthday}</TableCell>
-              <TableCell>{row.gender}</TableCell>
-              <TableCell>
-                <Button 
-                  variant="outlined"
-                  color="error"
-                  onClick={() => onClick(row.id)}
-                >Delete</Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+              Delete
+            </Button>
+          )
+        },
+      ]}
+    />
+
   )
 }
