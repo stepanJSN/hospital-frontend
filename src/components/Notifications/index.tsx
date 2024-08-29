@@ -11,7 +11,7 @@ type NotificationProps = {
   }
 }
 
-export default function Notification({trigger, type = "error", text = "Error. Try again later", position}: NotificationProps) {
+export default function Notification({trigger, type = "error", text = "Error. Unable to load data", position}: NotificationProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   useEffect(() => {
