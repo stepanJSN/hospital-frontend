@@ -1,5 +1,5 @@
 import { customerService } from "@/services/customer";
-import { QueryClient } from "@tanstack/react-query";
+import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
 import CustomersPage from "./CustomersPage";
 
 export default async function Customers() {
@@ -10,5 +10,9 @@ export default async function Customers() {
 		queryFn: () => customerService.getAll({}),
   })
 
-  return <CustomersPage />
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <CustomersPage />
+    </HydrationBoundary>
+  )
 }
