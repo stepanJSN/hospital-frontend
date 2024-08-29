@@ -11,13 +11,6 @@ export interface IGetCustomerAppointmentsForm extends Omit<IGetAppointments, 're
 
 export interface IGetStaffAppointmentsForm extends Omit<IGetAppointments, 'returnType' | 'staffName'> {}
 
-export interface IAvailableTime {
-  dayOfWeek: number;
-  startTime: number;
-  endTime: number;
-  bookedTime: number[];
-}
-
 export interface IAppointmentPayload {
   staffId: string;
   dateTime: string;

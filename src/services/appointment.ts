@@ -1,19 +1,8 @@
-import { IAppointmentPayload, IAvailableTime, IChangeStatus, IGetAppointments, IAppointment } from "@/types/appointment.type";
+import { IAppointmentPayload, IChangeStatus, IGetAppointments, IAppointment } from "@/types/appointment.type";
 import { axiosWithAuth } from "./api";
 import { getUserId } from "./auth-token";
 
 class AppointmentService {
-
-	async getAvailableTime(staffId: string, startDate: string, endDate: string) {
-		return (await axiosWithAuth.get<IAvailableTime[]>('/staff/schedule', 
-			{ params: { 
-				staffId,
-				startDate,
-				endDate,
-			}}
-		)).data;
-	}
-
 	async makeAppointment(data: IAppointmentPayload) {
 		await axiosWithAuth.post('/appointments', data);
 	}

@@ -1,5 +1,5 @@
 import { axiosWithAuth } from "./api";
-import { FilterStaffType, ICreateStaff, IStaff, IStaffShort, UpdateStaff } from "@/types/staff.type";
+import { FilterStaffType, IAvailableTime, ICreateStaff, IStaff, IStaffShort, UpdateStaff } from "@/types/staff.type";
 import { getUserId } from "./auth-token";
 import { IUpdateAvatarResponse } from "@/types/customer.type";
 
@@ -21,6 +21,16 @@ class StaffService {
 			}}
 		)).data;
 	};
+
+  async getAvailableTime(staffId: string, startDate: string, endDate: string) {
+		return (await axiosWithAuth.get<IAvailableTime[]>('/staff/schedule', 
+			{ params: { 
+				staffId,
+				startDate,
+				endDate,
+			}}
+		)).data;
+	}
 
   async update(data: UpdateStaff, staffId?: string) {
     return (await axiosWithAuth.patch<IStaff>(`/staff/${staffId ?? await getUserId()}/`, data)).data;

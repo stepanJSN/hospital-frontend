@@ -28,3 +28,10 @@ export type FilterStaffType = {
   specialization?: ISpecialization;
   fullName?: string;
 }
+
+export interface IAvailableTime {
+  dayOfWeek: number;
+  startTime: number;
+  endTime: number;
+  bookedTime: number[];
+}
