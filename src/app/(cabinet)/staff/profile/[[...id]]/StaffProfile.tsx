@@ -60,7 +60,7 @@ export default function StaffProfile({ staffId, isAdmin }: StaffProfile) {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: staffId ? ['profile', staffId] : ['profile'] }),
 	})
 
-  const { mutate: deleteMutate, isPending: isDeletePending, isError: isDeleteError } = useMutation({
+  const { mutate: deleteMutate, isPending: isDeletePending, isError: isDeleteError, reset } = useMutation({
 		mutationFn: (staffId?: string) => staffService.delete(staffId),
     onSuccess: () => {
       if (!staffId) {
@@ -100,7 +100,7 @@ export default function StaffProfile({ staffId, isAdmin }: StaffProfile) {
     mutate(replaceEmptyFieldsWithNull(payload))
   }
 
-  const handleClose = () => setIsDialogOpen(false);
+  const handleClose = () => { setIsDialogOpen(false); reset(); };
   const handleDelete = () => deleteMutate(staffId);
 
   return (

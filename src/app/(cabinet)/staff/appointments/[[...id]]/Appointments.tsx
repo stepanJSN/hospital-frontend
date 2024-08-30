@@ -44,13 +44,13 @@ export default function Appointments({ staffId }: AppointmentsProps) {
     onSettled: () => refetch(),
 	})
 
-  const { mutate: deleteMutation, isPending: isDeletePending, isError: isDeleteError } = useMutation({
+  const { mutate: deleteMutation, isPending: isDeletePending, isError: isDeleteError, reset } = useMutation({
 		mutationFn: () => appointmentService.delete(appointmentId as string),
     onSuccess: () => { refetch(); closeDialog() },
 	})
 
   const handleDelete = () => deleteMutation();
-  const closeDialog = () => setAppointmentId(null);
+  const closeDialog = () => { setAppointmentId(null); reset(); };
 
   const mapData = (data: IAppointment[]) => {
     return data.map(item => ({ 

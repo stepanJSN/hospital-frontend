@@ -32,12 +32,12 @@ export default function MyAppointments() {
   
   const onSubmit = () => setFilterData(removeEmptyFields(getValues()));
 
-  const { mutate, isPending, isError: isDeleteError } = useMutation({
+  const { mutate, isPending, isError: isDeleteError, reset } = useMutation({
 		mutationFn: () => appointmentService.delete(appointmentId as string),
     onSuccess: () => { closeDialog(); queryRefetch() },
   })
 
-  const closeDialog = () => setAppointmentId(null);
+  const closeDialog = () => { setAppointmentId(null); reset()};
   const handleDelete = () => mutate();
 
   return (

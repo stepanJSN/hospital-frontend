@@ -45,7 +45,7 @@ export default function Profile() {
     onSuccess: (data: IUser) => queryClient.setQueryData(['profile'], data),
 	})
 
-  const { mutate: deleteMutate, isPending: isDeletePending, isError: isDeleteError } = useMutation({
+  const { mutate: deleteMutate, isPending: isDeletePending, isError: isDeleteError, reset } = useMutation({
 		mutationFn: () => customerService.delete(),
     onSuccess: () => logout(),
 	})
@@ -68,7 +68,7 @@ export default function Profile() {
 	})
 
   const onSubmit: SubmitHandler<UpdateUser> = (data) => mutate(replaceEmptyFieldsWithNull(data));
-  const handleClose = () => setIsDialogOpen(false);
+  const handleClose = () => { setIsDialogOpen(false); reset(); };
   const handleDelete = () => deleteMutate();
 
   return (

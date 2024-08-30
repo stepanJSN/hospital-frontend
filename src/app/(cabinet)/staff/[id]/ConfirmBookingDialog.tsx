@@ -40,7 +40,7 @@ export default function ConfirmBookingDialog({
 
   useEffect(() => {
     reset();
-  }, [bookingDateTime, reset]);
+  }, [reset]);
 
   return (
     <Dialog

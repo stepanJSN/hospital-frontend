@@ -37,7 +37,7 @@ export default function CustomersPage() {
     placeholderData: keepPreviousData,
   })
 
-  const { mutate, isPending, isError: isDeleteError } = useMutation({
+  const { mutate, isPending, isError: isDeleteError, reset } = useMutation({
 		mutationFn: (id: string) => customerService.delete(id),
     onSuccess: () => refetch(),
 	})
@@ -51,7 +51,7 @@ export default function CustomersPage() {
     mutate(selectedUser as string)
     setSelectedUser(null);
   };
-  const handleDialogClose = () => setSelectedUser(null);
+  const handleDialogClose = () => { setSelectedUser(null); reset()};
   const handleDelete = (id: string) => {
     setSelectedUser(id);
   }
