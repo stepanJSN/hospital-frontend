@@ -1,4 +1,4 @@
-import useGetDoctors from '@/hooks/useGetDoctroData';
+import useGetDoctors from '@/hooks/useGetDoctorsData';
 import { appointmentService } from '@/services/appointment';
 import { IAppointmentPayload } from '@/types/appointment.type';
 import { CustomErrorType } from '@/types/axiosError.type';
@@ -11,17 +11,16 @@ import dayjs from 'dayjs';
 import { useEffect } from 'react';
 
 type ConfirmBookingDialogProps = {
-  isOpen: boolean;
   closeDialog: () => void;
-  doctorId: string;
-  bookingDateTime: Date;
+  staffId: string;
+  bookingDateTime: Date | null;
 }
 
-export default function ConfirmBookingDialog({ 
-  isOpen, closeDialog, doctorId, bookingDateTime,
+export default function ConfirmBookingDialog({
+  closeDialog, staffId, bookingDateTime,
 }: ConfirmBookingDialogProps) {
   const queryClient = useQueryClient();
-  const { doctorData } = useGetDoctors(doctorId);
+  const { doctorData } = useGetDoctors(staffId);
 
   const { mutate, isPending, isError, error, reset } = useMutation({
 		mutationFn: (data: IAppointmentPayload) => appointmentService.makeAppointment(data),
@@ -34,18 +33,18 @@ export default function ConfirmBookingDialog({
 
   const confirmAppointment = () => {
     mutate({
-      staffId: doctorId,
+      staffId,
       dateTime: dayjs(bookingDateTime).format('YYYY-MM-DDTHH:mm:ss.SSS'),
     });
   }
 
   useEffect(() => {
     reset();
-  }, [isOpen]);
+  }, [bookingDateTime, reset]);
 
   return (
     <Dialog
-        open={isOpen}
+        open={!!bookingDateTime}
         onClose={closeDialog}
       >
         <Box display="flex">
@@ -57,7 +56,7 @@ export default function ConfirmBookingDialog({
         <DialogContent>
           {isError && 
             <Alert severity="error" sx={{ maxWidth: '300px' }}>
-              {(error as AxiosError).response?.status === 400 ? 
+              {error.response?.status === 400 ? 
               (error as AxiosError<CustomErrorType>).response?.data?.message
               : "Error. Try again"}
             </Alert>
