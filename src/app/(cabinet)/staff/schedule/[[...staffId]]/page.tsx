@@ -1,33 +1,20 @@
-"use client"
-
-import { scheduleService } from "@/services/schedule"
-import { Alert, Box, CircularProgress } from "@mui/material"
-import { useQuery } from "@tanstack/react-query"
-import ScheduleTable from "./ScheduleTable"
-import { useParams } from "next/navigation"
 import { getUserId } from "@/services/auth-token"
+import { scheduleService } from "@/services/schedule";
+import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
+import Schedule from "./Schedule";
 
-const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+export default async function SchedulePage({ params }: { params: { id: string } }) {
+  const staffId = params.id ?? await getUserId();
 
-export default function Schedule() {
-  const { staffId } = useParams<{ staffId: string[] }>();
-
-  const getId = async () => {
-    return staffId ? staffId[0] : await getUserId() as string;
-  }
-
-  const { data, isSuccess, isPending, isError } = useQuery({
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery({
 		queryKey: ['schedule', staffId],
-		queryFn: async () => scheduleService.get(await getId()),
+		queryFn: async () => scheduleService.get(staffId),
 	})
 
   return (
-    <>
-      <Box width="100%">
-        {isSuccess && <ScheduleTable id={getId()} days={days} schedule={data} />}
-        {isPending && <CircularProgress sx={{ position: 'relative', top: '40%', left: '50%' }} />}
-        {isError && <Alert severity="error" sx={{ m: 2 }}>Error. Can&apos;t load schedule.</Alert>}
-      </Box>
-    </>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <Schedule staffId={staffId} />
+    </HydrationBoundary>
   )
 }

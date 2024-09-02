@@ -1,9 +1,7 @@
 export interface ISchedule {
-  id: string;
-  staffId: string;
   dayOfWeek: number;
-  startTime: number;
-  endTime: number;
+  startTime: number | null;
+  endTime: number | null;
 }
 
 export interface IChangeSchedule {

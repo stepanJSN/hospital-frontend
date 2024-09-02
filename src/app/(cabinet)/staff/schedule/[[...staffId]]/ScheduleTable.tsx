@@ -1,36 +1,22 @@
 import Notification from "@/components/Notifications";
+import DataTable from "@/components/Table/DataTable";
 import { scheduleService } from "@/services/schedule";
 import { IChangeSchedule, ISchedule } from "@/types/schedule.type";
-import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useDebounce, useRenderCount } from "@uidotdev/usehooks";
+import { useDebounce } from "@uidotdev/usehooks";
 import { ChangeEvent, useEffect, useState } from "react";
 
 type ScheduleTableProps = {
-  id: Promise<string>;
+  staffId: string;
   days: string[];
   schedule: ISchedule[];
 }
 
-type Schedule = {
-  dayOfWeek: number;
-  startTime: number;
-  endTime: number;
-  disabled: boolean
-} 
-
-const defaultSchedule = Array.from({ length: 7 }, (_, i) => ({
-  dayOfWeek: i,
-  startTime: 8,
-  endTime: 18,
-  disabled: true,
-}))
-
-export default function ScheduleTable({ id, schedule, days }: ScheduleTableProps) {
+export default function ScheduleTable({ staffId, schedule, days }: ScheduleTableProps) {
   const queryClient = useQueryClient();
-  const [scheduleData, setScheduleData] = useState<Schedule[]>(defaultSchedule);
+  const [scheduleData, setScheduleData] = useState(schedule);
   const debouncedScheduleData = useDebounce(scheduleData, 1500);
-  const renderCount = useRenderCount();
 
   const { mutate, isError, isSuccess } = useMutation({
 		mutationFn: (data: IChangeSchedule) => scheduleService.update(data),
@@ -38,31 +24,22 @@ export default function ScheduleTable({ id, schedule, days }: ScheduleTableProps
 	})
 
   useEffect(() => {
-    const updatedSchedule = scheduleData.map(item => {
-      const newItem = schedule.find(s => s.dayOfWeek === item.dayOfWeek);
-      return newItem ? { disabled: false, ...newItem } : item;
-    });
-    setScheduleData(updatedSchedule);
-  }, []);
-
-  useEffect(() => {
-    const query = async () => {
-      if (renderCount > 6) {
-        mutate({
-          staffId: await id,
-          schedule: scheduleData.filter(scheduleItem => !scheduleItem.disabled),
-        });
-      }
+    if (JSON.stringify(debouncedScheduleData) !== JSON.stringify(schedule)) {
+      mutate({
+        staffId,
+        schedule: debouncedScheduleData.filter(
+          (scheduleItem): scheduleItem is { dayOfWeek: number; startTime: number; endTime: number } => 
+          scheduleItem.startTime !== null && scheduleItem.endTime !== null),
+      });
     }
-    query();
-  }, [debouncedScheduleData]);
+  }, [debouncedScheduleData, mutate, schedule, staffId]);
 
-  const handleTimeChange = (index: number, type: 'startTime'| 'endTime', event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleTimeChange = (dayOfWeek: number, type: 'startTime'| 'endTime', event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const newTime = +event.target.value;
 
     setScheduleData(prevData => 
-      prevData.map((item, i) => 
-        i === index ? { ...item, [type]: newTime } : item
+      prevData.map((item) => 
+        item.dayOfWeek === dayOfWeek ? { ...item, [type]: newTime } : item
       )
     );
   };
@@ -70,7 +47,9 @@ export default function ScheduleTable({ id, schedule, days }: ScheduleTableProps
   const changeDayType = (dayOfWeek: number) => {
     setScheduleData(prevData => {
       return prevData.map((item) => 
-        item.dayOfWeek === dayOfWeek ? { ...item, disabled: !item.disabled, } : item
+        item.dayOfWeek === dayOfWeek 
+        ? { ...item, startTime: item.startTime ? null : 8,  endTime: item.endTime ? null : 18 } 
+        : item
       )
     }
     );
@@ -78,63 +57,52 @@ export default function ScheduleTable({ id, schedule, days }: ScheduleTableProps
 
   return (
     <>
-      <TableContainer>
-        <Table sx={{ minWidth: 650, }} aria-label="schedule table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Day</TableCell>
-              <TableCell>Start time</TableCell>
-              <TableCell>End Time</TableCell>
-              <TableCell></TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {scheduleData.map((scheduleItem, index) => (
-              <TableRow
-                key={scheduleItem.dayOfWeek}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+      <DataTable
+        keyExtractor={(row) => row.dayOfWeek}
+        data={scheduleData}
+        columns={[
+          { header: 'Day', accessor: (scheduleItem) =>  days[scheduleItem.dayOfWeek]},
+          { header: 'From', accessor: (scheduleItem) => (
+            <TextField
+              size="small"
+              margin='dense'
+              disabled={!scheduleItem.startTime}
+              value={scheduleItem.startTime ?? 8}
+              label="From"
+              onChange={(event) => handleTimeChange(scheduleItem.dayOfWeek, 'startTime', event)}
+              InputProps={{ inputProps: { min: 8, max: 18 } }}
+              type="number"
+              variant="outlined"
+            />
+          ) },
+          { header: 'To', accessor: (scheduleItem) => (
+            <TextField
+              size="small"
+              margin='dense'
+              disabled={!scheduleItem.endTime}
+              value={scheduleItem.endTime ?? 18}
+              onChange={(event) => handleTimeChange(scheduleItem.dayOfWeek, 'endTime', event)}
+              InputProps={{ inputProps: { min: 8, max: 18 } }}
+              label="To"
+              type="number"
+              variant="outlined"
+            />
+          ) },
+          { 
+            header: '', 
+            align: 'right',
+            accessor: (scheduleItem) => (
+              <Button 
+                onClick={() => changeDayType(scheduleItem.dayOfWeek)}
+                variant={!scheduleItem.startTime ? "contained" : "outlined"}
+                sx={{ width: '280px' }}
               >
-                <TableCell component="th" scope="row">
-                  {days[scheduleItem.dayOfWeek]}
-                </TableCell>
-                <TableCell>
-                  <TextField
-                    size="small"
-                    margin='dense'
-                    disabled={scheduleItem.disabled}
-                    value={scheduleItem.startTime}
-                    label="From"
-                    onChange={(event) => handleTimeChange(index, 'startTime', event)}
-                    InputProps={{ inputProps: { min: 8, max: 18 } }}
-                    type="number"
-                    variant="outlined"
-                  />
-                </TableCell>
-                <TableCell>
-                  <TextField
-                    size="small"
-                    margin='dense'
-                    disabled={scheduleItem.disabled}
-                    value={scheduleItem.endTime}
-                    onChange={(event) => handleTimeChange(index, 'endTime', event)}
-                    InputProps={{ inputProps: { min: 8, max: 18 } }}
-                    label="To"
-                    type="number"
-                    variant="outlined"
-                  />
-                </TableCell>
-                <TableCell align="right">
-                  <Button 
-                    onClick={() => changeDayType(scheduleItem.dayOfWeek)}
-                    variant={scheduleItem.disabled ? "contained" : "outlined"}
-                    sx={{ width: '280px' }}
-                  >{!scheduleItem.disabled ? "Make it a non-business day" : "Make it a business day"}</Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+                {!!scheduleItem.startTime ? "Make it a non-business day" : "Make it a business day"}
+              </Button>
+            ) 
+          },
+        ]}
+      />
       {isSuccess && <Notification type="success" text="Schedule updated" />}
       {isError && <Notification text="Error. Schedule was not updated" />}
     </>
