@@ -5,13 +5,13 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import StaffTable from "./StaffTable";
 import ActionBar from "./ActionBar";
-import ExportExcel from "@/components/ExportExcel";
+import ExportExcel from "@/app/components/ExportExcel";
 import { FilterStaffType, IStaffShort } from "@/types/staff.type";
 import { staffService } from "@/services/staff";
 import { useState } from "react";
 import { removeEmptyFields } from "@/helpers/removeEmptyFields";
-import Error from "@/components/Errors/Error";
-import NoDataMessage from "@/components/Errors/NoDataMessage";
+import Error from "@/app/components/Errors/Error";
+import NoDataMessage from "@/app/components/Errors/NoDataMessage";
 
 type StaffProps = {
   isAdmin: boolean;

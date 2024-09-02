@@ -1,6 +1,6 @@
 "use client"
 
-import Notification from "@/components/Notifications";
+import Notification from "@/app/components/Notifications";
 import useGetDoctors from "@/hooks/useGetDoctorsData";
 import { Avatar, Box, Divider, Skeleton, Typography } from "@mui/material";
 import ButtonLink from "./ButtonLink";

@@ -6,8 +6,8 @@ import { Box, FormControlLabel, LinearProgress, Switch, Typography } from "@mui/
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import ReadMoreDialog from "./ReadMoreDialog";
 import NotificationsTable from "./NotificationsTable";
-import Error from "@/components/Errors/Error";
-import NoDataMessage from "@/components/Errors/NoDataMessage";
+import Error from "@/app/components/Errors/Error";
+import NoDataMessage from "@/app/components/Errors/NoDataMessage";
 
 export default function Notifications() {
   const [onlyUnread, setOnlyUnread] = useState<boolean>(true);

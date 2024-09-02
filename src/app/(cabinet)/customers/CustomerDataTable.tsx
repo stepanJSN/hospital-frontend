@@ -1,4 +1,4 @@
-import DataTable from "@/components/Table/DataTable";
+import DataTable from "@/app/components/Table/DataTable";
 import { IUser } from "@/types/customer.type";
 import { Button } from "@mui/material";
 import Link from "next/link";

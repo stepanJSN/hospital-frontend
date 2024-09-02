@@ -1,7 +1,7 @@
 import { LoadingButton } from '@mui/lab'
 import { Box } from '@mui/material'
 import { Control } from 'react-hook-form'
-import FormInput from '@/components/Inputs/FormInput'
+import FormInput from '@/app/components/Inputs/FormInput'
 import { GetAll } from '@/types/customer.type'
 
 type CustomerActionBarProps = {

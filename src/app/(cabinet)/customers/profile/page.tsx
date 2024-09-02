@@ -1,11 +1,11 @@
 "use client"
 
-import DatePicker from '@/components/DatePicker'
-import DeleteDialog from '@/components/Dialogs/DeleteDialog'
-import FileUpload from '@/components/Inputs/FileUpload'
-import FormInput from '@/components/Inputs/FormInput'
-import Notification from '@/components/Notifications'
-import Select from '@/components/Select'
+import DatePicker from '@/app/components/DatePicker'
+import DeleteDialog from '@/app/components/Dialogs/DeleteDialog'
+import FileUpload from '@/app/components/Inputs/FileUpload'
+import FormInput from '@/app/components/Inputs/FormInput'
+import Notification from '@/app/components/Notifications'
+import Select from '@/app/components/Select'
 import { replaceEmptyFieldsWithNull } from '@/helpers/replaceEmptyFieldsWithNull'
 import useLogout from '@/hooks/useLogout'
 import { customerService } from '@/services/customer'

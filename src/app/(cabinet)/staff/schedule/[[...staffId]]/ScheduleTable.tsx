@@ -1,5 +1,5 @@
-import Notification from "@/components/Notifications";
-import DataTable from "@/components/Table/DataTable";
+import Notification from "@/app/components/Notifications";
+import DataTable from "@/app/components/Table/DataTable";
 import { scheduleService } from "@/services/schedule";
 import { IChangeSchedule, ISchedule } from "@/types/schedule.type";
 import { Button, TextField } from "@mui/material";

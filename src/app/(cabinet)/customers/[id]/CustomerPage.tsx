@@ -1,6 +1,6 @@
 "use client"
 
-import Notification from "@/components/Notifications";
+import Notification from "@/app/components/Notifications";
 import { customerService } from "@/services/customer";
 import { Avatar, Box, Skeleton, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";

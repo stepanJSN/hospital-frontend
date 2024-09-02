@@ -6,12 +6,12 @@ import { Box, LinearProgress, Typography } from "@mui/material";
 import { keepPreviousData, useMutation, useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import AppointmentsActionBar from "./AppointmentsActionBar";
-import DeleteDialog from "@/components/Dialogs/DeleteDialog";
+import DeleteDialog from "@/app/components/Dialogs/DeleteDialog";
 import { IGetCustomerAppointmentsForm } from "@/types/appointment.type";
 import CustomerAppointmentsTable from "./CustomerAppointmentsTable";
 import { removeEmptyFields } from "@/helpers/removeEmptyFields";
-import Error from "@/components/Errors/Error";
-import NoDataMessage from "@/components/Errors/NoDataMessage";
+import Error from "@/app/components/Errors/Error";
+import NoDataMessage from "@/app/components/Errors/NoDataMessage";
 
 export default function MyAppointments() {
   const [appointmentId, setAppointmentId] = useState<string | null>(null);

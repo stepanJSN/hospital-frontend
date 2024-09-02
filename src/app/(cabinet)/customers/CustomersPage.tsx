@@ -8,12 +8,12 @@ import { keepPreviousData, useMutation, useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import CustomerActionBar from "./CustomersActionBar";
 import CustomerDataTable from "./CustomerDataTable";
-import DeleteDialog from "@/components/Dialogs/DeleteDialog";
-import ExportExcel from "@/components/ExportExcel";
+import DeleteDialog from "@/app/components/Dialogs/DeleteDialog";
+import ExportExcel from "@/app/components/ExportExcel";
 import dayjs from "dayjs";
 import { removeEmptyFields } from "@/helpers/removeEmptyFields";
-import Error from "@/components/Errors/Error";
-import NoDataMessage from "@/components/Errors/NoDataMessage";
+import Error from "@/app/components/Errors/Error";
+import NoDataMessage from "@/app/components/Errors/NoDataMessage";
 
 export default function CustomersPage() {
   const [selectedUser, setSelectedUser] = useState<string | null>();

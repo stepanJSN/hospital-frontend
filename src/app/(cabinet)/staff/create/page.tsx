@@ -1,9 +1,9 @@
 "use client"
 
-import DatePicker from '@/components/DatePicker'
-import AutocompleteAsync from '@/components/Inputs/AutocompleteAsync'
-import FormInput from '@/components/Inputs/FormInput'
-import Select from '@/components/Select'
+import DatePicker from '@/app/components/DatePicker'
+import AutocompleteAsync from '@/app/components/Inputs/AutocompleteAsync'
+import FormInput from '@/app/components/Inputs/FormInput'
+import Select from '@/app/components/Select'
 import { specializationService } from '@/services/specialization'
 import { staffService } from '@/services/staff'
 import { ICreateStaff, IStaff, IStaffShort } from '@/types/staff.type'

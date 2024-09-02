@@ -1,9 +1,9 @@
-import DatePicker from "@/components/DatePicker";
+import DatePicker from "@/app/components/DatePicker";
 import { LoadingButton } from "@mui/lab";
 import { Box } from "@mui/material";
 import { Control, UseFormHandleSubmit } from "react-hook-form";
-import FormInput from "@/components/Inputs/FormInput";
-import FormSwitch from "@/components/Switch/FormSwitch";
+import FormInput from "@/app/components/Inputs/FormInput";
+import FormSwitch from "@/app/components/Switch/FormSwitch";
 import { IGetCustomerAppointmentsForm } from "@/types/appointment.type";
 
 type CustomerActionBarProps = {

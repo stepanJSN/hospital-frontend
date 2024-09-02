@@ -1,4 +1,4 @@
-import DataTable from "@/components/Table/DataTable";
+import DataTable from "@/app/components/Table/DataTable";
 import { IAppointment } from "@/types/appointment.type"
 import { Button, Link as UILink } from "@mui/material";
 import dayjs from "dayjs";

@@ -3,15 +3,15 @@
 import { useState } from "react";
 import { Box, Button, LinearProgress, TextField, Typography } from "@mui/material";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import DeleteDialog from "@/components/Dialogs/DeleteDialog";
+import DeleteDialog from "@/app/components/Dialogs/DeleteDialog";
 import { specializationService } from "@/services/specialization";
 import { useDebounce } from "@uidotdev/usehooks";
 import SpecializationsDataTable from "./SpecializationsDataTable";
 import CreateDialog from "./CreateDialog";
 import EditDialog from "./EditDialog";
-import ExportExcel from "@/components/ExportExcel";
-import Error from "@/components/Errors/Error";
-import NoDataMessage from "@/components/Errors/NoDataMessage";
+import ExportExcel from "@/app/components/ExportExcel";
+import Error from "@/app/components/Errors/Error";
+import NoDataMessage from "@/app/components/Errors/NoDataMessage";
 
 export default function Customer() {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);

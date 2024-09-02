@@ -1,4 +1,4 @@
-import FormInput from '@/components/Inputs/FormInput';
+import FormInput from '@/app/components/Inputs/FormInput';
 import { specializationService } from '@/services/specialization';
 import { Alert, Box, Button, Dialog, DialogTitle, LinearProgress } from '@mui/material'
 import { useMutation, useQueryClient } from '@tanstack/react-query';

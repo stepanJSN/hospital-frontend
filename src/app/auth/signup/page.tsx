@@ -3,12 +3,12 @@
 import { Alert, Box, Link, Typography } from '@mui/material'
 import { LoadingButton } from '@mui/lab';
 import { SubmitHandler, useForm } from 'react-hook-form'
-import FormInput from '@/components/Inputs/FormInput';
+import FormInput from '@/app/components/Inputs/FormInput';
 import { useMutation } from '@tanstack/react-query';
 import { authService } from '@/services/auth';
 import { ISingUp } from '@/types/auth.type';
-import Select from '@/components/Select';
-import DatePicker from '@/components/DatePicker';
+import Select from '@/app/components/Select';
+import DatePicker from '@/app/components/DatePicker';
 import { removeEmptyFields } from '@/helpers/removeEmptyFields';
 import NextLink from 'next/link';
 

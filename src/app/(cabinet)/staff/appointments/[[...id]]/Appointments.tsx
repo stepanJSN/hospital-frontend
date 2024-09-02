@@ -5,16 +5,16 @@ import { Box, LinearProgress, Typography} from "@mui/material";
 import { keepPreviousData, useMutation, useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { useState } from "react";
-import DeleteDialog from "@/components/Dialogs/DeleteDialog";
-import Notification from "@/components/Notifications";
-import ExportExcel from "@/components/ExportExcel";
+import DeleteDialog from "@/app/components/Dialogs/DeleteDialog";
+import Notification from "@/app/components/Notifications";
+import ExportExcel from "@/app/components/ExportExcel";
 import { IAppointment, IGetStaffAppointmentsForm } from "@/types/appointment.type";
 import { useForm } from "react-hook-form";
 import AppointmentsActionBar from "./AppointmentsActionBar";
 import { removeEmptyFields } from "@/helpers/removeEmptyFields";
 import StaffAppointmentsTable from "./StaffAppointmentsTable";
-import Error from "@/components/Errors/Error";
-import NoDataMessage from "@/components/Errors/NoDataMessage";
+import Error from "@/app/components/Errors/Error";
+import NoDataMessage from "@/app/components/Errors/NoDataMessage";
 
 type AppointmentsProps = {
   staffId?: string;

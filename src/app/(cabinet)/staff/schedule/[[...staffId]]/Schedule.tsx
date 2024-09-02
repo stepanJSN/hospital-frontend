@@ -4,7 +4,7 @@ import { scheduleService } from "@/services/schedule"
 import { Box, CircularProgress } from "@mui/material"
 import { useQuery } from "@tanstack/react-query"
 import ScheduleTable from "./ScheduleTable";
-import Error from "@/components/Errors/Error";
+import Error from "@/app/components/Errors/Error";
 
 type ScheduleProps = {
   staffId: string;

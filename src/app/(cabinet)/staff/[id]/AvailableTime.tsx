@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 import { workingHours } from "@/config/workingHours";
 import { staffService } from "@/services/staff";
 import { IAvailableTime } from "@/types/staff.type";
-import Error from "@/components/Errors/Error";
+import Error from "@/app/components/Errors/Error";
 
 type AvailableTimeProps = {
   staffId: string;
