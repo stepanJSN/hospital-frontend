@@ -3,7 +3,7 @@
 import { Autocomplete, TextField } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { useDebounce } from "@uidotdev/usehooks";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Control, Controller } from "react-hook-form";
 
 type AutocompleteAsyncProps<T> = {
@@ -21,7 +21,6 @@ export default function AutocompleteAsync<T>({
   id, label, control, searchFunc, startFromLetter = 0, noOptionsText, required = false, sx 
 }: AutocompleteAsyncProps<T>) {
   const [searchValue, setSearchValue] = useState<string>("");
-  const [options, setOptions] = useState<Array<T>>([]);
   const debouncedSearchValue = useDebounce(searchValue, 500);
 
   const { data, isFetching } = useQuery({
@@ -29,10 +28,6 @@ export default function AutocompleteAsync<T>({
 		queryFn: async() => await searchFunc(debouncedSearchValue),
     enabled: () => debouncedSearchValue.length >= startFromLetter,
   })
-
-  useEffect(() => {
-    if(data) setOptions(data);
-  }, [data]);
 
   return (
     <Controller
@@ -48,7 +43,7 @@ export default function AutocompleteAsync<T>({
         <Autocomplete
           disablePortal
           id={id}
-          options={options}
+          options={data ?? []}
           sx={sx}
           size="small"
           getOptionLabel={(option) => option.title}

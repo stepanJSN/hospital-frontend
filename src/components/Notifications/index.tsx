@@ -1,8 +1,7 @@
 import { Alert, Snackbar } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 type NotificationProps = {
-  trigger: boolean;
   type?: 'error' | 'success';
   text?: string;
   position?: {
@@ -11,14 +10,8 @@ type NotificationProps = {
   }
 }
 
-export default function Notification({trigger, type = "error", text = "Error. Unable to load data", position}: NotificationProps) {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (trigger) {
-      setIsOpen(true);
-    }
-  }, [trigger]);
+export default function Notification({type = "error", text = "Error. Unable to load data", position}: NotificationProps) {
+  const [isOpen, setIsOpen] = useState<boolean>(true);
 
   const handleClose = () => setIsOpen(false);
 

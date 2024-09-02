@@ -135,8 +135,8 @@ export default function ScheduleTable({ id, schedule, days }: ScheduleTableProps
           </TableBody>
         </Table>
       </TableContainer>
-      <Notification trigger={isSuccess} type="success" text="Schedule updated" />
-      <Notification trigger={isError} text="Error. Schedule was not updated" />
+      {isSuccess && <Notification type="success" text="Schedule updated" />}
+      {isError && <Notification text="Error. Schedule was not updated" />}
     </>
   )
 }

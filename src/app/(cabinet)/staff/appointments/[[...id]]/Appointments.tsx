@@ -94,15 +94,17 @@ export default function Appointments({ staffId }: AppointmentsProps) {
         handleClose={closeDialog}
         handleDelete={handleDelete}
       />
-      <Notification 
-        trigger={isChangeStatusSuccess}
-        type="success"
-        text="The status of the appointment was changed"
-      />
-      <Notification 
-        trigger={isChangeStatusError}
-        text="Error. Failed to change the status of the appointment"
-      />
+      {isChangeStatusSuccess && 
+        <Notification
+          type="success"
+          text="The status of the appointment was changed"
+        />
+      }
+      {isChangeStatusError && 
+        <Notification 
+          text="Error. Failed to change the status of the appointment"
+        />
+      }
     </Box>
   )
 }

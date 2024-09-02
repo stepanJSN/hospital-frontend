@@ -72,10 +72,11 @@ export default function DoctorInfo({ staffId, isAdmin }: DoctorInfoProps) {
         ? <Typography padding={2}>{doctorData.description ?? 'Description not provided'}</Typography>
         : <Skeleton width="100%" height={100} />
       }
-      <Notification 
-        trigger={isError}
-        position={{ vertical: 'top', horizontal: 'center' }}
-      />
+      {
+        <Notification 
+          position={{ vertical: 'top', horizontal: 'center' }}
+        />
+      }
     </>
   )
 }

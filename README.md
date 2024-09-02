@@ -1,6 +1,6 @@
 # Hospital frontend
 
-“Hospital” is an application to make doctor's appointments more comfortable. It offers a user-friendly interface for all users: administrators, patients and doctors.
+The “Hospital” is an application to make doctor's appointments more comfortable. It offers a user-friendly interface for all users: administrators, patients and doctors.
 This is the frontend part. Backend: https://github.com/Stepan22-prog/hospital-backend
 
 ## Functionality

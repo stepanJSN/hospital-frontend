@@ -257,15 +257,17 @@ export default function StaffProfile({ staffId, isAdmin }: StaffProfile) {
         handleClose={handleClose}
         handleDelete={handleDelete}
       />
-      <Notification 
-        trigger={isAvatarMutationError}
-        text="Error. Unable to update avatar"
+      {isAvatarMutationError &&
+        <Notification
+          text="Error. Unable to update avatar"
+        />
+      }
+      {isAvatarMutationSuccess &&
+        <Notification
+          text="The avatar was successfully updated"
+          type="success"
       />
-      <Notification 
-        trigger={isAvatarMutationSuccess}
-        text="The avatar was successfully updated"
-        type="success"
-      />
+      }
     </Box>
   )
 }

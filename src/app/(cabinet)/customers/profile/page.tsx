@@ -184,15 +184,17 @@ export default function Profile() {
         handleClose={handleClose}
         handleDelete={handleDelete}
       />
-      <Notification 
-        trigger={isAvatarMutationError}
-        text="Error. Unable to update avatar"
-      />
-      <Notification 
-        trigger={isAvatarMutationSuccess}
-        text="The avatar was successfully updated"
-        type="success"
-      />
+      {isAvatarMutationError && 
+        <Notification 
+          text="Error. Unable to update avatar"
+        />
+      }
+      {isAvatarMutationSuccess &&
+        <Notification
+          text="The avatar was successfully updated"
+          type="success"
+        />
+      }
     </Box>
   )
 }

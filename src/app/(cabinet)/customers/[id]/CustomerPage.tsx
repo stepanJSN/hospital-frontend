@@ -50,13 +50,14 @@ export default function CustomerPage({ id }: CustomerPageType) {
           </>}
         </Box>
       </Box>
-      <Notification 
-        trigger={isError}
-        position={{ 
-          horizontal: 'center',
-          vertical: 'top'
-        }}
-      />
+      {isError && 
+        <Notification
+          position={{ 
+            horizontal: 'center',
+            vertical: 'top'
+          }}
+        />
+      }
     </>
   )
 }
