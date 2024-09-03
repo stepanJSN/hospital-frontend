@@ -7,59 +7,59 @@ import { MenuList } from '@/types/menu.type';
 
 export const customerMenu: MenuList = [
   {
-    pageRoute: "/staff",
+    pageRoute: '/staff',
     pageIcon: <CalendarMonthIcon />,
-    pageText: "Make an appointment with a doctor"
+    pageText: 'Make an appointment with a doctor',
   },
   {
-    pageRoute: "/customers/appointments",
+    pageRoute: '/customers/appointments',
     pageIcon: <FormatListBulletedIcon />,
-    pageText: "My appointments"
+    pageText: 'My appointments',
   },
   {
-    pageRoute: "/customers/profile",
+    pageRoute: '/customers/profile',
     pageIcon: <PersonIcon />,
-    pageText: "Profile"
-  }
-]
+    pageText: 'Profile',
+  },
+];
 
 export const staffMenu: MenuList = [
   {
-    pageRoute: "/staff/appointments",
+    pageRoute: '/staff/appointments',
     pageIcon: <FormatListBulletedIcon />,
-    pageText: "Appointments"
+    pageText: 'Appointments',
   },
   {
-    pageRoute: "/staff/schedule",
+    pageRoute: '/staff/schedule',
     pageIcon: <CalendarMonthIcon />,
-    pageText: "My schedule"
+    pageText: 'My schedule',
   },
   {
-    pageRoute: "/staff/profile",
+    pageRoute: '/staff/profile',
     pageIcon: <PersonIcon />,
-    pageText: "Profile"
-  }
-]
+    pageText: 'Profile',
+  },
+];
 
 export const adminMenu: MenuList = [
   {
-    pageRoute: "/staff",
+    pageRoute: '/staff',
     pageIcon: <PeopleIcon />,
-    pageText: "Staff"
+    pageText: 'Staff',
   },
   {
-    pageRoute: "/customers",
+    pageRoute: '/customers',
     pageIcon: <PersonIcon />,
-    pageText: "Customers"
+    pageText: 'Customers',
   },
   {
-    pageRoute: "/staff/specializations",
+    pageRoute: '/staff/specializations',
     pageIcon: <FormatListBulletedIcon />,
-    pageText: "Specializations"
+    pageText: 'Specializations',
   },
   {
-    pageRoute: "/staff/profile",
+    pageRoute: '/staff/profile',
     pageIcon: <AccountCircleIcon />,
-    pageText: "Profile"
-  }
-]
+    pageText: 'Profile',
+  },
+];

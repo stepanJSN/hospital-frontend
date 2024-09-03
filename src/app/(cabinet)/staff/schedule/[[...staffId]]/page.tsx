@@ -1,4 +1,4 @@
-import { getUserId } from '@/services/auth-token';
+import { getUserId } from '@/services/cookie';
 import { scheduleService } from '@/services/schedule';
 import {
   dehydrate,

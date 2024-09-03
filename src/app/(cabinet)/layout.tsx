@@ -5,7 +5,7 @@ import {
   QueryClient,
 } from '@tanstack/react-query';
 import Menu from './Menu';
-import { getUserRole } from '@/services/auth-token';
+import { getUserRole } from '@/services/cookie';
 import { customerService } from '@/services/customer';
 import { staffService } from '@/services/staff';
 import { notificationsService } from '@/services/notifications';

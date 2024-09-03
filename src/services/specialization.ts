@@ -1,13 +1,18 @@
-import { IChangeSpecialization, ISpecialization } from "@/types/specialization.type";
-import { axiosWithAuth } from "./api";
+import {
+  IChangeSpecialization,
+  ISpecialization,
+} from '@/types/specialization.type';
+import { axiosWithAuth } from './api';
 
 class SpecializationService {
   async getAll(title?: string) {
-    return (await axiosWithAuth.get<ISpecialization[]>('/specialization', {
-      params: {
-        title,
-      }
-    })).data;
+    return (
+      await axiosWithAuth.get<ISpecialization[]>('/specialization', {
+        params: {
+          title,
+        },
+      })
+    ).data;
   }
 
   async create(data: IChangeSpecialization) {

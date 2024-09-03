@@ -1,6 +1,6 @@
-import { authService } from "@/services/auth";
-import { useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next//navigation";
+import { authService } from '@/services/auth';
+import { useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next//navigation';
 
 export default function useLogout() {
   const queryClient = useQueryClient();
@@ -10,6 +10,6 @@ export default function useLogout() {
     authService.logout();
     queryClient.invalidateQueries();
     push('/auth/signin');
-  }
+  };
   return logout;
 }

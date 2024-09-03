@@ -1,4 +1,4 @@
-import { getUserRole } from "@/services/auth-token";
+import { getUserRole } from '@/services/cookie';
 
 export default async function isAdmin(): Promise<boolean> {
   const role = await getUserRole();

@@ -1,4 +1,7 @@
-export function replaceEmptyFieldsWithNull<T extends Record<string, any>>(data: T): T {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export function replaceEmptyFieldsWithNull<T extends Record<string, any>>(
+  data: T,
+): T {
   const newObj: Partial<T> = {};
   for (const key in data) {
     if (data[key] === '') {
