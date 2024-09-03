@@ -1,17 +1,13 @@
-import { Box } from "@mui/material"
+import { Box } from '@mui/material';
 
 export default function AuthLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
-    <Box
-      display="flex"
-      marginTop="200px"
-      justifyContent="center"
-    >
+    <Box display="flex" marginTop="200px" justifyContent="center">
       {children}
     </Box>
-  )
+  );
 }
