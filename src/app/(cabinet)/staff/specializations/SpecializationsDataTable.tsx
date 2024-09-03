@@ -1,13 +1,26 @@
-import { ISpecialization } from "@/types/specialization.type";
-import { TableCell, TableContainer, TableHead, TableRow, Table, TableBody, Paper, Button } from "@mui/material";
+import { ISpecialization } from '@/types/specialization.type';
+import {
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Table,
+  TableBody,
+  Paper,
+  Button,
+} from '@mui/material';
 
 type SpecializationsDataTableType = {
-  data: ISpecialization[]
+  data: ISpecialization[];
   onDelete: (id: string) => void;
   onEdit: (id: string, value: string) => void;
-}
+};
 
-export default function SpecializationsDataTable({ data, onDelete, onEdit }: SpecializationsDataTableType) {
+export default function SpecializationsDataTable({
+  data,
+  onDelete,
+  onEdit,
+}: SpecializationsDataTableType) {
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="doctors table">
@@ -22,32 +35,32 @@ export default function SpecializationsDataTable({ data, onDelete, onEdit }: Spe
           {data.map((row) => (
             <TableRow
               key={row.id}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 }}}
+              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
-              <TableCell 
-                component="th" 
-                scope="row"
-                sx={{ width: '95%' }}
-              >
+              <TableCell component="th" scope="row" sx={{ width: '95%' }}>
                 {row.title}
               </TableCell>
               <TableCell>
-                <Button 
+                <Button
                   variant="outlined"
                   onClick={() => onEdit(row.id, row.title)}
-                >Edit</Button>
+                >
+                  Edit
+                </Button>
               </TableCell>
               <TableCell>
-                <Button 
+                <Button
                   variant="outlined"
                   color="error"
                   onClick={() => onDelete(row.id)}
-                >Delete</Button>
+                >
+                  Delete
+                </Button>
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
     </TableContainer>
-  )
+  );
 }

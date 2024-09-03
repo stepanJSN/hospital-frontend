@@ -1,7 +1,11 @@
-import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
-import Staff from "./Staff";
-import { staffService } from "@/services/staff";
-import isAdmin from "@/helpers/isAdmin";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from '@tanstack/react-query';
+import Staff from './Staff';
+import { staffService } from '@/services/staff';
+import isAdmin from '@/helpers/isAdmin';
 
 export default async function StaffPage() {
   const queryClient = new QueryClient();
@@ -9,12 +13,12 @@ export default async function StaffPage() {
 
   await queryClient.prefetchQuery({
     queryKey: ['staff', {}],
-    queryFn: () => staffService.getAll({})
-  })
+    queryFn: () => staffService.getAll({}),
+  });
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <Staff isAdmin={isUserAdmin} />
     </HydrationBoundary>
-  )
+  );
 }

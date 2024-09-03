@@ -1,53 +1,79 @@
-"use client"
-import { Box, Button, CircularProgress, Divider, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import ConfirmBookingDialog from "./ConfirmBookingDialog";
+'use client';
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Divider,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
+import ConfirmBookingDialog from './ConfirmBookingDialog';
 import dayjs from 'dayjs';
-import { workingHours } from "@/config/workingHours";
-import { staffService } from "@/services/staff";
-import { IAvailableTime } from "@/types/staff.type";
-import Error from "@/app/components/Errors/Error";
+import { workingHours } from '@/config/workingHours';
+import { staffService } from '@/services/staff';
+import { IAvailableTime } from '@/types/staff.type';
+import Error from '@/app/components/Errors/Error';
 
 type AvailableTimeProps = {
   staffId: string;
-}
+};
 
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const timeArray = Array.from(
-  { length: workingHours.to - workingHours.from + 1 }, 
-  (_, index) => workingHours.from + index
+  { length: workingHours.to - workingHours.from + 1 },
+  (_, index) => workingHours.from + index,
 );
 
 export default function AvailableTime({ staffId }: AvailableTimeProps) {
-  const [dateRange, setDateRange] = useState({ startDate: new Date(), endDate: dayjs().add(7, 'day').toDate() });
+  const [dateRange, setDateRange] = useState({
+    startDate: new Date(),
+    endDate: dayjs().add(7, 'day').toDate(),
+  });
   const [selectedDateTime, setSelectedDateTime] = useState<null | Date>(null);
-  
+
   const { refetch, data, isFetching, isError, isSuccess } = useQuery({
     queryKey: ['availableTime', staffId, dateRange],
-		queryFn: () => staffService.getAvailableTime(staffId, dateRange.startDate.toString(), dateRange.endDate.toString())
-  })
+    queryFn: () =>
+      staffService.getAvailableTime(
+        staffId,
+        dateRange.startDate.toString(),
+        dateRange.endDate.toString(),
+      ),
+  });
 
   function changeWeekForward() {
-    setDateRange((prevRange) => (
-      { startDate: dayjs(prevRange.startDate).add(7, 'day').toDate(), endDate:  dayjs(prevRange.endDate).add(7, 'day').toDate() }
-    ))
+    setDateRange((prevRange) => ({
+      startDate: dayjs(prevRange.startDate).add(7, 'day').toDate(),
+      endDate: dayjs(prevRange.endDate).add(7, 'day').toDate(),
+    }));
   }
 
   function changeWeekBackward() {
-    setDateRange((prevRange) => (
-      { startDate: dayjs(prevRange.startDate).subtract(7, 'day').toDate(), endDate: dayjs(prevRange.endDate).subtract(7, 'day').toDate() }
-    ))
+    setDateRange((prevRange) => ({
+      startDate: dayjs(prevRange.startDate).subtract(7, 'day').toDate(),
+      endDate: dayjs(prevRange.endDate).subtract(7, 'day').toDate(),
+    }));
   }
 
-  function renderAvailableTime(data: Array<IAvailableTime>, currentTime: number) {
+  function renderAvailableTime(
+    data: Array<IAvailableTime>,
+    currentTime: number,
+  ) {
     const availableTimeArray: Array<number | null> = [];
     for (let i = 0; i < 7; i++) {
       if (
-        Object.hasOwn(data[i], 'startTime')
-        && (data[i].startTime <= currentTime) 
-        && (data[i].endTime >= currentTime) 
-        && !data[i].bookedTime.includes(currentTime)
+        Object.hasOwn(data[i], 'startTime') &&
+        data[i].startTime <= currentTime &&
+        data[i].endTime >= currentTime &&
+        !data[i].bookedTime.includes(currentTime)
       ) {
         availableTimeArray.push(currentTime);
       } else {
@@ -72,52 +98,71 @@ export default function AvailableTime({ staffId }: AvailableTimeProps) {
         <Typography variant="h6">Available time</Typography>
         <Divider />
         <Box display="flex" alignItems="center" marginY={2}>
-          <Button 
-            disabled={new Date().getDate() === dateRange.startDate.getDate()} 
+          <Button
+            disabled={new Date().getDate() === dateRange.startDate.getDate()}
             variant="outlined"
             onClick={changeWeekBackward}
           >
-              Prev
+            Prev
           </Button>
-          <Typography marginX={2}>{`${dateRange.startDate.toLocaleDateString()} - ${dateRange.endDate.toLocaleDateString()}`}</Typography>
-          <Button variant="outlined" onClick={changeWeekForward}>Next</Button>
+          <Typography
+            marginX={2}
+          >{`${dateRange.startDate.toLocaleDateString()} - ${dateRange.endDate.toLocaleDateString()}`}</Typography>
+          <Button variant="outlined" onClick={changeWeekForward}>
+            Next
+          </Button>
         </Box>
-        {isSuccess && 
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="appointment table">
-            <TableHead>
-              <TableRow>
-                {data?.map((day) => (
-                  <TableCell key={day.dayOfWeek}>{`${new Date(day.dayOfWeek).toLocaleDateString()} ${DAYS[new Date(day.dayOfWeek).getDay()]}`}</TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {timeArray?.map((hour) => (
-                <TableRow
-                  key={hour}
-                >
-                  <>{console.log(renderAvailableTime(data, hour))}</>
-                  {data && renderAvailableTime(data, hour).map((time, index) => (
-                    <TableCell key={index} sx={{ height: '58px', padding: '10px', border: '1px solid rgba(224, 224, 224, 1)' }}>
-                      {time && <Button onClick={() => handleDateSelect(time, index)}>{`${time}:00`}</Button>}
-                    </TableCell>
+        {isSuccess && (
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="appointment table">
+              <TableHead>
+                <TableRow>
+                  {data?.map((day) => (
+                    <TableCell
+                      key={day.dayOfWeek}
+                    >{`${new Date(day.dayOfWeek).toLocaleDateString()} ${DAYS[new Date(day.dayOfWeek).getDay()]}`}</TableCell>
                   ))}
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>}
-        {isFetching && <CircularProgress sx={{ position: 'relative', left: '50%' }} />}
+              </TableHead>
+              <TableBody>
+                {timeArray?.map((hour) => (
+                  <TableRow key={hour}>
+                    <>{console.log(renderAvailableTime(data, hour))}</>
+                    {data &&
+                      renderAvailableTime(data, hour).map((time, index) => (
+                        <TableCell
+                          key={index}
+                          sx={{
+                            height: '58px',
+                            padding: '10px',
+                            border: '1px solid rgba(224, 224, 224, 1)',
+                          }}
+                        >
+                          {time && (
+                            <Button
+                              onClick={() => handleDateSelect(time, index)}
+                            >{`${time}:00`}</Button>
+                          )}
+                        </TableCell>
+                      ))}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
+        {isFetching && (
+          <CircularProgress sx={{ position: 'relative', left: '50%' }} />
+        )}
       </Box>
-      {data && 
+      {data && (
         <ConfirmBookingDialog
           closeDialog={closeDialog}
           staffId={staffId}
           bookingDateTime={selectedDateTime}
         />
-      }
+      )}
       {isError && <Error refetch={refetch} />}
     </>
-  )
+  );
 }

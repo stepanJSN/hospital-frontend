@@ -1,18 +1,26 @@
-import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
-import Appointments from "./Appointments";
-import { appointmentService } from "@/services/appointment";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from '@tanstack/react-query';
+import Appointments from './Appointments';
+import { appointmentService } from '@/services/appointment';
 
-export default async function AppointmentsPage({ params }: { params: { id?: string[] } }) {
+export default async function AppointmentsPage({
+  params,
+}: {
+  params: { id?: string[] };
+}) {
   const staffId = params.id && params.id[0];
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
     queryKey: staffId
-      ? ["staffAppointments", staffId, { isCompleted: false }]
-      : ["staffAppointments", { isCompleted: false }],
+      ? ['staffAppointments', staffId, { isCompleted: false }]
+      : ['staffAppointments', { isCompleted: false }],
     queryFn: () =>
       appointmentService.getByUserId({
-        returnType: "customer",
+        returnType: 'customer',
       }),
   });
 
@@ -20,5 +28,5 @@ export default async function AppointmentsPage({ params }: { params: { id?: stri
     <HydrationBoundary state={dehydrate(queryClient)}>
       <Appointments staffId={staffId} />
     </HydrationBoundary>
-  )
+  );
 }
