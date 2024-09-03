@@ -1,20 +1,30 @@
-import { Box, Button, Dialog, DialogContent, DialogTitle, IconButton, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  Typography,
+} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { INotification } from "@/types/notifications.type";
-import dayjs from "dayjs";
+import { INotification } from '@/types/notifications.type';
+import dayjs from 'dayjs';
 
 type ReadMoreDialogProps = {
   notification: INotification | null;
   markAsRead: () => void;
   handleClose: () => void;
-}
+};
 
-export default function ReadMoreDialog({ notification, markAsRead, handleClose }: ReadMoreDialogProps) {
+export default function ReadMoreDialog({
+  notification,
+  markAsRead,
+  handleClose,
+}: ReadMoreDialogProps) {
   return (
     <Dialog open={!!notification}>
-      <DialogTitle>
-        {notification?.senderName}
-      </DialogTitle>
+      <DialogTitle>{notification?.senderName}</DialogTitle>
       <IconButton
         aria-label="close"
         onClick={handleClose}
@@ -28,12 +38,10 @@ export default function ReadMoreDialog({ notification, markAsRead, handleClose }
         <CloseIcon />
       </IconButton>
       <DialogContent dividers>
-        <Typography gutterBottom>
-          {notification?.message}
-        </Typography>
+        <Typography gutterBottom>{notification?.message}</Typography>
       </DialogContent>
-      <Box 
-        display="flex" 
+      <Box
+        display="flex"
         justifyContent="space-between"
         alignItems="center"
         m={1}
@@ -46,5 +54,5 @@ export default function ReadMoreDialog({ notification, markAsRead, handleClose }
         </Button>
       </Box>
     </Dialog>
-  )
+  );
 }
