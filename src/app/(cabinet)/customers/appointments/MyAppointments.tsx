@@ -1,48 +1,69 @@
-"use client"
+'use client';
 
-import { useState } from "react";
-import { appointmentService } from "@/services/appointment";
-import { Box, LinearProgress, Typography } from "@mui/material";
-import { keepPreviousData, useMutation, useQuery } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
-import AppointmentsActionBar from "./AppointmentsActionBar";
-import DeleteDialog from "@/app/components/Dialogs/DeleteDialog";
-import { IGetCustomerAppointmentsForm } from "@/types/appointment.type";
-import CustomerAppointmentsTable from "./CustomerAppointmentsTable";
-import { removeEmptyFields } from "@/helpers/removeEmptyFields";
-import Error from "@/app/components/Errors/Error";
-import NoDataMessage from "@/app/components/Errors/NoDataMessage";
+import { useState } from 'react';
+import { appointmentService } from '@/services/appointment';
+import { Box, LinearProgress, Typography } from '@mui/material';
+import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query';
+import { useForm } from 'react-hook-form';
+import AppointmentsActionBar from './AppointmentsActionBar';
+import DeleteDialog from '@/app/components/Dialogs/DeleteDialog';
+import { IGetCustomerAppointmentsForm } from '@/types/appointment.type';
+import CustomerAppointmentsTable from './CustomerAppointmentsTable';
+import { removeEmptyFields } from '@/helpers/removeEmptyFields';
+import Error from '@/app/components/Errors/Error';
+import NoDataMessage from '@/app/components/Errors/NoDataMessage';
 
 export default function MyAppointments() {
   const [appointmentId, setAppointmentId] = useState<string | null>(null);
-  const [filterData, setFilterData] = useState<IGetCustomerAppointmentsForm>({ isCompleted: false });
-  const {
-    control,
-    handleSubmit,
-    getValues,
-  } = useForm<IGetCustomerAppointmentsForm>();
+  const [filterData, setFilterData] = useState<IGetCustomerAppointmentsForm>({
+    isCompleted: false,
+  });
+  const { control, handleSubmit, getValues } =
+    useForm<IGetCustomerAppointmentsForm>();
 
-  const { refetch: queryRefetch, data, isFetching, isError, isSuccess } = useQuery({
+  const {
+    refetch: queryRefetch,
+    data,
+    isFetching,
+    isError,
+    isSuccess,
+  } = useQuery({
     queryKey: ['customerAppointments', filterData],
-		queryFn: () => {
-      return appointmentService.getByUserId({ returnType: 'staff', ...filterData });
+    queryFn: () => {
+      return appointmentService.getByUserId({
+        returnType: 'staff',
+        ...filterData,
+      });
     },
     placeholderData: keepPreviousData,
-  })
-  
+  });
+
   const onSubmit = () => setFilterData(removeEmptyFields(getValues()));
 
-  const { mutate, isPending, isError: isDeleteError, reset } = useMutation({
-		mutationFn: () => appointmentService.delete(appointmentId as string),
-    onSuccess: () => { closeDialog(); queryRefetch() },
-  })
+  const {
+    mutate,
+    isPending,
+    isError: isDeleteError,
+    reset,
+  } = useMutation({
+    mutationFn: () => appointmentService.delete(appointmentId as string),
+    onSuccess: () => {
+      closeDialog();
+      queryRefetch();
+    },
+  });
 
-  const closeDialog = () => { setAppointmentId(null); reset()};
+  const closeDialog = () => {
+    setAppointmentId(null);
+    reset();
+  };
   const handleDelete = () => mutate();
 
   return (
     <Box margin={1}>
-      <Typography variant="h5" component="h1">Your appointments:</Typography>
+      <Typography variant="h5" component="h1">
+        Your appointments:
+      </Typography>
       <AppointmentsActionBar
         handleSubmit={handleSubmit}
         onSubmit={onSubmit}
@@ -50,15 +71,15 @@ export default function MyAppointments() {
         isFetching={isFetching}
       />
       {isFetching && <LinearProgress sx={{ my: 1 }} />}
-      {isSuccess && data.length !== 0 && 
-        <CustomerAppointmentsTable 
-          data={data} 
-          setAppointmentId={(id) => setAppointmentId(id)} 
-        /> 
-      }
-      {isSuccess && data?.length === 0 && 
+      {isSuccess && data.length !== 0 && (
+        <CustomerAppointmentsTable
+          data={data}
+          setAppointmentId={(id) => setAppointmentId(id)}
+        />
+      )}
+      {isSuccess && data?.length === 0 && (
         <NoDataMessage message="You don't have any doctor's appointments." />
-      }
+      )}
       {isError && <Error refetch={queryRefetch} />}
       <DeleteDialog
         open={!!appointmentId}
@@ -70,5 +91,5 @@ export default function MyAppointments() {
         handleDelete={handleDelete}
       />
     </Box>
-  )
+  );
 }

@@ -1,19 +1,23 @@
-import { LoadingButton } from '@mui/lab'
-import { Box } from '@mui/material'
-import { Control } from 'react-hook-form'
-import FormInput from '@/app/components/Inputs/FormInput'
-import { GetAll } from '@/types/customer.type'
+import { LoadingButton } from '@mui/lab';
+import { Box } from '@mui/material';
+import { Control } from 'react-hook-form';
+import FormInput from '@/app/components/Inputs/FormInput';
+import { GetAll } from '@/types/customer.type';
 
 type CustomerActionBarProps = {
   handleSubmit: () => void;
-  control:  Control<GetAll, any>
+  control: Control<GetAll>;
   isFetching: boolean;
-}
+};
 
-export default function CustomerActionBar({ handleSubmit, control, isFetching }: CustomerActionBarProps) {
+export default function CustomerActionBar({
+  handleSubmit,
+  control,
+  isFetching,
+}: CustomerActionBarProps) {
   return (
-    <Box 
-      component="form" 
+    <Box
+      component="form"
       display="flex"
       alignItems="center"
       gap={2}
@@ -21,29 +25,29 @@ export default function CustomerActionBar({ handleSubmit, control, isFetching }:
       onSubmit={handleSubmit}
     >
       <FormInput
-        label='FirstName'
-        name='firstName'
+        label="FirstName"
+        name="firstName"
         control={control}
         required={false}
       />
       <FormInput
-        label='LastName'
-        name='lastName'
+        label="LastName"
+        name="lastName"
         control={control}
         required={false}
       />
-      <LoadingButton 
+      <LoadingButton
         loading={isFetching}
-        variant="contained" 
+        variant="contained"
         fullWidth
         type="submit"
         loadingPosition="start"
         sx={{
-          width: "200px"
+          width: '200px',
         }}
       >
         Search
       </LoadingButton>
     </Box>
-  )
+  );
 }
