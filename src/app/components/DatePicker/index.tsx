@@ -1,16 +1,22 @@
-import dayjs from "dayjs";
-import { Control, Controller } from "react-hook-form";
+import dayjs from 'dayjs';
+import { Control, Controller } from 'react-hook-form';
 import { DatePicker as DatePickerUI } from '@mui/x-date-pickers';
 
 type DatePickerProps = {
   label: string;
   name?: string;
-  control: Control<any>;
+  control: Control;
   required?: boolean;
   sx?: object;
-}
+};
 
-export default function DatePicker({ name, label, control, required = true, sx }: DatePickerProps) {
+export default function DatePicker({
+  name,
+  label,
+  control,
+  required = true,
+  sx,
+}: DatePickerProps) {
   return (
     <Controller
       name={name ?? label.toLowerCase()}
@@ -18,17 +24,15 @@ export default function DatePicker({ name, label, control, required = true, sx }
       rules={{
         required,
       }}
-      render={({
-        field: { onChange, value },
-      }) => (
+      render={({ field: { onChange, value } }) => (
         <DatePickerUI
           label={label}
-          value={value ? dayjs(value): null}
-          onChange={value => onChange(value)}
+          value={value ? dayjs(value) : null}
+          onChange={(value) => onChange(value)}
           slotProps={{ textField: { size: 'small' } }}
           sx={sx}
         />
       )}
     />
-  )
+  );
 }

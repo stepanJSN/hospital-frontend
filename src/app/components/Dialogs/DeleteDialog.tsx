@@ -1,4 +1,13 @@
-import { Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, LinearProgress } from "@mui/material";
+import {
+  Alert,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  LinearProgress,
+} from '@mui/material';
 
 type DeleteDialogProps = {
   open: boolean;
@@ -8,10 +17,17 @@ type DeleteDialogProps = {
   isLoading?: boolean;
   handleClose: () => void;
   handleDelete: () => void;
-}
+};
 
-export default function DeleteDialog({ open, title, content, handleClose, handleDelete, isError, isLoading }: DeleteDialogProps) {
-
+export default function DeleteDialog({
+  open,
+  title,
+  content,
+  handleClose,
+  handleDelete,
+  isError,
+  isLoading,
+}: DeleteDialogProps) {
   return (
     <Dialog
       open={open}
@@ -26,7 +42,7 @@ export default function DeleteDialog({ open, title, content, handleClose, handle
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          {content ?? "This action cannot be undone. All data will be lost"}
+          {content ?? 'This action cannot be undone. All data will be lost'}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
@@ -36,5 +52,5 @@ export default function DeleteDialog({ open, title, content, handleClose, handle
         </Button>
       </DialogActions>
     </Dialog>
-  )
+  );
 }

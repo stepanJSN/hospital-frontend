@@ -1,15 +1,26 @@
-import { FormControl, InputLabel, MenuItem, Select as SelectComponent } from "@mui/material";
-import { Control, Controller } from "react-hook-form";
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select as SelectComponent,
+} from '@mui/material';
+import { Control, Controller } from 'react-hook-form';
 
 type SelectProps = {
-  control: Control<any>;
+  control: Control;
   label: string;
   required?: boolean;
   defaultValue: string;
-  options: Array<string | { value: number, text: string }>;
-}
+  options: Array<string | { value: number; text: string }>;
+};
 
-export default function Select({control, label, defaultValue, options, required = true}: SelectProps) {
+export default function Select({
+  control,
+  label,
+  defaultValue,
+  options,
+  required = true,
+}: SelectProps) {
   return (
     <Controller
       name={label.toLowerCase()}
@@ -18,15 +29,8 @@ export default function Select({control, label, defaultValue, options, required 
         required,
       }}
       defaultValue={defaultValue}
-      render={({
-        field: { onChange, value },
-      }) => (
-        <FormControl 
-          fullWidth 
-          required={required} 
-          size="small"
-          margin="dense"
-        >
+      render={({ field: { onChange, value } }) => (
+        <FormControl fullWidth required={required} size="small" margin="dense">
           <InputLabel id={label}>{label}</InputLabel>
           <SelectComponent
             labelId={label}
@@ -34,14 +38,20 @@ export default function Select({control, label, defaultValue, options, required 
             label={label}
             onChange={onChange}
           >
-            {options.map(option =>
-              typeof option === "string" ?
-              <MenuItem key={option} value={option}>{option}</MenuItem>
-              : <MenuItem key={option.value} value={option.value}>{option.text}</MenuItem>
+            {options.map((option) =>
+              typeof option === 'string' ? (
+                <MenuItem key={option} value={option}>
+                  {option}
+                </MenuItem>
+              ) : (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.text}
+                </MenuItem>
+              ),
             )}
           </SelectComponent>
         </FormControl>
       )}
     />
-  )
+  );
 }

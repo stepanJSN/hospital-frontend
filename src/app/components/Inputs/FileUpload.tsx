@@ -5,11 +5,10 @@ import { LoadingButton } from '@mui/lab';
 type FileUploadProps = {
   update: (file: File) => void;
   title: string;
-  isLoading?: boolean
-}
+  isLoading?: boolean;
+};
 
 const FileUpload = ({ update, title, isLoading }: FileUploadProps) => {
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       update(e.target.files[0]);
@@ -37,8 +36,8 @@ const FileUpload = ({ update, title, isLoading }: FileUploadProps) => {
       tabIndex={-1}
       startIcon={<CloudUploadIcon />}
       sx={{
-        position: 'relative', 
-        left: '50%', 
+        position: 'relative',
+        left: '50%',
         transform: 'translateX(-50%)',
         marginTop: 1,
       }}

@@ -1,16 +1,20 @@
-import { Alert, Snackbar } from '@mui/material'
-import { useState } from 'react'
+import { Alert, Snackbar } from '@mui/material';
+import { useState } from 'react';
 
 type NotificationProps = {
   type?: 'error' | 'success';
   text?: string;
   position?: {
     vertical: 'top' | 'bottom';
-    horizontal: 'center' | 'left' |'right';
-  }
-}
+    horizontal: 'center' | 'left' | 'right';
+  };
+};
 
-export default function Notification({type = "error", text = "Error. Unable to load data", position}: NotificationProps) {
+export default function Notification({
+  type = 'error',
+  text = 'Error. Unable to load data',
+  position,
+}: NotificationProps) {
   const [isOpen, setIsOpen] = useState<boolean>(true);
 
   const handleClose = () => setIsOpen(false);
@@ -30,6 +34,6 @@ export default function Notification({type = "error", text = "Error. Unable to l
       >
         {text}
       </Alert>
-    </ Snackbar>
-  )
+    </Snackbar>
+  );
 }

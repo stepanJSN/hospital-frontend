@@ -1,22 +1,32 @@
-import { TextField } from "@mui/material";
-import { Control, Controller } from "react-hook-form";
+import { TextField } from '@mui/material';
+import { Control, Controller } from 'react-hook-form';
 
 type InputProps = {
-  control: Control<any>;
+  control: Control;
   label: string;
-  name?: string
+  name?: string;
   errorText?: string;
   fullWidth?: boolean;
   type?: string;
-  required?: boolean
+  required?: boolean;
   pattern?: RegExp;
   multiline?: boolean;
   sx?: object;
-  margin?: 'dense' | 'normal' | 'none'
-}
+  margin?: 'dense' | 'normal' | 'none';
+};
 
-export default function FormInput({ 
-  control, label, name, errorText, type = "text", required = true, pattern, multiline = false, fullWidth = true, sx, margin = 'dense'
+export default function FormInput({
+  control,
+  label,
+  name,
+  errorText,
+  type = 'text',
+  required = true,
+  pattern,
+  multiline = false,
+  fullWidth = true,
+  sx,
+  margin = 'dense',
 }: InputProps) {
   return (
     <Controller
@@ -26,10 +36,7 @@ export default function FormInput({
         required,
         pattern,
       }}
-      render={({
-        field: { onChange, value },
-        fieldState: { error },
-      }) => (
+      render={({ field: { onChange, value }, fieldState: { error } }) => (
         <TextField
           InputLabelProps={{ shrink: value }}
           required={required}
@@ -37,12 +44,12 @@ export default function FormInput({
           size="small"
           margin={margin}
           error={!!error}
-          onChange={
-            (event) => type === "number" ? 
-            onChange(event.target.value ? +event.target.value : '') :
-            onChange(event.target.value)
+          onChange={(event) =>
+            type === 'number'
+              ? onChange(event.target.value ? +event.target.value : '')
+              : onChange(event.target.value)
           }
-          value={value ?? ""}
+          value={value ?? ''}
           label={label}
           fullWidth={fullWidth}
           multiline={multiline}
@@ -52,5 +59,5 @@ export default function FormInput({
         />
       )}
     />
-  )
+  );
 }
