@@ -11,7 +11,7 @@ type DoctorInfoProps = {
 };
 
 export default function DoctorInfo({ staffId, isAdmin }: DoctorInfoProps) {
-  const { doctorData } = useGetDoctors(staffId);
+  const { doctorData, isError } = useGetDoctors(staffId);
 
   return (
     <>
@@ -81,7 +81,9 @@ export default function DoctorInfo({ staffId, isAdmin }: DoctorInfoProps) {
       ) : (
         <Skeleton width="100%" height={100} />
       )}
-      {<Notification position={{ vertical: 'top', horizontal: 'center' }} />}
+      {isError && (
+        <Notification position={{ vertical: 'top', horizontal: 'center' }} />
+      )}
     </>
   );
 }

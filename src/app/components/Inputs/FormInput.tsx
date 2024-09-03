@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TextField } from '@mui/material';
 import { Control, Controller } from 'react-hook-form';
 
 type InputProps = {
-  control: Control;
+  control: Control<any>;
   label: string;
   name?: string;
   errorText?: string;

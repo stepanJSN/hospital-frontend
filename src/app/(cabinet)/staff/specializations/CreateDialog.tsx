@@ -8,26 +8,22 @@ import {
   DialogTitle,
   LinearProgress,
 } from '@mui/material';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 type CreateDialogProps = {
   open: boolean;
   handleClose: () => void;
-  refetch: () => void;
 };
 
-export default function CreateDialog({
-  open,
-  handleClose,
-  refetch,
-}: CreateDialogProps) {
+export default function CreateDialog({ open, handleClose }: CreateDialogProps) {
   const { control, handleSubmit, reset } = useForm<{ title: string }>();
+  const queryClient = useQueryClient();
 
   const { mutate, isError, isPending } = useMutation({
     mutationFn: (data: { title: string }) => specializationService.create(data),
     onSuccess: () => {
-      refetch();
+      queryClient.invalidateQueries({ queryKey: ['specializations'] });
       handleClose();
       reset();
     },

@@ -1,5 +1,6 @@
 import FormInput from '@/app/components/Inputs/FormInput';
 import { specializationService } from '@/services/specialization';
+import { ISpecialization } from '@/types/specialization.type';
 import {
   Alert,
   Box,
@@ -12,27 +13,24 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 type EditDialogProps = {
-  specializationId: string;
-  titleValue: string | null;
+  specialization: ISpecialization;
   handleClose: () => void;
-  refetch: () => void;
 };
 
 export default function EditDialog({
-  titleValue,
-  specializationId,
+  specialization,
   handleClose,
 }: EditDialogProps) {
   const queryClient = useQueryClient();
   const { control, handleSubmit, setValue } = useForm<{ title: string }>();
 
-  if (titleValue) {
-    setValue('title', titleValue);
+  if (specialization) {
+    setValue('title', specialization.title);
   }
 
   const { mutate, isError, isPending } = useMutation({
     mutationFn: (data: { title: string }) =>
-      specializationService.update(specializationId, data),
+      specializationService.update(specialization?.id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['specializations'] });
       handleClose();
@@ -43,7 +41,7 @@ export default function EditDialog({
 
   return (
     <Dialog
-      open={!!titleValue}
+      open={!!specialization}
       onClose={handleClose}
       aria-labelledby="edit-dialog-title"
     >

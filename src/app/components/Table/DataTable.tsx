@@ -7,11 +7,13 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
+import { CSSProperties } from 'react';
 
 type Column<T> = {
   header: string;
   accessor: (row: T) => React.ReactNode;
   align?: 'left' | 'right' | 'center';
+  sx?: CSSProperties;
 };
 
 type DataTableProps<T> = {
@@ -48,7 +50,11 @@ export default function DataTable<T>({
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               {columns.map((column) => (
-                <TableCell key={column.header} align={column.align || 'left'}>
+                <TableCell
+                  key={column.header}
+                  align={column.align || 'left'}
+                  sx={column.sx}
+                >
                   {column.accessor(row)}
                 </TableCell>
               ))}

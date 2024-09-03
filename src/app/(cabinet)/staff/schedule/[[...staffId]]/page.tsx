@@ -10,9 +10,9 @@ import Schedule from './Schedule';
 export default async function SchedulePage({
   params,
 }: {
-  params: { id: string };
+  params: { staffId: string };
 }) {
-  const staffId = params.id ?? (await getUserId());
+  const staffId = params.staffId ?? (await getUserId());
 
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
