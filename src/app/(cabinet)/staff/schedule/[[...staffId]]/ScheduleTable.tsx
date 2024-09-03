@@ -1,5 +1,6 @@
 import Notification from '@/app/components/Notifications';
 import DataTable from '@/app/components/Table/DataTable';
+import { workingHours } from '@/config/workingHours';
 import { scheduleService } from '@/services/schedule';
 import { IChangeSchedule, ISchedule } from '@/types/schedule.type';
 import { Button, TextField } from '@mui/material';
@@ -64,8 +65,8 @@ export default function ScheduleTable({
         item.dayOfWeek === dayOfWeek
           ? {
               ...item,
-              startTime: item.startTime ? null : 8,
-              endTime: item.endTime ? null : 18,
+              startTime: item.startTime ? null : workingHours.from,
+              endTime: item.endTime ? null : workingHours.to,
             }
           : item,
       );
@@ -89,12 +90,14 @@ export default function ScheduleTable({
                 size="small"
                 margin="dense"
                 disabled={!scheduleItem.startTime}
-                value={scheduleItem.startTime ?? 8}
+                value={scheduleItem.startTime ?? workingHours.from}
                 label="From"
                 onChange={(event) =>
                   handleTimeChange(scheduleItem.dayOfWeek, 'startTime', event)
                 }
-                InputProps={{ inputProps: { min: 8, max: 18 } }}
+                InputProps={{
+                  inputProps: { min: workingHours.from, max: workingHours.to },
+                }}
                 type="number"
                 variant="outlined"
               />
@@ -107,11 +110,13 @@ export default function ScheduleTable({
                 size="small"
                 margin="dense"
                 disabled={!scheduleItem.endTime}
-                value={scheduleItem.endTime ?? 18}
+                value={scheduleItem.endTime ?? workingHours.to}
                 onChange={(event) =>
                   handleTimeChange(scheduleItem.dayOfWeek, 'endTime', event)
                 }
-                InputProps={{ inputProps: { min: 8, max: 18 } }}
+                InputProps={{
+                  inputProps: { min: workingHours.from, max: workingHours.to },
+                }}
                 label="To"
                 type="number"
                 variant="outlined"
