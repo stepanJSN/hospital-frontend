@@ -1,15 +1,18 @@
+/* eslint-disable @typescript-eslint/no-empty-object-type */
 export interface IGetAppointments {
   fromDate?: string;
   toDate?: string;
   isCompleted?: boolean;
   staffName?: string;
   customerName?: string;
-  returnType: 'staff' | 'customer'
+  returnType: 'staff' | 'customer';
 }
 
-export interface IGetCustomerAppointmentsForm extends Omit<IGetAppointments, 'returnType' | 'customerName'> {}
+export interface IGetCustomerAppointmentsForm
+  extends Omit<IGetAppointments, 'returnType' | 'customerName'> {}
 
-export interface IGetStaffAppointmentsForm extends Omit<IGetAppointments, 'returnType' | 'staffName'> {}
+export interface IGetStaffAppointmentsForm
+  extends Omit<IGetAppointments, 'returnType' | 'staffName'> {}
 
 export interface IAppointmentPayload {
   staffId: string;
@@ -25,13 +28,13 @@ export interface IAppointment {
     surname: string;
     specialization: {
       title: string;
-    },
-  },
+    };
+  };
   customer: {
     id: string;
     name: string;
     surname: string;
-  }
+  };
 }
 
 export interface IChangeStatus {
