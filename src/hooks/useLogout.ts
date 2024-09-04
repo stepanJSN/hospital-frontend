@@ -8,7 +8,7 @@ export default function useLogout() {
 
   const logout = () => {
     authService.logout();
-    queryClient.invalidateQueries();
+    queryClient.resetQueries();
     push('/auth/signin');
   };
   return logout;
