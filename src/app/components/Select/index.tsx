@@ -7,7 +7,8 @@ import {
 import { Control, Controller } from 'react-hook-form';
 
 type SelectProps = {
-  control: Control;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  control: Control<any>;
   label: string;
   required?: boolean;
   defaultValue: string;

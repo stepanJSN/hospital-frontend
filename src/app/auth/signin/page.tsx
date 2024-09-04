@@ -38,10 +38,16 @@ export default function SignIn() {
 
   return (
     <Box
-      width="50%"
       maxWidth="400px"
       component="form"
       onSubmit={handleSubmit(onSubmit)}
+      sx={{
+        transform: 'translateY(50%)',
+        width: {
+          xs: '90%',
+          sm: '50%',
+        },
+      }}
     >
       <Typography align="center" component="h1" variant="h5" mb={1}>
         Sign In

@@ -35,9 +35,15 @@ export default function SignIn() {
 
   return (
     <Box
-      width="50%"
       maxWidth="400px"
       component="form"
+      mt="7%"
+      sx={{
+        width: {
+          xs: '90%',
+          sm: '50%',
+        },
+      }}
       onSubmit={handleSubmit(onSubmit)}
     >
       <Typography align="center" component="h1" variant="h5" mb={1}>

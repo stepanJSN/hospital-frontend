@@ -5,7 +5,8 @@ import { DatePicker as DatePickerUI } from '@mui/x-date-pickers';
 type DatePickerProps = {
   label: string;
   name?: string;
-  control: Control;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  control: Control<any>;
   required?: boolean;
   sx?: object;
 };
