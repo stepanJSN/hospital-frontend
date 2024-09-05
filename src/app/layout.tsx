@@ -26,7 +26,6 @@ export default function RootLayout({
       <body className={inter.className}>
         <Providers>
           <CssBaseline />
-
           {children}
         </Providers>
       </body>

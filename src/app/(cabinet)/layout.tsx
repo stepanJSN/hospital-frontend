@@ -47,13 +47,18 @@ export default async function Layout({
   })();
 
   return (
-    <Box display="flex" minHeight="100vh" gap={1}>
-      <HydrationBoundary state={dehydrate(queryClient)}>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <Box sx={{ display: { xs: 'flex' } }}>
         <Menu menuList={menuList} userRole={userRole} />
-        <Box flex="0 1 75%" paddingRight={1} paddingBottom={2}>
+        <Box
+          flex="auto"
+          paddingRight={1}
+          paddingBottom={2}
+          sx={{ pt: { xs: 7, md: 1 } }}
+        >
           {children}
         </Box>
-      </HydrationBoundary>
-    </Box>
+      </Box>
+    </HydrationBoundary>
   );
 }
