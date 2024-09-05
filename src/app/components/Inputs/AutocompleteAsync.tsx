@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { Autocomplete, TextField } from '@mui/material';
@@ -9,7 +10,7 @@ import { Control, Controller } from 'react-hook-form';
 type AutocompleteAsyncProps<T> = {
   id: string;
   label: string;
-  control: Control;
+  control: Control<any>;
   startFromLetter?: number;
   searchFunc: (searchValue: string) => Promise<Array<T>>;
   noOptionsText?: string;

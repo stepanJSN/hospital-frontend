@@ -1,4 +1,4 @@
-import { styled } from '@mui/material';
+import { styled, useMediaQuery, useTheme } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { LoadingButton } from '@mui/lab';
 
@@ -9,6 +9,8 @@ type FileUploadProps = {
 };
 
 const FileUpload = ({ update, title, isLoading }: FileUploadProps) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       update(e.target.files[0]);
@@ -35,6 +37,7 @@ const FileUpload = ({ update, title, isLoading }: FileUploadProps) => {
       variant="contained"
       tabIndex={-1}
       startIcon={<CloudUploadIcon />}
+      size={isMobile ? 'small' : 'medium'}
       sx={{
         position: 'relative',
         left: '50%',

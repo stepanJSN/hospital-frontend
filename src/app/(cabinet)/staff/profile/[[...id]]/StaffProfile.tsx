@@ -137,8 +137,14 @@ export default function StaffProfile({ staffId, isAdmin }: StaffProfile) {
               position: 'relative',
               left: '50%',
               transform: 'translateX(-50%)',
-              width: 100,
-              height: 100,
+              width: {
+                xs: 70,
+                sm: 100,
+              },
+              height: {
+                xs: 70,
+                sm: 100,
+              },
               fontSize: 35,
             }}
             src={data.avatarUrl}
