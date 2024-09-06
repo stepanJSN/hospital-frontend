@@ -25,10 +25,13 @@ export default function CustomerDataTable({
             >{`${row.name} ${row.surname}`}</Link>
           ),
         },
-        { header: 'Email', accessor: (row) => row.email },
-        { header: 'Telephone', accessor: (row) => row.telephone },
-        { header: 'Birthday', accessor: (row) => row.birthday },
-        { header: 'Gender', accessor: (row) => row.gender },
+        { header: 'Email', hideOnMobile: true, accessor: (row) => row.email },
+        {
+          header: 'Telephone',
+          hideOnTablet: true,
+          accessor: (row) => row.telephone,
+        },
+        { header: 'Gender', hideOnTablet: true, accessor: (row) => row.gender },
         {
           header: 'Action',
           align: 'right',
