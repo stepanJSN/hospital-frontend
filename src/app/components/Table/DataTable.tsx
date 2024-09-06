@@ -12,6 +12,7 @@ import { CSSProperties } from 'react';
 type Column<T> = {
   header: string;
   accessor: (row: T) => React.ReactNode;
+  hideOnMobile?: boolean;
   align?: 'left' | 'right' | 'center';
   sx?: CSSProperties;
 };
@@ -29,14 +30,20 @@ export default function DataTable<T>({
 }: DataTableProps<T>) {
   return (
     <TableContainer component={Paper} sx={{ mt: 1 }}>
-      <Table sx={{ minWidth: 650 }} aria-label="generic table">
+      <Table aria-label="generic table">
         <TableHead>
           <TableRow>
             {columns.map((column) => (
               <TableCell
                 key={column.header}
                 align={column.align || 'left'}
-                sx={{ fontWeight: '600' }}
+                sx={{
+                  fontWeight: '600',
+                  display: {
+                    xs: column.hideOnMobile ? 'none' : 'table-cell',
+                    sm: 'table-cell',
+                  },
+                }}
               >
                 {column.header}
               </TableCell>
@@ -53,7 +60,13 @@ export default function DataTable<T>({
                 <TableCell
                   key={column.header}
                   align={column.align || 'left'}
-                  sx={column.sx}
+                  sx={{
+                    display: {
+                      xs: column.hideOnMobile ? 'none' : 'table-cell',
+                      sm: 'table-cell',
+                    },
+                    ...column.sx,
+                  }}
                 >
                   {column.accessor(row)}
                 </TableCell>
