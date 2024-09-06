@@ -1,6 +1,6 @@
+import AdaptiveButton from '@/app/components/Buttons/AdaptiveButton';
 import DataTable from '@/app/components/Table/DataTable';
 import { IStaffShort } from '@/types/staff.type';
-import { Button } from '@mui/material';
 import Link from 'next/link';
 
 type DataTableType = {
@@ -33,13 +33,13 @@ export default function StaffTable({ data, isAdmin }: DataTableType) {
           header: 'Action',
           align: 'right',
           accessor: (row) => (
-            <Button
+            <AdaptiveButton
               variant="outlined"
               component={Link}
               href={`/staff/${row.id}`}
             >
               {isAdmin ? 'Manage' : 'Visit'}
-            </Button>
+            </AdaptiveButton>
           ),
         },
       ]}
