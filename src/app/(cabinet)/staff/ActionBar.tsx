@@ -1,7 +1,6 @@
 import DatePicker from '@/app/components/DatePicker';
 import AutocompleteAsync from '@/app/components/Inputs/AutocompleteAsync';
-import { LoadingButton } from '@mui/lab';
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
 import React from 'react';
 import { Control, UseFormHandleSubmit } from 'react-hook-form';
 import Link from 'next/link';
@@ -9,6 +8,8 @@ import FormInput from '@/app/components/Inputs/FormInput';
 import { specializationService } from '@/services/specialization';
 import { FilterStaffType } from '@/types/staff.type';
 import { ISpecialization } from '@/types/specialization.type';
+import AdaptiveButton from '@/app/components/Buttons/AdaptiveButton';
+import AdaptiveLoadingButton from '@/app/components/Buttons/AdaptiveLoadingButton';
 
 type ActionBarProps = {
   handleSubmit: UseFormHandleSubmit<FilterStaffType, undefined>;
@@ -30,7 +31,8 @@ export default function ActionBar({
       component="form"
       display="flex"
       alignItems="center"
-      gap={2}
+      flexWrap="wrap"
+      gap={1}
       mt={2}
       onSubmit={handleSubmit(onSubmit)}
     >
@@ -41,7 +43,7 @@ export default function ActionBar({
         errorText="Incorrect full name"
         required={false}
         fullWidth={false}
-        sx={{ minWidth: '250px' }}
+        sx={{ minWidth: '250px', flex: 'auto' }}
         margin="none"
       />
       <AutocompleteAsync<ISpecialization>
@@ -54,29 +56,21 @@ export default function ActionBar({
         sx={{ minWidth: '250px', flex: 'auto' }}
       />
       {isAdmin ? (
-        <Button
-          sx={{ width: '200px', height: '40px' }}
-          component={Link}
-          href="/staff/create"
-        >
+        <AdaptiveButton component={Link} href="/staff/create">
           Create new profile
-        </Button>
+        </AdaptiveButton>
       ) : (
         <DatePicker control={control} label="Date" required={false} />
       )}
-      <LoadingButton
+      <AdaptiveLoadingButton
         loading={isFetching}
         variant="contained"
-        fullWidth
         type="submit"
         loadingPosition="start"
-        sx={{
-          height: '40px',
-          width: '200px',
-        }}
+        sx={{ minWidth: '150px' }}
       >
         Search
-      </LoadingButton>
+      </AdaptiveLoadingButton>
     </Box>
   );
 }

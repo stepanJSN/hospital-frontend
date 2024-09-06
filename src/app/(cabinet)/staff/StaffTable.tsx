@@ -20,10 +20,15 @@ export default function StaffTable({ data, isAdmin }: DataTableType) {
         },
         {
           header: 'Specialization',
+          hideOnMobile: true,
           accessor: (row) => row.specialization?.title,
         },
-        { header: 'Experience', accessor: (row) => row.experience },
-        { header: 'Gender', accessor: (row) => row.gender },
+        {
+          header: 'Experience',
+          hideOnMobile: true,
+          accessor: (row) => row.experience,
+        },
+        { header: 'Gender', hideOnMobile: true, accessor: (row) => row.gender },
         {
           header: 'Action',
           align: 'right',

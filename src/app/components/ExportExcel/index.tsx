@@ -1,6 +1,6 @@
-import { Button } from '@mui/material';
 import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
+import AdaptiveButton from '../Buttons/AdaptiveButton';
 
 type ExportExcelProps = {
   data: object[];
@@ -21,9 +21,9 @@ const ExportExcel = ({ data, fileName }: ExportExcelProps) => {
   };
 
   return (
-    <Button color="success" variant="contained" onClick={exportToExcel}>
+    <AdaptiveButton color="success" variant="contained" onClick={exportToExcel}>
       Export to Excel
-    </Button>
+    </AdaptiveButton>
   );
 };
 
