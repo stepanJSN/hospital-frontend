@@ -13,6 +13,7 @@ type Column<T> = {
   header: string;
   accessor: (row: T) => React.ReactNode;
   hideOnMobile?: boolean;
+  hideOnTablet?: boolean;
   align?: 'left' | 'right' | 'center';
   sx?: CSSProperties;
 };
@@ -40,8 +41,12 @@ export default function DataTable<T>({
                 sx={{
                   fontWeight: '600',
                   display: {
-                    xs: column.hideOnMobile ? 'none' : 'table-cell',
-                    sm: 'table-cell',
+                    xs:
+                      column.hideOnMobile || column.hideOnTablet
+                        ? 'none'
+                        : 'table-cell',
+                    sm: column.hideOnTablet ? 'none' : 'table-cell',
+                    md: 'table-cell',
                   },
                 }}
               >
@@ -62,8 +67,12 @@ export default function DataTable<T>({
                   align={column.align || 'left'}
                   sx={{
                     display: {
-                      xs: column.hideOnMobile ? 'none' : 'table-cell',
-                      sm: 'table-cell',
+                      xs:
+                        column.hideOnMobile || column.hideOnTablet
+                          ? 'none'
+                          : 'table-cell',
+                      sm: column.hideOnTablet ? 'none' : 'table-cell',
+                      md: 'table-cell',
                     },
                     ...column.sx,
                   }}
