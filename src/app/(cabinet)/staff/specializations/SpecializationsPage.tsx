@@ -92,7 +92,7 @@ export default function SpecializationPage() {
         </Button>
         {isSuccess && <ExportExcel data={data} fileName="specializations" />}
       </Box>
-      {isFetching && <LinearProgress sx={{ height: '5px' }} />}
+      {isFetching ? <LinearProgress sx={{ my: 1 }} /> : <Box height="12px" />}
       {isSuccess && data?.length !== 0 && (
         <>
           <Typography component="h1" variant="h5" mt={2} mb={1}>

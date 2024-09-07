@@ -53,7 +53,7 @@ export default function Staff({ isAdmin }: StaffProps) {
         control={control}
         isFetching={isFetching}
       />
-      {isFetching && <LinearProgress sx={{ my: 1 }} />}
+      {isFetching ? <LinearProgress sx={{ my: 1 }} /> : <Box height="12px" />}
       {isSuccess && data?.length !== 0 && (
         <StaffTable data={data} isAdmin={isAdmin} />
       )}

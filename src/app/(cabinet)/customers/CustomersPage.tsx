@@ -80,10 +80,10 @@ export default function CustomersPage() {
         control={control}
         isFetching={isFetching}
       />
+      {isFetching ? <LinearProgress sx={{ my: 1 }} /> : <Box height="12px" />}
       {isSuccess && data?.length !== 0 && (
         <CustomerDataTable data={mapData(data)} onClick={handleDelete} />
       )}
-      {isFetching && <LinearProgress sx={{ my: 1 }} />}
       {isSuccess && data?.length === 0 && (
         <NoDataMessage message="Customers not found" />
       )}
