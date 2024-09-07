@@ -98,30 +98,33 @@ export default function Menu({ menuList, userRole }: MenuProps) {
                   href={element.pageRoute}
                   selected={pathname === element.pageRoute}
                   component={Link}
+                  onClick={handleMenuToggler}
                 >
                   <ListItemIcon>{element.pageIcon}</ListItemIcon>
                   <ListItemText primary={element.pageText} />
                 </ListItemButton>
               </ListItem>
             ))}
-          </List>
-          <ListItemButton
-            href="/notifications"
-            selected={pathname === '/notifications'}
-            component={Link}
-            sx={{ maxHeight: '48px', width: '90%' }}
-          >
-            <ListItemIcon>
-              <Badge
-                badgeContent={notificationsData?.length}
-                invisible={notificationsData?.length === 0}
-                color="warning"
+            <ListItem>
+              <ListItemButton
+                href="/notifications"
+                selected={pathname === '/notifications'}
+                component={Link}
+                onClick={handleMenuToggler}
               >
-                <NotificationsIcon />
-              </Badge>
-            </ListItemIcon>
-            <ListItemText primary="Notifications" />
-          </ListItemButton>
+                <ListItemIcon>
+                  <Badge
+                    badgeContent={notificationsData?.length}
+                    invisible={notificationsData?.length === 0}
+                    color="warning"
+                  >
+                    <NotificationsIcon />
+                  </Badge>
+                </ListItemIcon>
+                <ListItemText primary="Notifications" />
+              </ListItemButton>
+            </ListItem>
+          </List>
           <Button fullWidth startIcon={<LogoutIcon />} onClick={logout}>
             Logout
           </Button>
