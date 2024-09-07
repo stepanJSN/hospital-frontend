@@ -10,6 +10,8 @@ type CustomerPageType = {
   id: string;
 };
 
+const avatarSize = { mobile: 100, tablet: 150 };
+
 export default function CustomerPage({ id }: CustomerPageType) {
   const { data, isFetching, isError } = useQuery({
     queryKey: ['customerId', id],
@@ -18,20 +20,37 @@ export default function CustomerPage({ id }: CustomerPageType) {
 
   return (
     <>
-      <Box display="flex" margin={3} width="100%">
+      <Box
+        display="flex"
+        width="100%"
+        sx={{
+          margin: { xs: 1, md: 3 },
+          flexDirection: { xs: 'column', sm: 'row' },
+          alignItems: 'center',
+        }}
+      >
         <Box>
           {!isFetching && !isError && (
             <Avatar
               alt="Avatar"
               src={data?.avatarUrl}
-              sx={{ width: 150, height: 150 }}
+              sx={{
+                width: { xs: avatarSize.mobile, sm: avatarSize.tablet },
+                height: { xs: avatarSize.mobile, sm: avatarSize.tablet },
+              }}
             />
           )}
           {(isFetching || isError) && (
-            <Skeleton variant="circular" width={150} height={150} />
+            <Skeleton
+              variant="circular"
+              sx={{
+                width: { xs: avatarSize.mobile, sm: avatarSize.tablet },
+                height: { xs: avatarSize.mobile, sm: avatarSize.tablet },
+              }}
+            />
           )}
         </Box>
-        <Box marginLeft={3}>
+        <Box sx={{ marginLeft: { sm: 3 } }}>
           {!isFetching && !isError && (
             <>
               <Typography
