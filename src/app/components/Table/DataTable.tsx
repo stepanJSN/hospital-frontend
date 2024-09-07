@@ -48,6 +48,10 @@ export default function DataTable<T>({
                     sm: column.hideOnTablet ? 'none' : 'table-cell',
                     md: 'table-cell',
                   },
+                  padding: {
+                    xs: '10px',
+                    md: '16px',
+                  },
                 }}
               >
                 {column.header}
@@ -73,6 +77,10 @@ export default function DataTable<T>({
                           : 'table-cell',
                       sm: column.hideOnTablet ? 'none' : 'table-cell',
                       md: 'table-cell',
+                    },
+                    padding: {
+                      xs: '10px',
+                      md: '16px',
                     },
                     ...column.sx,
                   }}

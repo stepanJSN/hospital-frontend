@@ -1,13 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import {
-  Box,
-  Button,
-  LinearProgress,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Box, LinearProgress, TextField, Typography } from '@mui/material';
 import {
   keepPreviousData,
   useMutation,
@@ -24,6 +18,7 @@ import ExportExcel from '@/app/components/ExportExcel';
 import Error from '@/app/components/Errors/Error';
 import NoDataMessage from '@/app/components/Errors/NoDataMessage';
 import { ISpecialization } from '@/types/specialization.type';
+import AdaptiveButton from '@/app/components/Buttons/AdaptiveButton';
 
 export default function SpecializationPage() {
   const [selectedSpecializationForDelete, setSelectedSpecializationForDelete] =
@@ -68,7 +63,12 @@ export default function SpecializationPage() {
 
   return (
     <Box width="100%" marginRight={1}>
-      <Box display="flex" alignItems="center" mt={1}>
+      <Box
+        display="flex"
+        alignItems="center"
+        mt={1}
+        sx={{ flexWrap: { xs: 'wrap' } }}
+      >
         <TextField
           id="specialization-title"
           label="Specialization"
@@ -76,12 +76,12 @@ export default function SpecializationPage() {
           margin="dense"
           variant="outlined"
           value={inputValue}
-          sx={{ width: '300px' }}
+          sx={{ minWidth: '250px', flex: 'auto', maxWidth: '450px' }}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             setInputValue(event.target.value);
           }}
         />
-        <Button
+        <AdaptiveButton
           onClick={() => setIsCreateDialogOpen(true)}
           sx={{
             height: '40px',
@@ -89,7 +89,7 @@ export default function SpecializationPage() {
           }}
         >
           Create specialization
-        </Button>
+        </AdaptiveButton>
         {isSuccess && <ExportExcel data={data} fileName="specializations" />}
       </Box>
       {isFetching ? <LinearProgress sx={{ my: 1 }} /> : <Box height="12px" />}

@@ -1,6 +1,6 @@
+import AdaptiveButton from '@/app/components/Buttons/AdaptiveButton';
 import DataTable from '@/app/components/Table/DataTable';
 import { ISpecialization } from '@/types/specialization.type';
-import { Button } from '@mui/material';
 
 type SpecializationsDataTableType = {
   data: ISpecialization[];
@@ -26,24 +26,24 @@ export default function SpecializationsDataTable({
         {
           header: '',
           accessor: (row) => (
-            <Button
+            <AdaptiveButton
               variant="outlined"
               onClick={() => onEdit(row.id, row.title)}
             >
               Edit
-            </Button>
+            </AdaptiveButton>
           ),
         },
         {
           header: '',
           accessor: (row) => (
-            <Button
+            <AdaptiveButton
               variant="outlined"
               color="error"
               onClick={() => onDelete(row.id)}
             >
               Delete
-            </Button>
+            </AdaptiveButton>
           ),
         },
       ]}
