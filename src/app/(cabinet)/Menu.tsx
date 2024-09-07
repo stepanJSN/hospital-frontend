@@ -63,13 +63,7 @@ export default function Menu({ menuList, userRole }: MenuProps) {
 
   return (
     <>
-      {isMobile && (
-        <Header
-          onMenuIconClick={handleMenuToggler}
-          menuList={menuList}
-          pathname={pathname}
-        />
-      )}
+      {isMobile && <Header onMenuIconClick={handleMenuToggler} />}
       <Drawer
         open={isMenuOpen}
         onClose={handleMenuToggler}
