@@ -2,29 +2,53 @@
 
 import Notification from '@/app/components/Notifications';
 import useGetDoctors from '@/hooks/useGetDoctorsData';
-import { Avatar, Box, Divider, Skeleton, Typography } from '@mui/material';
+import {
+  Avatar,
+  Box,
+  Divider,
+  Skeleton,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
 import ButtonLink from './ButtonLink';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 type DoctorInfoProps = {
   staffId: string;
   isAdmin: boolean;
 };
 
+const avatarSize = { mobile: 100, tablet: 150 };
+
 export default function DoctorInfo({ staffId, isAdmin }: DoctorInfoProps) {
   const { doctorData, isError } = useGetDoctors(staffId);
+  const theme = useTheme();
+  const isTablet = useMediaQuery(theme.breakpoints.down('lg'));
 
   return (
     <>
-      <Box display="flex" margin={3} width="100%">
+      <Box display="flex" margin={2}>
         <Box>
           {doctorData ? (
             <Avatar
               alt="Avatar"
               src={doctorData.avatarUrl}
-              sx={{ width: 150, height: 150 }}
+              sx={{
+                width: { xs: avatarSize.mobile, sm: avatarSize.tablet },
+                height: { xs: avatarSize.mobile, sm: avatarSize.tablet },
+              }}
             />
           ) : (
-            <Skeleton variant="circular" width={150} height={150} />
+            <Skeleton
+              variant="circular"
+              sx={{
+                width: { xs: avatarSize.mobile, sm: avatarSize.tablet },
+                height: { xs: avatarSize.mobile, sm: avatarSize.tablet },
+              }}
+            />
           )}
         </Box>
         <Box marginLeft={3} flex="auto">
@@ -62,13 +86,13 @@ export default function DoctorInfo({ staffId, isAdmin }: DoctorInfoProps) {
         {isAdmin && (
           <Box display="flex" flexDirection="column" gap={1}>
             <ButtonLink href={`/staff/profile/${staffId}`}>
-              Edit profile
+              {isTablet ? <AccountCircleIcon /> : 'Edit Profile'}
             </ButtonLink>
             <ButtonLink href={`/staff/appointments/${staffId}`}>
-              See appointments
+              {isTablet ? <CalendarMonthIcon /> : 'See appointments'}
             </ButtonLink>
             <ButtonLink href={`/staff/schedule/${staffId}`}>
-              Edit schedule
+              {isTablet ? <AccessTimeIcon /> : 'Edit schedule'}
             </ButtonLink>
           </Box>
         )}

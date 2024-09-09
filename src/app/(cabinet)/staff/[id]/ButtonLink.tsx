@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import AdaptiveButton from '@/app/components/Buttons/AdaptiveButton';
 import Link from 'next/link';
 import React from 'react';
 
@@ -9,13 +9,13 @@ type ButtonLinkProps = {
 
 export default function ButtonLink({ href, children }: ButtonLinkProps) {
   return (
-    <Button
+    <AdaptiveButton
       component={Link}
       href={href}
       sx={{ maxHeight: '40px', marginRight: 2 }}
       variant="contained"
     >
       {children}
-    </Button>
+    </AdaptiveButton>
   );
 }
