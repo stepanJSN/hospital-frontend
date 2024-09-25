@@ -10,7 +10,8 @@ This is the frontend part. Backend: https://github.com/Stepan22-prog/hospital-ba
  - Search for doctors (filters can be used)
  - Make an appointment for a available time
  - View appointments
- - Edit adn delete personal profile
+ - Edit and delete personal profile (including changing avatar)
+ - Receiving notifications of cancellation of an appointment
 
 **Doctors(staff)**
 
@@ -18,7 +19,8 @@ This is the frontend part. Backend: https://github.com/Stepan22-prog/hospital-ba
  - Viewing and filtering enrolled patients
  - Export recorded patients to Excel
  - Change work schedule
- - Edit and delete a profile
+ - Edit and delete a profile (including changing avatar)
+ - Receiving notifications of appointments or cancellations
 
 **Admin**
 
@@ -28,6 +30,7 @@ This is the frontend part. Backend: https://github.com/Stepan22-prog/hospital-ba
  - Export of staff list to excel
  - View and delete patients
  - Management of specializations. Creating, modifying and deleting
+ - Receiving notifications about changes in doctors' work schedules
 
 ## TechStack
 
