@@ -42,7 +42,7 @@ export default function Notifications() {
   };
 
   return (
-    <Box margin={2} width="100%">
+    <Box margin={2}>
       <Typography variant="h5" component="h1">
         Notifications:
       </Typography>

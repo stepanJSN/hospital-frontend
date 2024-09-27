@@ -1,17 +1,11 @@
 import { INotification } from '@/types/notifications.type';
-import {
-  Button,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableRow,
-} from '@mui/material';
+import { Button } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
 import WarningIcon from '@mui/icons-material/Warning';
 import ReportIcon from '@mui/icons-material/Report';
+import DataTable from '@/app/components/Table/DataTable';
 import dayjs from 'dayjs';
+import { MouseEvent } from 'react';
 
 type NotificationTableProps = {
   data: INotification[];
@@ -35,57 +29,62 @@ export default function NotificationsTable({
     }
   }
 
+  function handleRowClick(row: INotification) {
+    setSelectedNotification(row);
+  }
+
+  function handleMarkAsRead(
+    event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>,
+    rowId: string,
+  ) {
+    event.stopPropagation();
+    changeMessageStatus(rowId);
+  }
+
   return (
-    <TableContainer>
-      <Table
-        sx={{
-          minWidth: 650,
-          borderCollapse: 'separate',
-          borderSpacing: '0 8px',
-        }}
-        aria-label="notifications table"
-      >
-        <TableBody>
-          {data.map((row) => (
-            <TableRow
-              component={Paper}
-              key={row._id}
-              sx={{
-                '&:last-child td, &:last-child th': { border: 0 },
-                background: row.isRead ? '#adabab5c' : 'white',
-              }}
+    <DataTable
+      keyExtractor={(row) => row._id}
+      data={data}
+      isHeader={false}
+      handleRowClick={handleRowClick}
+      columns={[
+        {
+          header: 'Icon',
+          accessor: (row) => defineIcon(row.type),
+        },
+        { header: 'Sender', accessor: (row) => row.senderName },
+        {
+          header: 'Message',
+          hideOnTablet: true,
+          accessor: (row) =>
+            row.message.length > 25
+              ? `${row.message.substring(0, 23)}...`
+              : row.message,
+        },
+        {
+          header: 'Status',
+          hideOnTablet: true,
+          accessor: (row) => (row.isRead ? 'Read' : 'Unread'),
+        },
+        {
+          header: 'Date',
+          hideOnTablet: true,
+          accessor: (row) => dayjs(row.date).format('DD.MM.YYYY HH:mm'),
+        },
+        {
+          header: 'Action',
+          align: 'right',
+          accessor: (row) => (
+            <Button
+              variant="outlined"
+              disabled={row.isRead}
+              onClick={(e) => handleMarkAsRead(e, row._id)}
             >
-              <TableCell component="th" scope="row">
-                {defineIcon(row.type)}
-              </TableCell>
-              <TableCell component="th" scope="row">
-                {row.senderName}
-              </TableCell>
-              <TableCell
-                sx={{ '&:hover': { cursor: 'pointer' } }}
-                onClick={() => setSelectedNotification(row)}
-              >
-                {row.message.length > 25
-                  ? `${row.message.substring(0, 23)}...`
-                  : row.message}
-              </TableCell>
-              <TableCell>{row.isRead ? 'Read' : 'Unread'}</TableCell>
-              <TableCell component="th" scope="row">
-                {dayjs(row.date).format('DD.MM.YYYY HH:mm')}
-              </TableCell>
-              <TableCell align="right">
-                <Button
-                  variant="outlined"
-                  disabled={row.isRead}
-                  onClick={() => changeMessageStatus(row._id)}
-                >
-                  Mark as read
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+              Mark as read
+            </Button>
+          ),
+        },
+      ]}
+    />
   );
 }
