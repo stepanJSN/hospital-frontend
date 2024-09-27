@@ -2,10 +2,10 @@ import { Button, Dialog, DialogContent, DialogTitle } from '@mui/material';
 
 type TimeSelectProps = {
   handleClose: () => void;
-  handleDateSelect: (time: number, date: number) => void;
+  handleDateSelect: (time: number, date: string) => void;
   selectedDate: {
     availableTime: number[];
-    date: number;
+    date: string;
   } | null;
 };
 

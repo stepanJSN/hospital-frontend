@@ -34,7 +34,7 @@ export type FilterStaffType = {
 };
 
 export interface IAvailableTime {
-  dayOfWeek: number;
+  dayOfWeek: string;
   startTime: number;
   endTime: number;
   bookedTime: number[];

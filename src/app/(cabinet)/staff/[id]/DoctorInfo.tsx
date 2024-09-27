@@ -30,7 +30,14 @@ export default function DoctorInfo({ staffId, isAdmin }: DoctorInfoProps) {
 
   return (
     <>
-      <Box display="flex" margin={2}>
+      <Box
+        display="flex"
+        margin={2}
+        sx={{
+          flexDirection: { xs: 'column', sm: 'row' },
+          alignItems: { xs: 'center' },
+        }}
+      >
         <Box>
           {doctorData ? (
             <Avatar
@@ -51,7 +58,7 @@ export default function DoctorInfo({ staffId, isAdmin }: DoctorInfoProps) {
             />
           )}
         </Box>
-        <Box marginLeft={3} flex="auto">
+        <Box flex="auto" sx={{ ml: { xs: '0', sm: 3 } }}>
           {doctorData ? (
             <>
               <Typography
@@ -84,7 +91,11 @@ export default function DoctorInfo({ staffId, isAdmin }: DoctorInfoProps) {
           )}
         </Box>
         {isAdmin && (
-          <Box display="flex" flexDirection="column" gap={1}>
+          <Box
+            display="flex"
+            gap={1}
+            sx={{ flexDirection: { xs: 'row', sm: 'column' } }}
+          >
             <ButtonLink href={`/staff/profile/${staffId}`}>
               {isTablet ? <AccountCircleIcon /> : 'Edit Profile'}
             </ButtonLink>

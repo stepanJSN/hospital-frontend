@@ -4,14 +4,9 @@ import {
   Button,
   CircularProgress,
   Divider,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
@@ -19,8 +14,10 @@ import ConfirmBookingDialog from './ConfirmBookingDialog';
 import dayjs from 'dayjs';
 import { workingHours } from '@/config/workingHours';
 import { staffService } from '@/services/staff';
-import { IAvailableTime } from '@/types/staff.type';
 import Error from '@/app/components/Errors/Error';
+import TimeSelect from './TimeSelect';
+import TimeTable from './TimeTable';
+import DateList from './DateList';
 
 type AvailableTimeProps = {
   staffId: string;
@@ -33,11 +30,17 @@ const timeArray = Array.from(
 );
 
 export default function AvailableTime({ staffId }: AvailableTimeProps) {
+  const theme = useTheme();
+  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
   const [dateRange, setDateRange] = useState({
     startDate: new Date(),
     endDate: dayjs().add(7, 'day').toDate(),
   });
   const [selectedDateTime, setSelectedDateTime] = useState<null | Date>(null);
+  const [selectedDate, setSelectedDate] = useState<{
+    availableTime: number[];
+    date: string;
+  } | null>(null);
 
   const { refetch, data, isFetching, isError, isSuccess } = useQuery({
     queryKey: ['availableTime', staffId, dateRange],
@@ -63,34 +66,26 @@ export default function AvailableTime({ staffId }: AvailableTimeProps) {
     }));
   }
 
-  function renderAvailableTime(
-    data: Array<IAvailableTime>,
-    currentTime: number,
-  ) {
-    const availableTimeArray: Array<number | null> = [];
-    for (let i = 0; i < 7; i++) {
-      if (
-        Object.hasOwn(data[i], 'startTime') &&
-        data[i].startTime <= currentTime &&
-        data[i].endTime >= currentTime &&
-        !data[i].bookedTime.includes(currentTime)
-      ) {
-        availableTimeArray.push(currentTime);
-      } else {
-        availableTimeArray.push(null);
-      }
-    }
-    return availableTimeArray;
+  function handleDateSelect(time: number, dayOfWeek: number, fromDate: Date) {
+    const date = new Date(fromDate);
+    date.setDate(date.getDate() + dayOfWeek);
+    console.log(dayOfWeek);
+    setDateTime(time, date.toISOString());
   }
 
-  function handleDateSelect(time: number, dayOfWeek: number) {
-    const currentDate = new Date();
-    currentDate.setDate(currentDate.getDate() + dayOfWeek);
+  function setDateTime(time: number, date: string) {
+    const currentDate = new Date(date);
     currentDate.setHours(time, 0, 0, 0);
     setSelectedDateTime(currentDate);
+    setSelectedDate(null);
+  }
+
+  function convertDayOfWeekToString(dayOfWeek: string) {
+    return `${new Date(dayOfWeek).toLocaleDateString()} ${DAYS[new Date(dayOfWeek).getDay()]}`;
   }
 
   const closeDialog = () => setSelectedDateTime(null);
+  const closeTimeSelectDialog = () => setSelectedDate(null);
 
   return (
     <>
@@ -112,45 +107,23 @@ export default function AvailableTime({ staffId }: AvailableTimeProps) {
             Next
           </Button>
         </Box>
-        {isSuccess && (
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="appointment table">
-              <TableHead>
-                <TableRow>
-                  {data?.map((day) => (
-                    <TableCell
-                      key={day.dayOfWeek}
-                    >{`${new Date(day.dayOfWeek).toLocaleDateString()} ${DAYS[new Date(day.dayOfWeek).getDay()]}`}</TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {timeArray?.map((hour) => (
-                  <TableRow key={hour}>
-                    <>{console.log(renderAvailableTime(data, hour))}</>
-                    {data &&
-                      renderAvailableTime(data, hour).map((time, index) => (
-                        <TableCell
-                          key={index}
-                          sx={{
-                            height: '58px',
-                            padding: '10px',
-                            border: '1px solid rgba(224, 224, 224, 1)',
-                          }}
-                        >
-                          {time && (
-                            <Button
-                              onClick={() => handleDateSelect(time, index)}
-                            >{`${time}:00`}</Button>
-                          )}
-                        </TableCell>
-                      ))}
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        )}
+        {isSuccess &&
+          (isTablet ? (
+            <DateList
+              data={data}
+              convertDayOfWeekToString={convertDayOfWeekToString}
+              handleDateSelect={setSelectedDate}
+            />
+          ) : (
+            <TimeTable
+              data={data}
+              timeArray={timeArray}
+              convertDayOfWeekToString={convertDayOfWeekToString}
+              handleDateSelect={(time, dayOfWeek) =>
+                handleDateSelect(time, dayOfWeek, dateRange.startDate)
+              }
+            />
+          ))}
         {isFetching && (
           <CircularProgress sx={{ position: 'relative', left: '50%' }} />
         )}
@@ -162,6 +135,11 @@ export default function AvailableTime({ staffId }: AvailableTimeProps) {
           bookingDateTime={selectedDateTime}
         />
       )}
+      <TimeSelect
+        selectedDate={selectedDate}
+        handleClose={closeTimeSelectDialog}
+        handleDateSelect={setDateTime}
+      />
       {isError && <Error refetch={refetch} />}
     </>
   );

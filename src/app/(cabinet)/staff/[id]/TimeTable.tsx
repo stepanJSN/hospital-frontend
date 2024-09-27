@@ -13,11 +13,7 @@ import {
 type TimeTableProps = {
   data: IAvailableTime[];
   timeArray: number[];
-  convertDayOfWeekToString: (dayOfWeek: number) => string;
-  renderAvailableTime: (
-    data: Array<IAvailableTime>,
-    currentTime: number,
-  ) => (number | null)[];
+  convertDayOfWeekToString: (dayOfWeek: string) => string;
   handleDateSelect: (time: number, dayOfWeek: number) => void;
 };
 
@@ -25,9 +21,28 @@ export default function TimeTable({
   data,
   timeArray,
   convertDayOfWeekToString,
-  renderAvailableTime,
   handleDateSelect,
 }: TimeTableProps) {
+  function renderAvailableTime(
+    data: Array<IAvailableTime>,
+    currentTime: number,
+  ) {
+    const availableTimeArray: Array<number | null> = [];
+    for (let i = 0; i < 7; i++) {
+      if (
+        Object.hasOwn(data[i], 'startTime') &&
+        data[i].startTime <= currentTime &&
+        data[i].endTime >= currentTime &&
+        !data[i].bookedTime.includes(currentTime)
+      ) {
+        availableTimeArray.push(currentTime);
+      } else {
+        availableTimeArray.push(null);
+      }
+    }
+    return availableTimeArray;
+  }
+
   return (
     <TableContainer component={Paper}>
       <Table aria-label="appointment table">
