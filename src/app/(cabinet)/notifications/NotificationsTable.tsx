@@ -1,11 +1,11 @@
 import { INotification } from '@/types/notifications.type';
-import { Button } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
 import WarningIcon from '@mui/icons-material/Warning';
 import ReportIcon from '@mui/icons-material/Report';
 import DataTable from '@/app/components/Table/DataTable';
 import dayjs from 'dayjs';
 import { MouseEvent } from 'react';
+import AdaptiveButton from '@/app/components/Buttons/AdaptiveButton';
 
 type NotificationTableProps = {
   data: INotification[];
@@ -75,13 +75,13 @@ export default function NotificationsTable({
           header: 'Action',
           align: 'right',
           accessor: (row) => (
-            <Button
+            <AdaptiveButton
               variant="outlined"
               disabled={row.isRead}
               onClick={(e) => handleMarkAsRead(e, row._id)}
             >
               Mark as read
-            </Button>
+            </AdaptiveButton>
           ),
         },
       ]}

@@ -1,10 +1,10 @@
 import DatePicker from '@/app/components/DatePicker';
-import { LoadingButton } from '@mui/lab';
 import { Box } from '@mui/material';
 import { Control, UseFormHandleSubmit } from 'react-hook-form';
 import FormInput from '@/app/components/Inputs/FormInput';
 import FormSwitch from '@/app/components/Switch/FormSwitch';
 import { IGetStaffAppointmentsForm } from '@/types/appointment.type';
+import AdaptiveLoadingButton from '@/app/components/Buttons/AdaptiveLoadingButton';
 
 type AppointmentsActionBarProps = {
   handleSubmit: UseFormHandleSubmit<IGetStaffAppointmentsForm, undefined>;
@@ -27,14 +27,22 @@ export default function AppointmentsActionBar({
       onSubmit={handleSubmit(onSubmit)}
       gap={1}
       marginY={2}
+      sx={{ flexWrap: { xs: 'wrap' } }}
     >
       <DatePicker
         control={control}
         label="From"
         name="fromDate"
         required={false}
+        sx={{ flex: { xs: '100%', sm: '150px' } }}
       />
-      <DatePicker control={control} label="To" name="toDate" required={false} />
+      <DatePicker
+        control={control}
+        label="To"
+        name="toDate"
+        required={false}
+        sx={{ flex: { xs: '100%', sm: '150px' } }}
+      />
       <FormInput
         label="Patient name"
         name="customerName"
@@ -42,7 +50,7 @@ export default function AppointmentsActionBar({
         errorText="Incorrect patient name"
         required={false}
         fullWidth={false}
-        sx={{ minWidth: '100px' }}
+        sx={{ flex: { xs: '100%', sm: '150px' } }}
         margin="none"
       />
       <FormSwitch
@@ -50,21 +58,20 @@ export default function AppointmentsActionBar({
         defaultValue={false}
         label="Show completed"
         name="isCompleted"
-        sx={{ width: '150px' }}
+        sx={{ flex: { xs: '48%', sm: '150px' } }}
       />
-      <LoadingButton
+      <AdaptiveLoadingButton
         loading={isFetching}
         variant="contained"
         fullWidth
         type="submit"
         loadingPosition="start"
         sx={{
-          width: '100px',
-          flex: 'auto',
+          flex: { xs: '48%', sm: '0 1 150px' },
         }}
       >
         Show
-      </LoadingButton>
+      </AdaptiveLoadingButton>
     </Box>
   );
 }

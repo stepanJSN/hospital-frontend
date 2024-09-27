@@ -17,6 +17,7 @@ export default function SpecializationsDataTable({
     <DataTable
       keyExtractor={(row) => row.id}
       data={data}
+      isHeader={false}
       columns={[
         {
           header: 'Title',
@@ -24,7 +25,7 @@ export default function SpecializationsDataTable({
           accessor: (row) => row.title,
         },
         {
-          header: '',
+          header: 'Edit',
           accessor: (row) => (
             <AdaptiveButton
               variant="outlined"
@@ -35,7 +36,7 @@ export default function SpecializationsDataTable({
           ),
         },
         {
-          header: '',
+          header: 'Delete',
           accessor: (row) => (
             <AdaptiveButton
               variant="outlined"
