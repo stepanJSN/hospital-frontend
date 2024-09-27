@@ -70,6 +70,12 @@ export default function StaffAppointmentsTable({
                     bgcolor: row.isCompleted ? 'error.main' : 'success.main',
                   },
                 }}
+                onClick={() =>
+                  changeAppointmentStatus({
+                    id: row.id,
+                    status: !row.isCompleted,
+                  })
+                }
               >
                 <CheckIcon fontSize="inherit" />
               </IconButton>
@@ -101,6 +107,7 @@ export default function StaffAppointmentsTable({
                   color: 'white',
                   '&:hover': { bgcolor: 'error.main' },
                 }}
+                onClick={() => setAppointmentId(row.id)}
               >
                 <DeleteIcon fontSize="inherit" />
               </IconButton>

@@ -1,12 +1,15 @@
+import AdaptiveButton from '@/app/components/Buttons/AdaptiveButton';
 import Notification from '@/app/components/Notifications';
 import DataTable from '@/app/components/Table/DataTable';
 import { workingHours } from '@/config/workingHours';
 import { scheduleService } from '@/services/schedule';
 import { IChangeSchedule, ISchedule } from '@/types/schedule.type';
-import { Button, TextField } from '@mui/material';
+import { IconButton, TextField, useMediaQuery, useTheme } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useDebounce } from '@uidotdev/usehooks';
 import { ChangeEvent, useEffect, useState } from 'react';
+import WorkIcon from '@mui/icons-material/Work';
+import WorkOffIcon from '@mui/icons-material/WorkOff';
 
 type ScheduleTableProps = {
   staffId: string;
@@ -19,6 +22,8 @@ export default function ScheduleTable({
   schedule,
   days,
 }: ScheduleTableProps) {
+  const theme = useTheme();
+  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
   const queryClient = useQueryClient();
   const [scheduleData, setScheduleData] = useState(schedule);
   const debouncedScheduleData = useDebounce(scheduleData, 1500);
@@ -126,17 +131,30 @@ export default function ScheduleTable({
           {
             header: '',
             align: 'right',
-            accessor: (scheduleItem) => (
-              <Button
-                onClick={() => changeDayType(scheduleItem.dayOfWeek)}
-                variant={!scheduleItem.startTime ? 'contained' : 'outlined'}
-                sx={{ width: '280px' }}
-              >
-                {!!scheduleItem.startTime
-                  ? 'Make it a non-business day'
-                  : 'Make it a business day'}
-              </Button>
-            ),
+            accessor: (scheduleItem) =>
+              isTablet ? (
+                <IconButton
+                  aria-label="change status"
+                  size="medium"
+                  onClick={() => changeDayType(scheduleItem.dayOfWeek)}
+                >
+                  {!scheduleItem.startTime ? (
+                    <WorkIcon fontSize="inherit" color="primary" />
+                  ) : (
+                    <WorkOffIcon fontSize="inherit" color="secondary" />
+                  )}
+                </IconButton>
+              ) : (
+                <AdaptiveButton
+                  onClick={() => changeDayType(scheduleItem.dayOfWeek)}
+                  variant={!scheduleItem.startTime ? 'contained' : 'outlined'}
+                  sx={{ width: '280px' }}
+                >
+                  {!!scheduleItem.startTime
+                    ? 'Make it a non-business day'
+                    : 'Make it a business day'}
+                </AdaptiveButton>
+              ),
           },
         ]}
       />
