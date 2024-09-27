@@ -7,9 +7,9 @@ export default function useLogout() {
   const { push } = useRouter();
 
   const logout = () => {
+    push('/auth/signin');
     authService.logout();
     queryClient.resetQueries();
-    push('/auth/signin');
   };
   return logout;
 }
