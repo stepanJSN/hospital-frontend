@@ -60,7 +60,12 @@ export default function ActionBar({
           Create new profile
         </AdaptiveButton>
       ) : (
-        <DatePicker control={control} label="Date" required={false} />
+        <DatePicker
+          control={control}
+          label="Date"
+          required={false}
+          sx={{ flex: { xs: 'auto', sm: '0 0 250px' } }}
+        />
       )}
       <AdaptiveLoadingButton
         loading={isFetching}

@@ -27,14 +27,22 @@ export default function AppointmentsActionBar({
       onSubmit={handleSubmit(onSubmit)}
       gap={1}
       marginY={2}
+      flexWrap="wrap"
     >
       <DatePicker
         control={control}
         label="From"
         name="fromDate"
         required={false}
+        sx={{ flex: { xs: '100%', sm: '150px' } }}
       />
-      <DatePicker control={control} label="To" name="toDate" required={false} />
+      <DatePicker
+        control={control}
+        label="To"
+        name="toDate"
+        required={false}
+        sx={{ flex: { xs: '100%', sm: '150px' } }}
+      />
       <FormInput
         label="Doctor name"
         name="staffName"
@@ -42,7 +50,7 @@ export default function AppointmentsActionBar({
         errorText="Incorrect doctor name"
         required={false}
         fullWidth={false}
-        sx={{ minWidth: '100px' }}
+        sx={{ flex: { xs: '100%', sm: '200px' } }}
         margin="none"
       />
       <FormSwitch
@@ -50,7 +58,7 @@ export default function AppointmentsActionBar({
         defaultValue={false}
         label="Show completed"
         name="isCompleted"
-        sx={{ width: '150px' }}
+        sx={{ flex: { xs: '48%', sm: '200px' } }}
       />
       <LoadingButton
         loading={isFetching}

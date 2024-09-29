@@ -58,7 +58,7 @@ export default function AppointmentsActionBar({
         defaultValue={false}
         label="Show completed"
         name="isCompleted"
-        sx={{ flex: { xs: '48%', sm: '150px' } }}
+        sx={{ flex: { xs: '48%', sm: '200px' } }}
       />
       <AdaptiveLoadingButton
         loading={isFetching}
