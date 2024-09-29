@@ -9,7 +9,7 @@ export const customerMenu: MenuList = [
   {
     pageRoute: '/staff',
     pageIcon: <CalendarMonthIcon />,
-    pageText: 'Make an appointment with a doctor',
+    pageText: 'Make an appointment',
   },
   {
     pageRoute: '/customers/appointments',

@@ -69,13 +69,18 @@ export default function Menu({ menuList, userRole }: MenuProps) {
         onClose={handleMenuToggler}
         sx={{
           width: {
-            md: '230px',
+            md: '250px',
           },
         }}
         variant={isMobile ? 'temporary' : 'permanent'}
         anchor="left"
       >
-        <Box display="flex" flexDirection="column" alignItems="center">
+        <Box
+          width="250px"
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+        >
           <Avatar src={data?.avatarUrl} sx={{ width: 56, height: 56, mt: 1 }} />
           {isSuccess && (
             <Typography
