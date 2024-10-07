@@ -68,15 +68,23 @@ export default function DoctorInfo({ staffId, isAdmin }: DoctorInfoProps) {
                 paddingTop={2}
               >{`${doctorData.name} ${doctorData.surname}`}</Typography>
               <Typography>
-                {'Specialization: ' + doctorData.specialization?.title}
+                {'Specialization: ' +
+                  (doctorData.specialization?.title ??
+                    'Specialization is not provided')}
               </Typography>
               <Typography>
-                {'Experience: ' + doctorData.experience + ' year'}
+                {'Experience: ' +
+                  (doctorData.experience ?? 'Experience is not provided')}
               </Typography>
               <Typography>{'Email: ' + doctorData.email}</Typography>
-              <Typography>{'Telephone: ' + doctorData.telephone}</Typography>
+              <Typography>
+                {'Telephone: ' +
+                  (doctorData.telephone ?? 'Telephone is not provided')}
+              </Typography>
               <Typography>{'Gender: ' + doctorData.gender}</Typography>
-              <Typography>{'Room: ' + doctorData.room}</Typography>
+              <Typography>
+                {'Room: ' + (doctorData.room ?? 'Room is not provided')}
+              </Typography>
             </>
           ) : (
             <>
@@ -111,7 +119,7 @@ export default function DoctorInfo({ staffId, isAdmin }: DoctorInfoProps) {
       <Divider sx={{ color: 'grey' }} />
       {doctorData ? (
         <Typography padding={2}>
-          {doctorData.description ?? 'Description not provided'}
+          {doctorData.description ?? 'Description is not provided'}
         </Typography>
       ) : (
         <Skeleton width="100%" height={100} />

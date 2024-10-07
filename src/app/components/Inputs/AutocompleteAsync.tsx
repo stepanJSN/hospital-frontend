@@ -44,7 +44,10 @@ export default function AutocompleteAsync<T>({
       rules={{
         required,
       }}
-      render={({ field: { onChange, value }, fieldState: { error } }) => (
+      render={({
+        field: { onChange, value = null },
+        fieldState: { error },
+      }) => (
         <Autocomplete
           disablePortal
           id={id}
@@ -55,7 +58,7 @@ export default function AutocompleteAsync<T>({
           value={value}
           loading={isFetching}
           noOptionsText={noOptionsText ?? null}
-          onChange={(event, value) => onChange(value)}
+          onChange={(event, newValue) => onChange(newValue)}
           onInputChange={(event, value) => setSearchValue(value)}
           renderInput={(params) => (
             <TextField {...params} error={!!error} label={label} />

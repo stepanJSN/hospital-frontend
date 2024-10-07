@@ -60,10 +60,16 @@ export default function CustomerPage({ id }: CustomerPageType) {
                 paddingTop={2}
               >{`${data?.name} ${data?.surname}`}</Typography>
               <Typography>{'Email: ' + data?.email}</Typography>
-              <Typography>{'Telephone: ' + data?.telephone}</Typography>
+              <Typography>
+                {'Telephone: ' +
+                  (data?.telephone ?? 'Telephone is not provided')}
+              </Typography>
               <Typography>{'Gender: ' + data?.gender}</Typography>
               <Typography>
-                {'Gender: ' + dayjs(data?.birthday).format('DD.MM.YYYY')}
+                {'Birthday: ' +
+                  (data?.birthday
+                    ? dayjs(data?.birthday).format('DD.MM.YYYY')
+                    : 'Birthday is not provided')}
               </Typography>
             </>
           )}

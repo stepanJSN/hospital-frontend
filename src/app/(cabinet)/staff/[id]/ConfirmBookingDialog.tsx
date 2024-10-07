@@ -75,7 +75,7 @@ export default function ConfirmBookingDialog({
         )}
         <Typography>{`Doctor: ${doctorData?.name} ${doctorData?.surname}`}</Typography>
         <Typography>
-          {'Specialization: ' + doctorData?.specialization.title}
+          {'Specialization: ' + doctorData?.specialization?.title}
         </Typography>
         <Typography>
           {'Experience: ' + doctorData?.experience + ' year'}

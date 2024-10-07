@@ -21,7 +21,8 @@ export default function StaffTable({ data, isAdmin }: DataTableType) {
         {
           header: 'Specialization',
           hideOnMobile: true,
-          accessor: (row) => row.specialization?.title,
+          accessor: (row) =>
+            row.specialization ? row.specialization.title : 'Unknown',
         },
         {
           header: 'Experience',
