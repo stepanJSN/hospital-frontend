@@ -5,6 +5,11 @@ import {
 } from '@tanstack/react-query';
 import Appointments from './Appointments';
 import { appointmentService } from '@/services/appointment';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Appointments',
+};
 
 export default async function AppointmentsPage({
   params,
